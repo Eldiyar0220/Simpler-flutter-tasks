@@ -1,13 +1,9 @@
 <div align="center">
   <a href="https://marketplace.visualstudio.com/items?itemName=Eldiyar-Dev.simpler-flutter-tasks">
-    <img src="./images/eldiyar_profile_icon.png" />
-  </a>
-  <a href="">
     <img src="./images/vscode.png"/>
   </a>
 
   <h1>Task for Visual Studio Code</h1>
-
 </div>
 
 
@@ -48,7 +44,7 @@ I'm working hard to select all the day to day widgets, so wait for more commands
 - Open Apk Folder:
   - opening apk folder, if not exists "app-release.apk" -> open |build/outputs|
 
-
+https://github.com/Eldiyar0220/just-images/blob/main/images/simpler-flutter-tasks-commands.gif
 ### 0.1.0
 
 - flutter clean:
