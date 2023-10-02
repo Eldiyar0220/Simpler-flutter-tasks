@@ -9,8 +9,6 @@
   <h1>Task for Visual Studio Code</h1>
 
 </div>
-
- [Your Extension Name](https://github.com/Eldiyar0220/simpler-flutter-tasks/blob/main/images/eldiyar_profile_icon.png)
 A set of helpful Flutter and Dart commands for day to day Flutter development.
 
 ## Installation
