@@ -22,10 +22,6 @@
   "contributes": {
     "commands": [
       {
-        "command": "flutter-tasks.helloWorld",
-        "title": "Hello World"
-      },
-      {
         "command": "flutter-tasks.pubGet",
         "title": "pub get",
         "icon": "sync"

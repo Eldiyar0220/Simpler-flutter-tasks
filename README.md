@@ -1,9 +1,9 @@
 <div align="center">
-<!--   <a href="https://marketplace.visualstudio.com/items?itemName=Eldiyar-Dev.simpler-flutter-tasks", width=350>
+  <a href="https://marketplace.visualstudio.com/items?itemName=Eldiyar-Dev.simpler-flutter-tasks">
     <img src="./images/eldiyar_profile_icon.png" />
-  </a> -->
-  <a>
-    <img src="https://github.com/Eldiyar0220/just-images/blob/main/images/vscode.png"/>
+  </a>
+  <a href="">
+    <img src="./images/vscode.png"/>
   </a>
 
   <h1>Task for Visual Studio Code</h1>
@@ -11,8 +11,7 @@
 </div>
 
 
-![simpler-flutter-tasks-commands](https://github.com/Eldiyar0220/simpler-flutter-tasks/assets/84560520/14c86fcf-42e3-4e16-ba05-2ac84f2c85ea)
-
+![simpler-flutter-tasks-commands](./images/simpler-flutter-tasks-commands.gif)
 
 A set of helpful Flutter and Dart commands for day to day Flutter development.
 
@@ -38,10 +37,19 @@ I'm working hard to select all the day to day widgets, so wait for more commands
 | `Flutter build ios`                  |
 | `Flutter build ipa`                  |
 | `Build runner`                       |
+| `Open Apk Folder`                    |
 
 ## Release Notes
 
-### 1.0.0
+### 0.1.5
+
+- Build runner:
+  - dart run build_runner build --delete-conflicting-outputs
+- Open Apk Folder:
+  - opening apk folder, if not exists "app-release.apk" -> open |build/outputs|
+
+
+### 0.1.0
 
 - flutter clean:
   - just cleaning project.
@@ -53,8 +61,6 @@ I'm working hard to select all the day to day widgets, so wait for more commands
   - Build for ios
 - flutter build ipa:
   - Build for ipa
-- Build runner:
-  - dart run build_runner build --delete-conflicting-outputs
 
 - Features:
   - soon ... more commands
