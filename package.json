@@ -9,13 +9,41 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./extension.js",
   "contributes": {
-    "commands": [{
-      "command": "simpler-flutter-tasks.helloWorld",
-      "title": "Hello World"
-    }]
+    "commands": [
+      {
+        "command": "flutter-tasks.helloWorld",
+        "title": "Hello World"
+      },
+      {
+        "command": "flutter-tasks.pubGet",
+        "title": "pub get",
+        "icon": "sync"
+      },
+      {
+        "command": "flutter-tasks.pubGets",
+        "title": "(FLUTTER TASKS SOON) menu extension",
+        "icon": "sync"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "flutter-tasks.pubGet",
+          "when": "explorerResourceIsFolder",
+          "group": "navigation"
+        },
+        {
+          "command": "flutter-tasks.pubGets",
+          "when": "explorerResourceIsFolder",
+          "group": "navigation"
+        }
+      ]
+    }
   },
   "scripts": {
     "lint": "eslint .",
