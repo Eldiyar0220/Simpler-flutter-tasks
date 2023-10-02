@@ -3,14 +3,14 @@
     <img src="./images/eldiyar_profile_icon.png" />
   </a> -->
   <a>
-    <img src="./images/vscode.png"/>
+    <img src="images/vscode.png"/>
   </a>
 
   <h1>Task for Visual Studio Code</h1>
 
 </div>
 
-![snippets in action](./images/simpler-flutter-tasks-commands.gif)
+![snippets in action](images/simpler-flutter-tasks-commands.gif)
 
 
 A set of helpful Flutter and Dart commands for day to day Flutter development.
