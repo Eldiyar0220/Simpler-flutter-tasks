@@ -4,6 +4,7 @@
   "description": "Flutter quick commands",
   "publisher": "Eldiyar-Dev",
   "version": "0.0.1",
+  "icon": "/Users/admin/Desktop/publish_to_vs_code/simpler-flutter-tasks/images/eldiyar_profile_icon.png",
   "engines": {
     "vscode": "^1.82.0"
   },
@@ -13,7 +14,7 @@
   "activationEvents": [
     "onStartupFinished"
   ],
-  "main": "./extension.js",
+  "main": "./extension.js", 
   "contributes": {
     "commands": [
       {

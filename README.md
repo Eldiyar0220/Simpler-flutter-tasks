@@ -1,5 +1,6 @@
 ![Header](https://github.com/Eldiyar0220/simpler-flutter-tasks/blob/main/images/eldiyar_profile_icon.png)
 
+<!-- ![Your Extension Name](URL_TO_NEW_IMAGE) -->
 A set of helpful Flutter and Dart commands for day to day Flutter development.
 
 ## Features
