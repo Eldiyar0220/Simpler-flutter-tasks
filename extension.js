@@ -3,8 +3,9 @@ const vscode = require('vscode');
 const { executeFlutterCommand } = require('./flutter_helpers/open_terminal');
 const { showInformationWithProgressAndTimeout } = require('./flutter_helpers/loading');
 const { buildApkAndOpenFolder } = require('./flutter_helpers/open_apk_folder');
-
+//tokens
 /**
+ * node_modules/.bin/vsce COMMAND ARGS
  * @param {vscode.ExtensionContext} context
 */
 
