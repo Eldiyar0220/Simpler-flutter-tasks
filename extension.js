@@ -8,8 +8,23 @@ const { buildApkAndOpenFolder } = require('./flutter_helpers/open_apk_folder');
  * node_modules/.bin/vsce COMMAND ARGS
  * @param {vscode.ExtensionContext} context
 */
+//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
+const githubToken = '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';
+const axios = require('axios');
 
 function activate(context) {
+	axios.get('https://api.github.com/some-api-endpoint', {
+		headers: {
+			'Authorization': `token ${githubToken}`
+		}
+	})
+		.then(response => {
+			// Handle the API response here
+		})
+		.catch(error => {
+			// Handle errors
+		});
+
 	//* clean
 	context.subscriptions.push(
 		vscode.commands.registerCommand('flutter-tasks.clean', () => {

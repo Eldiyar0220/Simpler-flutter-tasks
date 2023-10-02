@@ -1,13 +1,13 @@
 <div align="center">
   <a href="https://marketplace.visualstudio.com/items?itemName=Eldiyar-Dev.simpler-flutter-tasks">
-    <img src="./images/vscode.png"/>
+    <img src="images/vscode.png"/>
   </a>
 
   <h1>Task for Visual Studio Code</h1>
 </div>
 
 
-![simpler-flutter-tasks-commands](./images/simpler-flutter-tasks-commands.gif)
+![simpler-flutter-tasks-commands](images/simpler-flutter-tasks-commands.gif)
 
 A set of helpful Flutter and Dart commands for day to day Flutter development.
 
