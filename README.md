@@ -1,8 +1,8 @@
 <div align="center">
-  <a href="https://marketplace.visualstudio.com/items?itemName=Eldiyar-Dev.simpler-flutter-tasks">
+  <a href="https://marketplace.visualstudio.com/items?itemName=Eldiyar-Dev.simpler-flutter-tasks", width=350>
     <img src="./images/eldiyar_profile_icon.png" />
   </a>
-  <a href="">
+  <a>
     <img src="./images/vscode.png"/>
   </a>
 
