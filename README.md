@@ -1,6 +1,5 @@
-![Header](https://github.com/Eldiyar0220/simpler-flutter-tasks/blob/main/images/eldiyar_profile_icon.png)
 
-<!-- ![Your Extension Name](URL_TO_NEW_IMAGE) -->
+ [Your Extension Name](https://github.com/Eldiyar0220/simpler-flutter-tasks/blob/main/images/eldiyar_profile_icon.png)
 A set of helpful Flutter and Dart commands for day to day Flutter development.
 
 ## Installation
@@ -22,19 +21,29 @@ I'm working hard to select all the day to day widgets, so wait for more commands
 | `Flutter clean`                      |
 | `Flutter pub get`                    |
 | `Flutter build apk`                  |
+| `Flutter build ios`                  |
+| `Flutter build ipa`                  |
+| `Build runner`                       |
 
 ## Release Notes
-
-
 
 ### 1.0.0
 
 - flutter clean:
-  - cleaning project.
-- flutte pub get:
+  - just cleaning project.
+- flutter pub get:
   - get all dependencies 
 - flutter build apk:
   - Build for android
+- flutter build ios:
+  - Build for ios
+- flutter build ipa:
+  - Build for ipa
+- Build runner:
+  - dart run build_runner build --delete-conflicting-outputs
+
+
+
 - Features:
   - soon ... more commands
 
