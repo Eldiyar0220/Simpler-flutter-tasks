@@ -1,10 +1,14 @@
 {
   "name": "simpler-flutter-tasks",
   "displayName": "Simpler Flutter Tasks",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Eldiyar0220/simpler-flutter-tasks"
+  },
   "description": "Flutter quick commands",
   "publisher": "Eldiyar-Dev",
-  "version": "0.0.1",
-  "icon": "/Users/admin/Desktop/publish_to_vs_code/simpler-flutter-tasks/images/eldiyar_profile_icon.png",
+  "version": "0.1.0",
+  "icon": "images/eldiyar_profile_icon.png",
   "engines": {
     "vscode": "^1.82.0"
   },
