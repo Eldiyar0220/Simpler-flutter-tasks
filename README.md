@@ -1,6 +1,10 @@
 ![Header](https://github.com/Eldiyar0220/Eldiyar0220/blob/main/images/eldiyar_profile_icon.png)
 
 ![alt text](http://images/eldiyar_profile_icon.png)
+<p align="center">
+  <img src="images/eldiyar_profile_icon.png" width="350" title="hover text">
+  <img src="images/eldiyar_profile_icon.png" width="350" alt="accessibility text">
+</p>
 https://github.com/Eldiyar0220/simpler-flutter-tasks/images/eldiyar_profile_icon.png
 
 A set of helpful Flutter and Dart commands for day to day Flutter development.
