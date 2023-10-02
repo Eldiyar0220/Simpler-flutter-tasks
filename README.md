@@ -10,7 +10,8 @@
 
 </div>
 
-![snippets in action](https://github.com/Eldiyar0220/just-images/blob/main/images/simpler-flutter-tasks-commands.gif)
+
+![simpler-flutter-tasks-commands](https://github.com/Eldiyar0220/simpler-flutter-tasks/assets/84560520/14c86fcf-42e3-4e16-ba05-2ac84f2c85ea)
 
 
 A set of helpful Flutter and Dart commands for day to day Flutter development.
