@@ -1,9 +1,8 @@
-![Header](https://github.com/Eldiyar0220/Eldiyar0220/blob/main/images/eldiyar_profile_icon.png)
+![Header](https://github.com/Eldiyar0220/Eldiyar0220/main/images/eldiyar_profile_icon.png)
 
 ![alt text](http://images/eldiyar_profile_icon.png)
 <p align="center">
   <img src="images/eldiyar_profile_icon.png"  title="hover text">
-  <img src="images/eldiyar_profile_icon.png" alt="accessibility text">
 </p>
 
 A set of helpful Flutter and Dart commands for day to day Flutter development.
