@@ -42,8 +42,6 @@ I'm working hard to select all the day to day widgets, so wait for more commands
 - Build runner:
   - dart run build_runner build --delete-conflicting-outputs
 
-
-
 - Features:
   - soon ... more commands
 
