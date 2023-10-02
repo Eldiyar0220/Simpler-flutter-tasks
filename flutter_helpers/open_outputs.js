@@ -21,60 +21,27 @@ function openOutPuts() {
 
             openProcess.stderr.on('data', (data) => {
                 console.error(`stderrsss : ${data}`);
+                showInformationWithProgressAndTimeout('Does not exists', 40)
             });
 
             openProcess.on('close', (code) => {
                 if (code === 0) {
-                    showInformationWithProgressAndTimeout('opening', 10)
+                    showInformationWithProgressAndTimeout('Opening Outputs', 10)
                 } else {
-                    showInformationWithProgressAndTimeout('does not exists', 40)
+                    showInformationWithProgressAndTimeout('Does not exists', 40)
 
                 }
             });
         } else {
-            const openProcess = spawn('open', ['-R', outPuts]);
-
-            openProcess.stdout.on('data', (data) => {
-                console.log(`stdout here: ${data}`);
-            });
-
-            openProcess.stderr.on('data', (data) => {
-                console.error(`stderr-: ${data}`);
-                const options = {
-                    modal: false,
-                };
-                vscode.window.showInformationMessage('Outputs does not exists !!!!!!', options, 'Build APK', 'Build IOS',)
-                    .then((selectedButton) => {
-                        if (selectedButton === 'Build APK') {
-                            executeFlutterCommand('flutter build apk')
-                        } else if (selectedButton === 'Build IOS') {
-                            executeFlutterCommand('flutter build ios')
-                        } else {
-                            return;
-                        }
-                    });
-            });
-
-            openProcess.on('close', (code) => {
-                if (code === 0) {
-                    showInformationWithProgressAndTimeout('opening', 10)
-                } else {
-                    const options = {
-                        modal: true,
-                    };
-
-
-
-                    vscode.window.showInformationMessage('APK FILE does not exists, Build apk?', options, 'Build APK', 'Open outputs')
-                        .then((selectedButton) => {
-                            if (selectedButton === 'Build APK') {
-                                executeFlutterCommand('flutter build apk')
-                            } else if (selectedButton === 'Open outputs') {
-                                openOutPuts()
-                            }
-                        });
-                }
-            });
+            const options = {
+                modal: false,
+            };
+            vscode.window.showInformationMessage('Outputs does not exists !!!!!!', options, 'Build APK')
+                .then((selectedButton) => {
+                    if (selectedButton === 'Build APK') {
+                        executeFlutterCommand('flutter build apk')
+                    }
+                });
 
         }
     }

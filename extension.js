@@ -108,13 +108,12 @@ function showStatusBarItem() {
 	statusBarItem6.command = "flutter-tasks.buildRunner";
 	statusBarItem6.color = '#04ffff';
 	statusBarItem6.show();
-	//----soon
 	// --------build apk---------------------------------------------------------------------------------------------------
-	// const statusBarItem7 = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
-	// statusBarItem7.text = "open Apk Folder $(link-external)";
-	// statusBarItem7.command = "flutter-tasks.openApkFolder";
-	// statusBarItem7.color = '#06f002';
-	// statusBarItem7.show();
+	const statusBarItem7 = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
+	statusBarItem7.text = "Open Apk Folder $(link-external)";
+	statusBarItem7.command = "flutter-tasks.openApkFolder";
+	statusBarItem7.color = '#06f002';
+	statusBarItem7.show();
 }
 
 
