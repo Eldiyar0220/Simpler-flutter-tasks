@@ -1,6 +1,6 @@
-![Header](https://github.com/Eldiyar0220/Eldiyar0220/blob/main/assets/python.png)
+![Header](https://github.com/Eldiyar0220/Eldiyar0220/blob/main/images/eldiyar_profile_icon.png)
 
-![alt text](http://url/to/img.png)
+![alt text](http://images/eldiyar_profile_icon.png)
 
 A set of helpful Flutter and Dart commands for day to day Flutter development.
 
