@@ -1,7 +1,7 @@
 <div align="center">
-  <a href="https://marketplace.visualstudio.com/items?itemName=Eldiyar-Dev.simpler-flutter-tasks", width=350>
+<!--   <a href="https://marketplace.visualstudio.com/items?itemName=Eldiyar-Dev.simpler-flutter-tasks", width=350>
     <img src="./images/eldiyar_profile_icon.png" />
-  </a>
+  </a> -->
   <a>
     <img src="./images/vscode.png"/>
   </a>
@@ -9,6 +9,8 @@
   <h1>Task for Visual Studio Code</h1>
 
 </div>
+![simpler-flutter-tasks-commands](https://github.com/Eldiyar0220/simpler-flutter-tasks/assets/84560520/6c29b73c-b120-4d9e-8437-a1f30698877b)
+
 A set of helpful Flutter and Dart commands for day to day Flutter development.
 
 ## Installation
