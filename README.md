@@ -3,7 +3,7 @@
     <img src="./images/eldiyar_profile_icon.png" />
   </a> -->
   <a>
-    <img src="images/vscode.png"/>
+    <img src="https://github.com/Eldiyar0220/just-images/blob/main/images/vscode.png"/>
   </a>
 
   <h1>Task for Visual Studio Code</h1>
