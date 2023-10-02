@@ -2,9 +2,9 @@
   <a href="https://marketplace.visualstudio.com/items?itemName=Eldiyar-Dev.simpler-flutter-tasks">
     <img src="./images/eldiyar_profile_icon.png" />
   </a>
-<!--   <a href="">
-    <img src="./res/vscode.png"/>
-  </a> -->
+  <a href="">
+    <img src="./images/vscode.png"/>
+  </a>
 
   <h1>Task for Visual Studio Code</h1>
 
