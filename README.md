@@ -7,7 +7,7 @@
 </div>
 
 
-![simpler-flutter-tasks-commands](images/simpler-flutter-tasks-commands.gif)
+![simpler-flutter-tasks-commands](images/simpler-flutter-tasks-commands_new.gif)
 
 ## -
 A set of helpful Flutter and Dart commands for day to day Flutter development.
