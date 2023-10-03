@@ -15,6 +15,13 @@
   "categories": [
     "Other"
   ],
+  "keywords": [
+    "Flutter",
+    "Dart",
+    "Snippets",
+    "commands",
+    "fast commands"
+  ],
   "activationEvents": [
     "onStartupFinished"
   ],

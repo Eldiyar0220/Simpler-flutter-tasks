@@ -38,7 +38,7 @@ I'm working hard to select all the day to day widgets, so wait for more commands
 
 ## Release Notes
 
-### 0.1.6-7
+### 0.1.8
 
 - Flutter Install
   - installing
@@ -54,7 +54,6 @@ I'm working hard to select all the day to day widgets, so wait for more commands
 - Open Apk Folder:
   - opening apk folder, if not exists "app-release.apk" -> open |build/outputs|
 
-https://github.com/Eldiyar0220/just-images/blob/main/images/simpler-flutter-tasks-commands.gif
 ### 0.1.0
 
 - flutter clean:
