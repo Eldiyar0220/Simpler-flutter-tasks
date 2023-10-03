@@ -9,7 +9,7 @@
 
 ![simpler-flutter-tasks-commands](images/simpler-flutter-tasks-commands.gif)
 
-##
+## -
 A set of helpful Flutter and Dart commands for day to day Flutter development.
 
 ## Installation
