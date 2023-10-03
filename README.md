@@ -31,10 +31,21 @@ I'm working hard to select all the day to day widgets, so wait for more commands
 | `Flutter build apk`                  |
 | `Flutter build ios`                  |
 | `Flutter build ipa`                  |
+| `flutter install`                    |
 | `Build runner`                       |
 | `Open Apk Folder`                    |
+|                                      |
 
 ## Release Notes
+
+### 0.1.6-7
+
+- Flutter Install
+  - installing
+
+### 0.1.6-7
+
+- Fixed bugs with terminal
 
 ### 0.1.5
 
@@ -57,8 +68,6 @@ https://github.com/Eldiyar0220/just-images/blob/main/images/simpler-flutter-task
 - flutter build ipa:
   - Build for ipa
 
-- Features:
-  - soon ... more commands
 
 ### 0.0.1
 
