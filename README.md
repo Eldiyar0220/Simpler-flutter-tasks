@@ -11,6 +11,7 @@
 
 ## -
 A set of helpful Flutter and Dart commands for day to day Flutter development.
+<img width="1237" alt="Снимок экрана 2023-10-03 в 23 35 48" src="https://github.com/Eldiyar0220/simpler-flutter-tasks/assets/84560520/28dd11d3-442f-4a9d-ab78-91111a669042">
 
 ## Installation
 
