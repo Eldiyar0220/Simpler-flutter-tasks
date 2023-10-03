@@ -16,7 +16,6 @@ A set of helpful Flutter and Dart commands for day to day Flutter development.
 - Name of Package - Simpler Flutter tasks -
 - [Visual Studio Code | Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=Eldiyar-Dev.simpler-flutter-tasks)
 
-
 ## Features
 
 Simply Flutter / Dart commands
