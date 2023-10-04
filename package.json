@@ -23,9 +23,10 @@
     "fast commands"
   ],
   "activationEvents": [
-    "onStartupFinished"
+    "onStartupFinished",
+    "onCommand:flutter-tasks.updateIcons"
   ],
-  "main": "./extension.js", 
+  "main": "./extension.js",
   "contributes": {
     "commands": [
       {
@@ -42,16 +43,39 @@
     "menus": {
       "explorer/context": [
         {
-          "command": "flutter-tasks.pubGet",
+          "command": "flutter-tasks.updateIcons",
           "when": "explorerResourceIsFolder",
           "group": "navigation"
         },
         {
-          "command": "flutter-tasks.pubGets",
+          "command": "flutter-tasks.pubGet",
           "when": "explorerResourceIsFolder",
           "group": "navigation"
         }
       ]
+    },
+    "configuration": {
+      "title": "Simpler Flutter Tasks",
+      "properties": {
+        "myExtension.textColor": {
+          "type": "string",
+          "default": "#000000",
+          "description": "Text color ...SOON will added"
+        },
+        "SimplerFlutterTasks.isHiddenGitPullIcon": {
+          "type": "string",
+          "default": "hide",
+          "enum": [
+            "show",
+            "hide"
+          ],
+          "enumDescriptions": [
+            "Git pull icon -> show",
+            "Git pull icon -> hide"
+          ],
+          "description": "Complete boolean with hide or show Icon"
+        }
+      }
     }
   },
   "scripts": {
