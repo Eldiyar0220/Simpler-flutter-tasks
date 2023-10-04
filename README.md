@@ -28,8 +28,8 @@ I'm working hard to select all the day to day widgets, so wait for more commands
 
 | Flutter quick commands   |    Visibility icons   |
 | -------------------------|-----------------------|
-| `Flutter clean`          |    default  -  show   |
-| `Flutter pub get`        |    default  -  show   |
+| `Flutter clean`          |    Always   -  show   |
+| `Flutter pub get`        |    Always   -  show   |
 | `Flutter build apk`      |    default  -  show   |
 | `Flutter build ios`      |    default  -  show   |
 | `Flutter build ipa`      |    default  -  show   |
@@ -37,6 +37,9 @@ I'm working hard to select all the day to day widgets, so wait for more commands
 | `Build runner`           |    default  -  show   |
 | `Open Apk Folder`        |    default  -  show   |
 | `Git pull`               |    default  -  hide   |
+| `Small Apk`              |    default  -  hide   |
+| `Spider Build`           |    default  -  hide   |
+| `Easy Localizations`     |    default  -  hide   |
 
 
 in Feature -> planning
@@ -55,6 +58,30 @@ in Feature -> planning
 
 
 ## Release Notes
+
+### 0.2.1
+  - New Commands
+    - Small Apk:
+    - Spider Build:
+    - Easy Localizations(default value)
+      - dart run easy_localization:generate -S assets/langs -O lib/langs
+      - dart run easy_localization:generate -S assets/langs -f keys -o locale_keys.g.dart
+        - You can change in extension's settings
+
+  - Added Hide / Show Icon
+    - flutter clean:
+    - flutter pub get:
+    - flutter build apk:
+    - flutter build ios:
+    - flutter build ipa:
+    - flutter install:
+    - Build runner:
+    - Open Apk Folder:
+    - Small Apk:
+    - Spider Build:
+    - Easy Localizations:
+  
+  - change Visibility icons in Extension's Settings |Simpler Flutter Tasks|
 
 ### 0.2.0
 
