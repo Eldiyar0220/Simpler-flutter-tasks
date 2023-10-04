@@ -36,9 +36,21 @@ I'm working hard to select all the day to day widgets, so wait for more commands
 | `flutter install`                    |
 | `Build runner`                       |
 | `Open Apk Folder`                    |
-|                                      |
+| `Git pull`                           |
 
 ## Release Notes
+
+### 0.2.0
+
+  - Git pull
+    - Just Git Pulling
+    - adding Beta testing hide or show icon " git pull icon by default is hide "
+    - open settings vs code -> search simpler flutter tasks -> there the set hide or show git pull icon
+   
+### 0.1.9
+
+- Optimized
+  - starting commands
 
 ### 0.1.8
 
