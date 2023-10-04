@@ -26,17 +26,17 @@ I'm working hard to select all the day to day widgets, so wait for more commands
 
 ### Flutter / Dart related Commands
 
-| flutter quick commands   |
-| ------------------------------------ |
-| `Flutter clean`                      |
-| `Flutter pub get`                    |
-| `Flutter build apk`                  |
-| `Flutter build ios`                  |
-| `Flutter build ipa`                  |
-| `flutter install`                    |
-| `Build runner`                       |
-| `Open Apk Folder`                    |
-| `Git pull`                           |
+| Flutter quick commands   |    Visibility icons   |
+| -------------------------|-----------------------|
+| `Flutter clean`          |   show   -  default   |
+| `Flutter pub get`        |   show   -  default   |
+| `Flutter build apk`      |   show   -  default   |
+| `Flutter build ios`      |   show   -  default   |
+| `Flutter build ipa`      |   show   -  default   |
+| `flutter install`        |   show   -  default   |
+| `Build runner`           |   show   -  default   |
+| `Open Apk Folder`        |   show   -  default   |
+| `Git pull`               |   hide   -  default   |
 
 ## Release Notes
 
