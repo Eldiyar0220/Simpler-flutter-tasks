@@ -10,11 +10,15 @@
 ![simpler-flutter-tasks-commands](images/simpler-flutter-tasks-commands_new.gif)
 ____________----------------____________----------------__________
 
+
+https://github.com/Eldiyar0220/simpler-flutter-tasks/assets/84560520/df137148-3717-4f83-b41c-128aae0092da
+
+
 ## -
 A set of helpful Flutter and Dart commands for day to day Flutter development.
-<img width="1237" alt="Снимок экрана 2023-10-03 в 23 35 48" src="https://github.com/Eldiyar0220/simpler-flutter-tasks/assets/84560520/28dd11d3-442f-4a9d-ab78-91111a669042">
 
 ## Installation
+
 
 - Name of Package - Simpler Flutter tasks -
 - [Visual Studio Code | Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=Eldiyar-Dev.simpler-flutter-tasks)
