@@ -9,6 +9,8 @@
 
 ![simpler-flutter-tasks-commands](images/simpler-flutter-tasks-commands_new.gif)
 ![simpler-flutter-tasks-commands](images/open_apk_folder.gif)
+____________----------------____________----------------__________
+![simpler-flutter-tasks-commands](images/ezgif.com-video-to-gif.gif)
 
 ## -
 A set of helpful Flutter and Dart commands for day to day Flutter development.
