@@ -28,15 +28,31 @@ I'm working hard to select all the day to day widgets, so wait for more commands
 
 | Flutter quick commands   |    Visibility icons   |
 | -------------------------|-----------------------|
-| `Flutter clean`          |   show   -  default   |
-| `Flutter pub get`        |   show   -  default   |
-| `Flutter build apk`      |   show   -  default   |
-| `Flutter build ios`      |   show   -  default   |
-| `Flutter build ipa`      |   show   -  default   |
-| `flutter install`        |   show   -  default   |
-| `Build runner`           |   show   -  default   |
-| `Open Apk Folder`        |   show   -  default   |
-| `Git pull`               |   hide   -  default   |
+| `Flutter clean`          |    default  -  show   |
+| `Flutter pub get`        |    default  -  show   |
+| `Flutter build apk`      |    default  -  show   |
+| `Flutter build ios`      |    default  -  show   |
+| `Flutter build ipa`      |    default  -  show   |
+| `flutter install`        |    default  -  show   |
+| `Build runner`           |    default  -  show   |
+| `Open Apk Folder`        |    default  -  show   |
+| `Git pull`               |    default  -  hide   |
+
+
+in Feature -> planning
+
+|  Commands by Folder         |    Visibility icons   |    Visibility icons   |
+| ----------------------------|-----------------------|-----------------------|
+| `Build APk`                 |    default  -  hide   |    default  -  hide   |
+|  -`flutter build apk`       |    default  -  hide   |    default  -  hide   |
+|  -`flutter build appbundle` |    default  -  hide   |    default  -  hide   |
+|  -`build apk and open apk`  |    default  -  hide   |    default  -  hide   |
+| `ios`                       |    default  -  hide   |    default  -  hide   |
+|  -`build ios`               |    default  -  hide   |    default  -  hide   |
+|  -`build ipa`               |    default  -  hide   |    default  -  hide   |
+|  -`open Ios folder`         |    default  -  hide   |    default  -  hide   |
+|  -`open Ipa folder`         |    default  -  hide   |    default  -  hide   |
+
 
 ## Release Notes
 
