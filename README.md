@@ -65,6 +65,7 @@ I'm working hard to select all the day to day widgets, so wait for more commands
     - Create your own commands
 
 `Create your Custom Commands`  
+`copy this json and add to your settings.json` 
 
 ```json
 "SimplerFlutterTasks.customCommandsList": [
@@ -82,7 +83,6 @@ I'm working hard to select all the day to day widgets, so wait for more commands
         }
     ],
 ```
-add to to your settings.json
 
   
 ### 0.2.1
