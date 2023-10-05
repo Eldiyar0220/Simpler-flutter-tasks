@@ -19,7 +19,6 @@
 
 <div align="center">
   <h1>You can add custom Commands</h1>
-  <h1>Command should be unique</h1>
 </div>
 
 ![simpler-flutter-tasks-commands](images/custom_commands_v1.gif)
@@ -57,23 +56,15 @@ I'm working hard to select all the day to day widgets, so wait for more commands
 | `Easy Localizations`     |    default  -  hide   |
 
 
-in Feature -> planning
-
-|  Commands by Folder         |    Visibility icons   |    Visibility icons   |
-| ----------------------------|-----------------------|-----------------------|
-| `Build APk`                 |    default  -  hide   |    default  -  hide   |
-|  -`flutter build apk`       |    default  -  hide   |    default  -  hide   |
-|  -`flutter build appbundle` |    default  -  hide   |    default  -  hide   |
-|  -`build apk and open apk`  |    default  -  hide   |    default  -  hide   |
-| `ios`                       |    default  -  hide   |    default  -  hide   |
-|  -`build ios`               |    default  -  hide   |    default  -  hide   |
-|  -`build ipa`               |    default  -  hide   |    default  -  hide   |
-|  -`open Ios folder`         |    default  -  hide   |    default  -  hide   |
-|  -`open Ipa folder`         |    default  -  hide   |    default  -  hide   |
-
 
 ## Release Notes
 
+### 0.2.2
+  - New Фича
+  - Custom Commands
+    - Create your own commands 
+
+  
 ### 0.2.1
   - New Commands
     - Small Apk:
@@ -143,3 +134,6 @@ in Feature -> planning
 ### 0.0.1
 
 Initial release
+
+
+Enjoy !!!! 😉 
