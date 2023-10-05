@@ -6,6 +6,15 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Released]
 
+## Release Notes
+
+### 0.2.3
+  - Added json file | Simple Release
+### 0.2.2
+  - New Фича
+  - Custom Commands
+    - Create your own commands
+
 ### 0.2.1
   - New Commands
     - Small Apk:
@@ -75,3 +84,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### 0.0.1
 
 Initial release
+
+
+Enjoy !!!! 😉 
