@@ -8,10 +8,9 @@
 
 
 ![simpler-flutter-tasks-commands](images/simpler-flutter-tasks-commands_new.gif)
-____________----------------____________----------------__________
 
 
-https://github.com/Eldiyar0220/simpler-flutter-tasks/assets/84560520/df137148-3717-4f83-b41c-128aae0092da
+![simpler-flutter-tasks-commands](images/open_apk_folder.gif)
 
 
 ## -
