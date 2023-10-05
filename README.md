@@ -62,7 +62,27 @@ I'm working hard to select all the day to day widgets, so wait for more commands
 ### 0.2.2
   - New Фича
   - Custom Commands
-    - Create your own commands 
+    - Create your own commands
+
+`Create your Custom Commands`  
+
+```json
+"SimplerFlutterTasks.customCommandsList": [
+        {
+            "label": "Custom Commands $(pulse)-$(notebook-delete-cell)",
+            "command": "flutter install",
+            "enabled": true,
+            "color": "yellow"
+        },
+        {
+            "label": "Pub get $(smiley)",
+            "command": "flutter pub get",
+            "enabled": true,
+            "color": "red"
+        }
+    ],
+```
+add to to your settings.json
 
   
 ### 0.2.1
