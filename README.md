@@ -17,8 +17,12 @@
 
 ![simpler-flutter-tasks-commands](images/hide_show_icon.gif)
 
+<div align="center">
+  <h1>You can add custom Commands</h1>
+  <h1>Command should be unique</h1>
+</div>
 
-<div align="center"></div>
+![simpler-flutter-tasks-commands](images/custom_commands_v1.gif)
 
 ### -
 A set of helpful Flutter and Dart commands for day to day Flutter development.
