@@ -23,6 +23,27 @@
 
 ![simpler-flutter-tasks-commands](images/custom_commands_v1.gif)
 
+`Create your Custom Commands`  
+`copy this json and add to your settings.json` 
+
+```json
+"SimplerFlutterTasks.customCommandsList": [
+        {
+            "label": "Custom Commands $(pulse)-$(notebook-delete-cell)",
+            "command": "flutter install",
+            "enabled": true,
+            "color": "yellow"
+        },
+        {
+            "label": "Pub get $(smiley)",
+            "command": "flutter pub get",
+            "enabled": true,
+            "color": "red"
+        }
+    ],
+```
+
+
 ### -
 A set of helpful Flutter and Dart commands for day to day Flutter development.
 
@@ -64,27 +85,6 @@ I'm working hard to select all the day to day widgets, so wait for more commands
   - Custom Commands
     - Create your own commands
 
-`Create your Custom Commands`  
-`copy this json and add to your settings.json` 
-
-```json
-"SimplerFlutterTasks.customCommandsList": [
-        {
-            "label": "Custom Commands $(pulse)-$(notebook-delete-cell)",
-            "command": "flutter install",
-            "enabled": true,
-            "color": "yellow"
-        },
-        {
-            "label": "Pub get $(smiley)",
-            "command": "flutter pub get",
-            "enabled": true,
-            "color": "red"
-        }
-    ],
-```
-
-  
 ### 0.2.1
   - New Commands
     - Small Apk:
