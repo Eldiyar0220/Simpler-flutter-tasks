@@ -76,7 +76,7 @@ I'm working hard to select all the day to day widgets, so wait for more commands
 
 | Flutter quick commands   |    Visibility icons   |
 | -------------------------|-----------------------|
-| `Flutter clean`          |    Always   - [show()]|
+| `Flutter clean`          |    Always   -  show   |
 | `Flutter pub get`        |    Always   -  show   |
 | `Flutter build apk`      |    default  -  show   |
 | `Flutter build ios`      |    default  -  show   |
