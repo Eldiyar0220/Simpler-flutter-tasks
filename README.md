@@ -41,18 +41,18 @@
 
 ```json
 "SimplerFlutterTasks.customCommandsList": [
-        {
-            "label": "Custom Commands $(pulse)-$(notebook-delete-cell)",
-            "command": "flutter install",
-            "enabled": true,
-            "color": "yellow"
-        },
-        {
-            "label": "Pub get $(smiley)",
-            "command": "flutter pub get",
-            "enabled": true,
-            "color": "red"
-        }
+      {
+          "label": "Custom Command 1 (pub get)",
+          "command": "flutter pub get",
+          "enabled": true,
+          "color": "#00ff33"
+      },
+      {
+          "label": "Custom Command 2 (build apk)",
+          "command": "flutter build apk",
+          "enabled": true,
+          "color": "#09eeb5"
+      }
     ],
 ```
 
@@ -76,7 +76,7 @@ I'm working hard to select all the day to day widgets, so wait for more commands
 
 | Flutter quick commands   |    Visibility icons   |
 | -------------------------|-----------------------|
-| `Flutter clean`          |    Always   -  show   |
+| `Flutter clean`          |    Always   - [show()]|
 | `Flutter pub get`        |    Always   -  show   |
 | `Flutter build apk`      |    default  -  show   |
 | `Flutter build ios`      |    default  -  show   |
@@ -92,6 +92,10 @@ I'm working hard to select all the day to day widgets, so wait for more commands
 
 
 ## Release Notes
+
+### 0.2.3-4
+  - Custom Commands auto updating, now you don't have to reload the VisualStudio Code
+
 
 ### 0.2.2
   - New Фича
