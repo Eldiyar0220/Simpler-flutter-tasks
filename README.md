@@ -17,6 +17,19 @@
 
 ![simpler-flutter-tasks-commands](images/hide_show_icon.gif)
 
+```json
+  "SimplerFlutterTasks.buildApkIcon": "show",
+  "SimplerFlutterTasks.iosIcon": "show",
+  "SimplerFlutterTasks.ipaIcon": "show",
+  "SimplerFlutterTasks.buildRunnerIcon": "show",
+  "SimplerFlutterTasks.installIcon": "show",
+  "SimplerFlutterTasks.openApkIcon": "show",
+  "SimplerFlutterTasks.gitPullIcon": "hide",
+  "SimplerFlutterTasks.smallApkIcon": "hide",
+  "SimplerFlutterTasks.spiderBuildIcon": "hide",
+  "SimplerFlutterTasks.easyLocalizationsIcon": "hide",
+```
+
 <div align="center">
   <h1>You can add custom Commands</h1>
 </div>
