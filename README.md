@@ -18,6 +18,8 @@
 ![simpler-flutter-tasks-commands](images/hide_show_icon.gif)
 
 ```json
+  "SimplerFlutterTasks.flutterCleanIcon": "show",
+  "SimplerFlutterTasks.flutterPubGetIcon": "show"
   "SimplerFlutterTasks.buildApkIcon": "show",
   "SimplerFlutterTasks.iosIcon": "show",
   "SimplerFlutterTasks.ipaIcon": "show",
@@ -76,8 +78,8 @@ I'm working hard to select all the day to day widgets, so wait for more commands
 
 | Flutter quick commands   |    Visibility icons   |
 | -------------------------|-----------------------|
-| `Flutter clean`          |    Always   -  show   |
-| `Flutter pub get`        |    Always   -  show   |
+| `Flutter clean`          |    default  -  show   |
+| `Flutter pub get`        |    default  -  show   |
 | `Flutter build apk`      |    default  -  show   |
 | `Flutter build ios`      |    default  -  show   |
 | `Flutter build ipa`      |    default  -  show   |
@@ -92,6 +94,13 @@ I'm working hard to select all the day to day widgets, so wait for more commands
 
 
 ## Release Notes
+
+### 0.2.5
+  - Added feature
+    - hide / show icon
+      - Flutter Clean
+      - Flutter Pub get
+
 
 ### 0.2.3-4
   - Custom Commands auto updating, now you don't have to reload the VisualStudio Code
