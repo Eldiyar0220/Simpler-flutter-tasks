@@ -1,6 +1,7 @@
 ## Table of Contents
-<!--- - [Installation](#installation) -->
+
 <!--- - [Contribution](#contribution)--->
+- [Installation](#installation)
 - [Snippets](#openApkFolder)
 - [Contributors](#contributors)
 - [License](#license)
@@ -69,6 +70,7 @@ A set of helpful Flutter and Dart commands for day to day Flutter development.
 
 ## Installation
 
+# Snippets
 
 - Name of Package - Simpler Flutter tasks -
 - [Visual Studio Code | Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=Eldiyar-Dev.simpler-flutter-tasks)
