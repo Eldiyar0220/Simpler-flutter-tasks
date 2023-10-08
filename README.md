@@ -59,8 +59,9 @@
 ```
 
 
-### -
+### Table of Contents
 A set of helpful Flutter and Dart commands for day to day Flutter development.
+
 - [Installation](#installation)
 - [Features](#Features)
 - [Commands](#Commands)
@@ -104,9 +105,6 @@ I'm working hard to select all the day to day widgets, so wait for more commands
 | `Small Apk`              |    default  -  hide   |
 | `Spider Build`           |    default  -  hide   |
 | `Easy Localizations`     |    default  -  hide   |
-
-
-#contributors
 
 
 ## Release Notes
@@ -200,7 +198,7 @@ Initial release
 
 ## Requirements
 
-Vscode: ^1.51.0
+[Vscode()]: ^1.82.0
 
 ## Reference
 
