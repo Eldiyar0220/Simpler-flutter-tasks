@@ -59,8 +59,10 @@
 A set of helpful Flutter and Dart commands for day to day Flutter development.
 - [Installation](#installation)
 - [Features](#Features)
+- [Commands](#Commands)
 - [Contributors](#contributors)
-- [Commands](#Flutter)
+- [Requirements](#Requirements)
+- [Reference](#Reference)
 
 
 
@@ -82,7 +84,9 @@ Simply Flutter / Dart commands
 
 I'm working hard to select all the day to day widgets, so wait for more commands!.
 
-## Flutter / Dart related Commands
+## Commands
+
+`Flutter related Commands`  
 
 | Flutter quick commands   |    Visibility icons   |
 | -------------------------|-----------------------|
