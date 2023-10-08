@@ -9,9 +9,7 @@
 
 ![simpler-flutter-tasks-commands](images/open_apk_folder.gif)
 
-<div align="center">
-  <h1>Hide / Show Icon</h1>
-</div>
+## Hide / Show Icon
 
 ![simpler-flutter-tasks-commands](images/hide_show_icon.gif)
 
@@ -65,7 +63,6 @@ A set of helpful Flutter and Dart commands for day to day Flutter development.
 - [Installation](#installation)
 - [Features](#Features)
 - [Commands](#Commands)
-- [Contributors](#contributors)
 - [Requirements](#Requirements)
 - [Reference](#Reference)
 
