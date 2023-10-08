@@ -38,6 +38,7 @@
 
 `Create your Custom Commands`  
 `copy this json and add to your VsCode settings.json` 
+create more commands
 
 ```json
 "SimplerFlutterTasks.customCommandsList": [
@@ -82,7 +83,7 @@ A set of helpful Flutter and Dart commands for day to day Flutter development.
 
 Simply Flutter / Dart commands
 
-I'm working hard to select all the day to day widgets, so wait for more commands!.
+I'm working hard to select all the day to day commands, so wait for more commands!.
 
 ## Commands
 
@@ -112,10 +113,8 @@ I'm working hard to select all the day to day widgets, so wait for more commands
       - Flutter Clean
       - Flutter Pub get
 
-
 ### 0.2.3-4
   - Custom Commands auto updating, now you don't have to reload the VisualStudio Code
-
 
 ### 0.2.2
   - New Фича
