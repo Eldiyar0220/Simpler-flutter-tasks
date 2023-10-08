@@ -13,6 +13,9 @@
 
 ![simpler-flutter-tasks-commands](images/hide_show_icon.gif)
 
+`Create your Custom Commands`  
+`copy this json and add to your VsCode settings.json` 
+
 ```json
   "SimplerFlutterTasks.flutterCleanIcon": "show",
   "SimplerFlutterTasks.flutterPubGetIcon": "show"
@@ -35,7 +38,7 @@
 ![simpler-flutter-tasks-commands](images/custom_commands_v1.gif)
 
 `Create your Custom Commands`  
-`copy this json and add to your settings.json` 
+`copy this json and add to your VsCode settings.json` 
 
 ```json
 "SimplerFlutterTasks.customCommandsList": [
@@ -72,8 +75,6 @@ A set of helpful Flutter and Dart commands for day to day Flutter development.
 
 
 ## Installation
-
-# Snippets
 
 - Name of Package - Simpler Flutter tasks -
 - [Visual Studio Code | Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=Eldiyar-Dev.simpler-flutter-tasks)
@@ -195,15 +196,6 @@ I'm working hard to select all the day to day widgets, so wait for more commands
 
 Initial release
 
-## Contributors
-![avatar]()
-
- <table>
-  <tr>
-    <td align="center"><a href="https://github.com/Eldiyar0220"><img src="https://github.com/Eldiyar0220/Simpler-flutter-tasks/assets/84560520/926370ff-ae80-46d5-b03c-dacd48a23639(https://github.com/Eldiyar0220)" width="100px;" alt=""/><br /><sub><b>Bolotov Eldiyar</b></sub></a><br />
-    </td>
-</tr>
-</table>
 
 ## Requirements
 
