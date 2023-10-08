@@ -11,9 +11,8 @@
 <div align="center">
   <h1>Task for Visual Studio Code</h1>
 </div>
-![simpler-flutter-tasks-commands](images/simpler-flutter-tasks-commands_new.gif)
 
-#openApkFolder
+![simpler-flutter-tasks-commands](images/simpler-flutter-tasks-commands_new.gif)
 
 ![simpler-flutter-tasks-commands](images/open_apk_folder.gif)
 
@@ -189,6 +188,20 @@ I'm working hard to select all the day to day widgets, so wait for more commands
 ### 0.0.1
 
 Initial release
+
+## Contributors
+![avatar]()
+
+ <table>
+  <tr>
+    <td align="center"><a href="https://github.com/Eldiyar0220"><img src="https://github.com/Eldiyar0220/Simpler-flutter-tasks/assets/84560520/926370ff-ae80-46d5-b03c-dacd48a23639](https://github.com/Eldiyar0220" width="100px;" alt=""/><br /><sub><b>Maruf Hassan</b></sub></a><br /><a href="#creator" title="Creator">🌐</a> </td>
+    </td>
+</tr>
+</table>
+
+## Requirements
+
+Vscode: ^1.51.0
 
 
 Enjoy !!!! 😉 
