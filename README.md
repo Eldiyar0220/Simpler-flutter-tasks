@@ -203,5 +203,8 @@ Initial release
 
 Vscode: ^1.51.0
 
+## Reference
+
+[Simpler Flutter Snippet](https://marketplace.visualstudio.com/items?itemName=Eldiyar-Dev.simpler-flutter-snippets)
 
 Enjoy !!!! 😉 
