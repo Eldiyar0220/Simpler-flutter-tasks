@@ -13,6 +13,7 @@
 ![simpler-flutter-tasks-commands](images/simpler-flutter-tasks-commands_new.gif)
 
 #openApkFolder
+
 ![simpler-flutter-tasks-commands](images/open_apk_folder.gif)
 
 <div align="center">
@@ -95,6 +96,8 @@ I'm working hard to select all the day to day widgets, so wait for more commands
 | `Spider Build`           |    default  -  hide   |
 | `Easy Localizations`     |    default  -  hide   |
 
+
+#contributors
 
 
 ## Release Notes
