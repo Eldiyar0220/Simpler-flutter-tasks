@@ -1,14 +1,18 @@
+## Table of Contents
+<!--- - [Installation](#installation) -->
+<!--- - [Contribution](#contribution)--->
+- [Snippets](#openApkFolder)
+- [Contributors](#contributors)
+- [License](#license)
+
+---
+
 <div align="center">
   <h1>Task for Visual Studio Code</h1>
 </div>
-
-
 ![simpler-flutter-tasks-commands](images/simpler-flutter-tasks-commands_new.gif)
 
-<div align="center">
-  <h1>Open Apk Folder</h1>
-</div>
-
+#openApkFolder
 ![simpler-flutter-tasks-commands](images/open_apk_folder.gif)
 
 <div align="center">
