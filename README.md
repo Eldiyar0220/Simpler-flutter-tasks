@@ -5,6 +5,8 @@
 
 ![simpler-flutter-tasks-commands](images/simpler-flutter-tasks-commands_new.gif)
 
+## Open APk Folder
+
 ![simpler-flutter-tasks-commands](images/open_apk_folder.gif)
 
 <div align="center">
@@ -13,8 +15,7 @@
 
 ![simpler-flutter-tasks-commands](images/hide_show_icon.gif)
 
-`Create your Custom Commands`  
-`copy this json and add to your VsCode settings.json` 
+`Copy this json and add to your VsCode settings.json` 
 
 ```json
   "SimplerFlutterTasks.flutterCleanIcon": "show",
