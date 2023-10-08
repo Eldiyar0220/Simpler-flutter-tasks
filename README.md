@@ -194,7 +194,7 @@ Initial release
 
  <table>
   <tr>
-    <td align="center"><a href="https://github.com/Eldiyar0220"><img src="https://github.com/Eldiyar0220/Simpler-flutter-tasks/assets/84560520/926370ff-ae80-46d5-b03c-dacd48a23639](https://github.com/Eldiyar0220" width="100px;" alt=""/><br /><sub><b>Maruf Hassan</b></sub></a><br /><a href="#creator" title="Creator">🌐</a> </td>
+    <td align="center"><a href="https://github.com/Eldiyar0220"><img src="https://github.com/Eldiyar0220/Simpler-flutter-tasks/assets/84560520/926370ff-ae80-46d5-b03c-dacd48a23639(https://github.com/Eldiyar0220)" width="100px;" alt=""/><br /><sub><b>Bolotov Eldiyar</b></sub></a><br /><a href="#creator" title="Creator">🌐</a> <a href="https://github.com/zyllus17" title="Documentation">📖</a> <a href="https://github.com/zyllus17/Ultimate-Flutter-Extension-Pack/pulls" title="Review Pull Requests">👀</a> <a href="#maintenance-tbenning" title="Maintenance">🚧</a></td>
     </td>
 </tr>
 </table>
