@@ -198,7 +198,7 @@ Initial release
 
 ## Requirements
 
-[Vscode()]: ^1.82.0
+[Vscode]: ^1.82.0
 
 ## Reference
 
