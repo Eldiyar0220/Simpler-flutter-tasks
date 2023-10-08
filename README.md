@@ -1,12 +1,3 @@
-## Table of Contents
-
-<!--- - [Contribution](#contribution)--->
-- [Installation](#installation)
-- [Snippets](#openApkFolder)
-- [Contributors](#contributors)
-- [License](#license)
-
----
 
 <div align="center">
   <h1>Task for Visual Studio Code</h1>
@@ -66,6 +57,17 @@
 
 ### -
 A set of helpful Flutter and Dart commands for day to day Flutter development.
+- [Installation](#installation)
+- [Features](#Features)
+- [Contributors](#contributors)
+- [Commands](#Flutter)
+
+
+
+
+
+
+
 
 ## Installation
 
@@ -80,7 +82,7 @@ Simply Flutter / Dart commands
 
 I'm working hard to select all the day to day widgets, so wait for more commands!.
 
-### Flutter / Dart related Commands
+## Flutter / Dart related Commands
 
 | Flutter quick commands   |    Visibility icons   |
 | -------------------------|-----------------------|
