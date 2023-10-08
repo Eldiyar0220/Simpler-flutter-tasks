@@ -8,10 +8,17 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## Release Notes
 
-### 0.2.3
-  - Added json file | Simple Release
+### 0.2.5
+  - Added feature
+    - hide / show icon
+      - Flutter Clean
+      - Flutter Pub get
+
+### 0.2.3-4
+  - Custom Commands auto updating, now you don't have to reload the VisualStudio Code
+
 ### 0.2.2
-  - New Фича
+  - Новая Фича [new feature]
   - Custom Commands
     - Create your own commands
 
@@ -19,11 +26,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
   - New Commands
     - Small Apk:
     - Spider Build:
-    - Easy Localizations(default value)
-      - dart run easy_localization:generate -S assets/langs -O lib/langs
-      - dart run easy_localization:generate -S assets/langs -f keys -o locale_keys.g.dart
-        - You can change in extension's settings
-
+    - Easy Localizations
+      - default value 
+        - dart run easy_localization:generate -S assets/langs -O lib/langs
+        - dart run easy_localization:generate -S assets/langs -f keys -o locale_keys.g.dart 
+        
   - Added Hide / Show Icon
     - flutter clean:
     - flutter pub get:
@@ -37,7 +44,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
     - Spider Build:
     - Easy Localizations:
   
-  - change Visibility icons in Extension's Settings |Simpler Flutter Tasks|
+  - Change Visibility icons in Extension's Settings |Simpler Flutter Tasks|
 
 ### 0.2.0
 
