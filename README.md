@@ -100,6 +100,9 @@ I'm working hard to select all the day to day commands, so wait for more command
 
 ## Release Notes
 
+### 0.2.6
+  - Fixed Custom Commands
+  - The Command `flutter clean` now work with `flutter pub get`
 ### 0.2.5
   - Added feature
     - hide / show icon

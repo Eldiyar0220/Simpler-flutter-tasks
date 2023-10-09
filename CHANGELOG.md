@@ -8,6 +8,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## Release Notes
 
+### 0.2.6
+  - Fixed Custom Commands
+  - The Command `flutter clean` now work with `flutter pub get`
 ### 0.2.5
   - Added feature
     - hide / show icon
