@@ -40,7 +40,7 @@
 `copy this json and add to your VsCode settings.json` 
 create more commands
 
-- [Icons for Simpler Flutter Tasks](https://marketplace.visualstudio.com/items?itemName=Eldiyar-Dev.simpler-flutter-tasks)
+- [Icons for Simpler Flutter Tasks](https://code.visualstudio.com/api/references/icons-in-labels#icon-listing)
 
 ```json
 "SimplerFlutterTasks.customCommandsList": [
