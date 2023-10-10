@@ -40,6 +40,8 @@
 `copy this json and add to your VsCode settings.json` 
 create more commands
 
+more icons for Simpler Flutter Tasks you can find here -> `https://code.visualstudio.com/api/references/icons-in-labels#icon-listing`
+
 ```json
 "SimplerFlutterTasks.customCommandsList": [
       {
