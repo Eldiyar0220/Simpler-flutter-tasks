@@ -71,7 +71,7 @@ A set of helpful Flutter and Dart commands for day to day Flutter development.
 
 ## Installation
 
-- Name of Package - Simpler Flutter tasks -
+- Name of Package - Simpler Flutter tasks - [Icons](https://code.visualstudio.com/api/references/icons-in-labels#icon-listing)
 - [Visual Studio Code | Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=Eldiyar-Dev.simpler-flutter-tasks)
 
 ## Features
