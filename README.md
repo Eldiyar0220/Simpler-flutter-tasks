@@ -17,7 +17,7 @@
 
 ```json
   "SimplerFlutterTasks.flutterCleanIcon": "show",
-  "SimplerFlutterTasks.flutterPubGetIcon": "show"
+  "SimplerFlutterTasks.flutterPubGetIcon": "show",
   "SimplerFlutterTasks.buildApkIcon": "show",
   "SimplerFlutterTasks.iosIcon": "show",
   "SimplerFlutterTasks.ipaIcon": "show",
