@@ -8,6 +8,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## Release Notes
 
+### 0.2.7-8
+  - Fixed Open Apk Folder
+    - Mac ✅
+    - Linux ✅
+    - Windows ✅
+
 ### 0.2.6
   - Fixed Custom Commands
   - The Command `flutter clean` now work with `flutter pub get`
@@ -95,5 +101,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 Initial release
 
+## Reference
+
+[Simpler Flutter Snippet](https://marketplace.visualstudio.com/items?itemName=Eldiyar-Dev.simpler-flutter-snippets)
 
 Enjoy !!!! 😉 
