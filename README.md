@@ -34,7 +34,7 @@
   <h1>You can add custom Commands</h1>
 </div>
 
-![simpler-flutter-tasks-commands](images/custom_commands_v1.gif)
+![simpler-flutter-tasks-commands](images/custom_commands_v2.gif)
 
 `Create your Custom Commands`  
 `copy this json and add to your VsCode settings.json` 
