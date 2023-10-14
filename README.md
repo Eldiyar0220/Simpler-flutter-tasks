@@ -102,7 +102,7 @@ I'm working hard to select all the day to day commands, so wait for more command
 
 ## Release Notes
 
-### 0.2.7-8
+### 2.8.2
   - Fixed Open Apk Folder
     - Mac ✅
     - Linux ✅
@@ -176,6 +176,9 @@ I'm working hard to select all the day to day commands, so wait for more command
   - dart run build_runner build --delete-conflicting-outputs
 - Open Apk Folder:
   - opening apk folder, if not exists "app-release.apk" -> open |build/outputs|
+    - Mac ✅
+    - Linux ❌
+    - Windows ❌
 
 ### 0.1.0
 

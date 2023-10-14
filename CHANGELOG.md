@@ -8,7 +8,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## Release Notes
 
-### 0.2.7-8
+### 2.8.2
   - Fixed Open Apk Folder
     - Mac ✅
     - Linux ✅
