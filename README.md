@@ -3,7 +3,7 @@
   <h1>Task for Visual Studio Code</h1>
 </div>
 
-![simpler-flutter-tasks-commands](images/simpler-flutter-tasks-commands_new.gif)
+![simpler-flutter-tasks-commands](images/simpler_flutter_tasks_first.gif)
 
 ## Open APk Folder
 
@@ -31,7 +31,7 @@
 ```
 
 <div align="center">
-  <h1>You can add custom Commands</h1>
+  <h1>Custom Commands</h1>
 </div>
 
 ![simpler-flutter-tasks-commands](images/custom_commands_v2.gif)
