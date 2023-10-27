@@ -42,21 +42,25 @@ create more commands
 
 - [Icons for Simpler Flutter Tasks](https://code.visualstudio.com/api/references/icons-in-labels#icon-listing)
 
+
+### Custom Commands
 ```json
 "SimplerFlutterTasks.customCommandsList": [
-      {
-          "label": "Custom Command 1 (pub get)",
-          "command": "flutter pub get",
-          "enabled": true,
-          "color": "#00ff33"
-      },
-      {
-          "label": "Custom Command 2 (build apk)",
-          "command": "flutter build apk",
-          "enabled": true,
-          "color": "#09eeb5"
-      }
-    ],
+    {
+        "label": "LocalizationS $(github-action)",
+        "command": "flutter pub get",
+        "enabled": true,
+        "color": "#00ff22",
+        "position": "right"
+    },
+    {
+        "label": "Custom Command 2 $(globe)",
+        "command": "flutter build apk",
+        "enabled": true,
+        "color": "#09eeb5",
+        "position": "right", 
+    },
+],
 ```
 
 
@@ -101,6 +105,16 @@ I'm working hard to select all the day to day commands, so wait for more command
 
 
 ## Release Notes
+
+### 2.8.3
+  - what's new
+    - custom commands  [Try Now](#Custom-Commands)
+        - right / left
+        - "position": "right",  --> NEW ✅ ✅ <br><br> 
+        
+
+    - Start the Command to new Terminal <br>
+        - `"SimplerFlutterTasks.createNewTerminal": true,`
 
 ### 2.8.2
   - Fixed Open Apk Folder

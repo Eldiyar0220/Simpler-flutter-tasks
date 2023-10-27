@@ -8,6 +8,16 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## Release Notes
 
+### 2.8.3
+  - what's new
+    - custom commands  [Try Now](#Custom-Commands)
+        - right / left
+        - "position": "right",  --> NEW ✅ ✅ <br><br> 
+        
+
+    - Start the Command to new Terminal <br>
+        - `"SimplerFlutterTasks.createNewTerminal": true,`
+
 ### 2.8.2
   - Fixed Open Apk Folder
     - Mac ✅
@@ -82,6 +92,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
   - dart run build_runner build --delete-conflicting-outputs
 - Open Apk Folder:
   - opening apk folder, if not exists "app-release.apk" -> open |build/outputs|
+    - Mac ✅
+    - Linux ❌
+    - Windows ❌
 
 ### 0.1.0
 
@@ -100,6 +113,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### 0.0.1
 
 Initial release
+
+
+## Requirements
+
+Vscode: ^1.82.0
 
 ## Reference
 
