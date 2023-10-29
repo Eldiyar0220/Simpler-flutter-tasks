@@ -114,7 +114,7 @@ I'm working hard to select all the day to day commands, so wait for more command
 ### 2.8.7 
   - Auto Updating Localizations from Json, 
        now you do not have to reload vs code ✅
-  - Menu Commands  🔥 🔥 🔥
+  - Vs Code `Menu Explorer Commands`  🔥 🔥 🔥
     - Build Runner ✅
       - dart run build_runner build
       - dart run build_runner build --delete-conflicting-outputs
