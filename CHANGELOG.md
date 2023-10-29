@@ -8,7 +8,31 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## Release Notes
 
-### 2.8.3
+### 2.8.7 
+  - Auto Updating Localizations from Json, 
+       now you do not have to reload vs code ✅
+  - Menu Commands  🔥 🔥 🔥
+    - Build Runner ✅
+      - dart run build_runner build
+      - dart run build_runner build --delete-conflicting-outputs
+      - dart run build_runner build --delete-conflicting-outputs -v
+    - Flutter Commands ✅
+      - flutter --version
+      - flutter doctor -v
+      - flutter pub outdated
+      - flutter upgrade
+      - flutter pub get
+      - flutter pub upgrade
+      - flutter devices
+      - flutter analyze
+      - dart fix --apply
+      - dart format .
+      - flutter clean
+    - .... so wait for more commands....!
+  
+  - Optimized Code - (Commands) ✅
+
+### 2.8.3-4-5-6
   - what's new
     - custom commands  [Try Now](#Custom-Commands)
         - right / left

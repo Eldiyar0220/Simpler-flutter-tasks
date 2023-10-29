@@ -5,6 +5,10 @@
 
 ![simpler-flutter-tasks-commands](images/simpler_flutter_tasks_first.gif)
 
+## Menu Explorer Vs Code
+
+![simpler-flutter-tasks-commands](images/menu_commands.gif)
+
 ## Open APk Folder
 
 ![simpler-flutter-tasks-commands](images/open_apk_folder.gif)
@@ -28,6 +32,7 @@
   "SimplerFlutterTasks.smallApkIcon": "hide",
   "SimplerFlutterTasks.spiderBuildIcon": "hide",
   "SimplerFlutterTasks.easyLocalizationsIcon": "hide",
+  "SimplerFlutterTasks.createNewTerminal": false,
 ```
 
 <div align="center">
@@ -106,7 +111,31 @@ I'm working hard to select all the day to day commands, so wait for more command
 
 ## Release Notes
 
-### 2.8.3
+### 2.8.7 
+  - Auto Updating Localizations from Json, 
+       now you do not have to reload vs code ✅
+  - Menu Commands  🔥 🔥 🔥
+    - Build Runner ✅
+      - dart run build_runner build
+      - dart run build_runner build --delete-conflicting-outputs
+      - dart run build_runner build --delete-conflicting-outputs -v
+    - Flutter Commands ✅
+      - flutter --version
+      - flutter doctor -v
+      - flutter pub outdated
+      - flutter upgrade
+      - flutter pub get
+      - flutter pub upgrade
+      - flutter devices
+      - flutter analyze
+      - dart fix --apply
+      - dart format .
+      - flutter clean
+    - .... so wait for more commands....!
+  
+  - Optimized Code - (Commands) ✅
+
+### 2.8.3-4-5-6
   - what's new
     - custom commands  [Try Now](#Custom-Commands)
         - right / left
