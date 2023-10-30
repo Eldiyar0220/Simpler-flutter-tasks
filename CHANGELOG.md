@@ -6,12 +6,19 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Released]
 
-## Release Notes
+## Release Notes 🔥 🔥 🔥 🔥 🔥 🔥 🔥
+
+### 3.0.0 
+  - Updated Menu Explorer 
+    - added new tab `Settings` ✅
+      - Hide / Show Icon -> `Now it’s convenient to change the visibility of status bar icons` ✅
+      - Start + Copy The Command ✅
+      - Added Numbering The Command ✅ 
 
 ### 2.8.7 
   - Auto Updating Localizations from Json, 
        now you do not have to reload vs code ✅
-  - Menu Commands  🔥 🔥 🔥
+  - Vs Code `Menu Explorer Commands`  🔥 🔥 🔥
     - Build Runner ✅
       - dart run build_runner build
       - dart run build_runner build --delete-conflicting-outputs
