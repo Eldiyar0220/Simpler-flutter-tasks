@@ -7,6 +7,14 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [Released]
 
 ## Release Notes 🔥 🔥 🔥 🔥 🔥 🔥 🔥
+      
+### 3.0.1 
+  - Added Tabs
+    - Android ✅
+    - IOS ✅
+    - Copy The Command on menu View ✅
+    - Start Command on menu view ✅
+
 
 ### 3.0.0 
   - Updated Menu Explorer 

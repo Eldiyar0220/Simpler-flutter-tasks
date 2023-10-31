@@ -109,23 +109,30 @@ I'm working hard to select all the day to day commands, so wait for more command
 | `Easy Localizations`     |    default  -  hide   |
 
 
-## Not Released yet 
+## Not Released yet --------- ❌
 Planning 
+### 3.0.3
+  - Optimize Starting Ios Commands❌
+
+  - adding Tab's Git Hub ❌
+    - so Wait for More Command ❌
+
 ### 3.0.2
-  - adding Tab's settings
-    - I will add settings to my other extensions.
+  - adding Tab's settings ❌
+    - I will add settings to my other extensions. ❌
       - `Simpler FLutter Tasks`
       - `Simpler FLutter Snippets`
       - `Simpler FLutter Generators`
-      
-### 3.0.1 
-  - Adding Tabs
-    - Android
-    - IOS
-    - Copy Text on menu View
-    - Start Command on menu view
 
 ## Release Notes 🔥 🔥 🔥 🔥 🔥 🔥 🔥
+      
+### 3.0.1 
+  - Added Tabs
+    - Android ✅
+    - IOS ✅
+    - Copy The Command on menu View ✅
+    - Start Command on menu view ✅
+
 
 ### 3.0.0 
   - Updated Menu Explorer 
