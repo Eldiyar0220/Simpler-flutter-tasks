@@ -111,20 +111,35 @@ I'm working hard to select all the day to day commands, so wait for more command
 
 ## Not Released yet --------- ❌
 Planning 
+
+### 3.0.5
+  - Settings Tabs ❌
+    - Always Expand  ❌
+    - Always Collapsed ❌
+
+### 3.0.4
+  - add Open Ios Folder ❌
+  - add Open Ipa Folder ❌
+
+
 ### 3.0.3
   - Optimize Starting Ios Commands❌
 
   - adding Tab's Git Hub ❌
     - so Wait for More Command ❌
 
+
+## Release Notes 🔥 🔥 🔥 🔥 🔥 🔥 🔥 ------- ✅
+
+
 ### 3.0.2
-  - adding Tab's settings ❌
-    - I will add settings to my other extensions. ❌
+  - adding Tab's settings ✅
+    - I will add settings to my other extensions. ✅
       - `Simpler FLutter Tasks`
       - `Simpler FLutter Snippets`
       - `Simpler FLutter Generators`
 
-## Release Notes 🔥 🔥 🔥 🔥 🔥 🔥 🔥
+
       
 ### 3.0.1 
   - Added Tabs
