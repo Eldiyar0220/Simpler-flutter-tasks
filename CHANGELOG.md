@@ -6,7 +6,32 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Released]
 
-## Release Notes 🔥 🔥 🔥 🔥 🔥 🔥 🔥
+## Release Notes 🔥 🔥 🔥 🔥 🔥 🔥 🔥 ------- ✅
+
+### 3.0.3
+  - Optimize Starting Ios Commands ✅ -- beta testing
+    - pod install
+    - pod update
+    - pod cache clean --all
+    - pod repo update
+
+  - Added refresh Tab's button
+  - Added Collapse All Tab's button
+  - Added Tab's Git Hub ✅
+    - you can't start the command only COPY | it will be safer this way
+      - Init Repo
+      - Git Cancelers
+      - Git Repo
+
+
+### 3.0.2
+  - adding Tab's settings ✅
+    - I will add settings to my other extensions. ✅
+      - `Simpler FLutter Tasks`
+      - `Simpler FLutter Snippets`
+      - `Simpler FLutter Generators`
+
+
       
 ### 3.0.1 
   - Added Tabs

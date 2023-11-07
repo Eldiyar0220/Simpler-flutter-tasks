@@ -112,24 +112,36 @@ I'm working hard to select all the day to day commands, so wait for more command
 ## Not Released yet --------- ❌
 Planning 
 
+### 3.0.6
+  - I Will add to Explorer tab ❌
+    - without settings ❌
+
 ### 3.0.5
   - Settings Tabs ❌
     - Always Expand  ❌
     - Always Collapsed ❌
 
 ### 3.0.4
-  - add Open Ios Folder ❌
-  - add Open Ipa Folder ❌
-
-
-### 3.0.3
-  - Optimize Starting Ios Commands❌
-
-  - adding Tab's Git Hub ❌
-    - so Wait for More Command ❌
-
+  - Editing Easy Localizations ❌
+  - Add Open Ios Folder ❌
+  - Add Open Ipa Folder ❌
 
 ## Release Notes 🔥 🔥 🔥 🔥 🔥 🔥 🔥 ------- ✅
+
+### 3.0.3
+  - Optimize Starting Ios Commands ✅ -- beta test only for MAC
+    - pod install
+    - pod update
+    - pod cache clean --all
+    - pod repo update
+
+  - Added refresh Tab's button
+  - Added Collapse All Tab's button
+  - Added Tab's Git Hub ✅
+    - you can't start the command only COPY | it will be safer this way
+      - Init Repo
+      - Git Cancelers
+      - Git Repo
 
 
 ### 3.0.2
@@ -294,5 +306,6 @@ Vscode: ^1.82.0
 ## Reference
 
 [Simpler Flutter Snippet](https://marketplace.visualstudio.com/items?itemName=Eldiyar-Dev.simpler-flutter-snippets)
+[Simpler Flutter Generator](https://marketplace.visualstudio.com/items?itemName=Eldiyar-Dev.simpler-flutter-generator)
 
 Enjoy !!!! 😉 
