@@ -8,12 +8,22 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## Release Notes 🔥 🔥 🔥 🔥 🔥 🔥 🔥 ------- ✅
 
+### 3.0.4
+  - Editing Easy Localizations ✅
+  - Added descriptions for some Commands ✅
+  - Add Open Ios Folder ✅
+  - Add Open Ipa Folder ✅
+
+
 ### 3.0.3
-  - Optimize Starting Ios Commands ✅ -- beta testing
-    - pod install
-    - pod update
-    - pod cache clean --all
-    - pod repo update
+  - Optimize Starting Ios Commands ✅ -- beta test only for MAC
+    - WINDOWS ❌
+    - LINUX ❌
+    - MAC ✅
+      - pod install
+      - pod update
+      - pod cache clean --all
+      - pod repo update
 
   - Added refresh Tab's button
   - Added Collapse All Tab's button
@@ -186,5 +196,6 @@ Vscode: ^1.82.0
 ## Reference
 
 [Simpler Flutter Snippet](https://marketplace.visualstudio.com/items?itemName=Eldiyar-Dev.simpler-flutter-snippets)
+[Simpler Flutter Generator](https://marketplace.visualstudio.com/items?itemName=Eldiyar-Dev.simpler-flutter-generator)
 
 Enjoy !!!! 😉 

@@ -106,34 +106,48 @@ I'm working hard to select all the day to day commands, so wait for more command
 | `Git pull`               |    default  -  hide   |
 | `Small Apk`              |    default  -  hide   |
 | `Spider Build`           |    default  -  hide   |
-| `Easy Localizations`     |    default  -  hide   |
+| `Open Ios Folder`        |    default  -  hide   |
+| `Open Ipa Folder`        |    default  -  hide   |
+| `Easy Localizations`     |    default  -  show   |
 
 
 ## Not Released yet --------- ❌
+
 Planning 
 
 ### 3.0.6
-  - I Will add to Explorer tab ❌
-    - without settings ❌
-
-### 3.0.5
   - Settings Tabs ❌
     - Always Expand  ❌
     - Always Collapsed ❌
+  - Optimize Starting Ios Commands  ❌
+     - For
+        - WINDOWS ✅
+        - LINUX ✅
+        - MAC ✅
+      
 
-### 3.0.4
-  - Editing Easy Localizations ❌
-  - Add Open Ios Folder ❌
-  - Add Open Ipa Folder ❌
+### 3.0.5
+  - I Will add to Explorer tab ❌
+    - without settings ❌
 
 ## Release Notes 🔥 🔥 🔥 🔥 🔥 🔥 🔥 ------- ✅
 
+### 3.0.4
+  - Editing Easy Localizations ✅
+  - Added descriptions for some Commands ✅
+  - Add Open Ios Folder ✅
+  - Add Open Ipa Folder ✅clear
+
+
 ### 3.0.3
   - Optimize Starting Ios Commands ✅ -- beta test only for MAC
-    - pod install
-    - pod update
-    - pod cache clean --all
-    - pod repo update
+    - WINDOWS ❌
+    - LINUX ❌
+    - MAC ✅
+      - pod install
+      - pod update
+      - pod cache clean --all
+      - pod repo update
 
   - Added refresh Tab's button
   - Added Collapse All Tab's button
