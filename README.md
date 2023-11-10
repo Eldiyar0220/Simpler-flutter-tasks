@@ -98,9 +98,9 @@ I'm working hard to select all the day to day commands, so wait for more command
 | `Flutter clean`          |    default  -  show   |
 | `Flutter pub get`        |    default  -  show   |
 | `Flutter build apk`      |    default  -  show   |
-| `Flutter build ios`      |    default  -  show   |
-| `Flutter build ipa`      |    default  -  show   |
-| `flutter install`        |    default  -  show   |
+| `Flutter build ios`      |    default  -  hide   |
+| `Flutter build ipa`      |    default  -  hide   |
+| `flutter install`        |    default  -  hide   |
 | `Build runner`           |    default  -  show   |
 | `Open Apk Folder`        |    default  -  show   |
 | `Git pull`               |    default  -  hide   |
@@ -115,6 +115,14 @@ I'm working hard to select all the day to day commands, so wait for more command
 
 Planning 
 
+### 3.0.7
+  - Settings Tabs
+    - Flutter clean choices
+      - flutter clean and flutter pub get
+      - just flutter clean
+
+    - Create Custom Commands just open default settings
+  
 ### 3.0.6
   - Settings Tabs ❌
     - Always Expand  ❌
@@ -124,19 +132,21 @@ Planning
         - WINDOWS ✅
         - LINUX ✅
         - MAC ✅
-      
-
-### 3.0.5
-  - I Will add to Explorer tab ❌
-    - without settings ❌
 
 ## Release Notes 🔥 🔥 🔥 🔥 🔥 🔥 🔥 ------- ✅
+
+### 3.0.5
+  - I Will add to Explorer tab ✅
+    - without settings ✅
+
+  - Added Colorized The Commands ✅
+    - Switch between Colorized / White
 
 ### 3.0.4
   - Editing Easy Localizations ✅
   - Added descriptions for some Commands ✅
   - Add Open Ios Folder ✅
-  - Add Open Ipa Folder ✅clear
+  - Add Open Ipa Folder ✅
 
 
 ### 3.0.3
