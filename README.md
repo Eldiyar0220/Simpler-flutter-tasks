@@ -15,7 +15,8 @@
 
 ## Hide / Show Icon
 
-![simpler-flutter-tasks-commands](images/hide_show_icon.gif)
+<!-- ![simpler-flutter-tasks-commands](images/hide_show_icon.gif) -->
+![simpler-flutter-tasks-commands](images/hide_show_video.gif)
 
 `Copy this json and add to your VsCode settings.json` 
 
