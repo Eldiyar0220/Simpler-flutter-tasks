@@ -7,6 +7,55 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [Released]
 
 ## Release Notes 🔥 🔥 🔥 🔥 🔥 🔥 🔥 ------- ✅
+  
+### 3.0.6
+  - New Commands  ---- > 🔥 🔥 🔥
+    - Flutter ✅
+      - flutter logs 
+      - flutter pub cache clean | flutter pub cache repair
+      - flutter downgrade YOUR_FLUTTER_VERSION
+      - flutter --help --verbose
+
+    - Android (Gradle) ✅
+      - Dependencies
+      - SigningReport
+      - Build
+      - Clean
+
+    - IOS  ✅
+      - new commands
+        - pod setup
+        - pod init
+        - pod version
+      - Deleting ✅
+        - .symlinks
+        - Pods
+        - Podfile.lock
+        - De integrate
+      - cocoapods ✅
+        - sudo gem install cocoapods
+        - brew install cocoapods
+        - brew upgrade cocoapods
+        - brew link --overwrite cocoapods
+      
+    - Settings Tabs ✅
+
+      - Other Settings
+        - Always Expand  - Всегда Открытый когда запускается Visual Studio Code -
+        - Always Collapsed  - Всегда Закрытый когда запускается Visual Studio Code -
+
+      - Activate Custom Commands 
+
+      - Settings Bloc Extension 
+        - Cubit Type +
+    
+    - firebase's commands tab  ✅
+
+  - Optimize Starting Ios Commands  ❌
+     - For
+        - WINDOWS ❌
+        - LINUX ❌
+        - MAC ✅
 
 ### 3.0.5
   - I Will add to Explorer tab ✅
