@@ -24,7 +24,7 @@
 ![simpler-flutter-tasks-commands](images/last_hide_show.gif)
 ![simpler-flutter-tasks-commands](images/menu_explorer_video.mp4)
 <!-- <video src='images/menu_explorer_video.mp4' /> -->
-<video src="images/menu_explorer_video.mp4"></video>
+<video src="images/menu_explorer_video.mp4" width=1000></video>
 
 
 `Copy this json and add to your VsCode settings.json` 
