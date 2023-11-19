@@ -19,11 +19,6 @@
 <!-- ![simpler-flutter-tasks-commands](images/hide_show_icon.gif) -->
 ![simpler-flutter-tasks-commands](images/old_hide_show_video.gif)
 
-## Hide / Show Icon  last
-
-<!-- ![simpler-flutter-tasks-commands](images/last_hide_show.gif) -->
-![simpler-flutter-tasks-commands](images/menu_explorer_video.mp4)
-
 `Copy this json and add to your VsCode settings.json` 
 
 ```json
