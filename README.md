@@ -117,7 +117,7 @@ I'm working hard to select all the day to day commands, so wait for more command
 
 Planning 
 
-### 3.0.7
+### 3.0.8
   - Settings Tabs
     - Flutter clean choices
       - flutter clean and flutter pub get
@@ -130,6 +130,10 @@ Planning
         - MAC ✅
 
 ## Release Notes 🔥 🔥 🔥 🔥 🔥 🔥 🔥 ------- ✅
+
+### 3.0.7
+  - Just Changed Icons happy New Year 2024
+  - Slowed down some animation icons
   
 ### 3.0.6
   - New Commands  ---- > 🔥 🔥 🔥
