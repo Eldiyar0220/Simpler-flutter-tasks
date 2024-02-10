@@ -3,6 +3,9 @@
   <h1>Task for Visual Studio Code</h1>
 </div>
 
+
+- Keep in mind that if you install 'THE Simpler Flutter Tasks' you will have two additional extensions installed for work
+
 ![simpler-flutter-tasks-commands](images/simpler_flutter_tasks_first.gif)
 
 ## Menu Explorer Vs Code
@@ -131,6 +134,10 @@ Planning
 
 ## Release Notes 🔥 🔥 🔥 🔥 🔥 🔥 🔥 ------- ✅
 
+### 3.0.8
+  - Just removed Icons happy New Year 2024
+  - adding information that installing 3 extension
+  
 ### 3.0.7
   - Just Changed Icons happy New Year 2024
   - Slowed down some animation icons
