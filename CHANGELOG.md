@@ -8,6 +8,57 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## Release Notes 🔥 🔥 🔥 🔥 🔥 🔥 🔥 ------- ✅
   
+### 3.1.1
+  - added some new feature for Flavor
+    - adb uninstall
+    - adb flutter run release
+    - json of flavor was changed
+    - removed apple icon from top editor
+    - fixed the command flutter clean for windows
+    - 
+
+### 3.1.0
+  - Added Flutter Flavor
+    - KeyBinding alt/option + f 
+    - flutter-tasks.activateFlavor
+    - Commands example default
+
+      - PROD
+        - flutter build apk --flavor prod -t lib/main_prod.dart
+        - flutter build appbundle --flavor prod -t lib/main_prod.dart
+        - flutter build ios --flavor prod
+        - flutter build ipa --flavor prod
+        - open Bundle
+        - open Apk by ENV -> Flavor
+
+        - adb install build/app/outputs/flutter-apk/app-prod-release.apk
+
+      - Staging
+        - flutter build apk --flavor staging -t lib/main_staging.dart
+        - flutter build ios --flavor staging
+        - flutter build ipa --flavor staging
+
+        - open Apk by ENV -> Flavor
+        - adb install build/app/outputs/flutter-apk/app-staging-release.apk
+
+      - Dev
+        - flutter build apk --flavor dev -t lib/main_dev.dart
+        - flutter build ios --flavor dev
+        - flutter build ipa --flavor dev
+
+        - open Apk by ENV -> Flavor
+        - adb install build/app/outputs/flutter-apk/app-dev-release.apk
+
+  
+
+### 3.0.8
+  - Just removed Icons happy New Year 2024
+  - adding information that installing 3 extension
+  
+### 3.0.7
+  - Just Changed Icons happy New Year 2024
+  - Slowed down some animation icons
+  
 ### 3.0.6
   - New Commands  ---- > 🔥 🔥 🔥
     - Flutter ✅
@@ -23,10 +74,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
       - Clean
 
     - IOS  ✅
-      - new commands
-        - pod setup
-        - pod init
-        - pod version
+      - pod setup
+      - pod init
+      - pod version
       - Deleting ✅
         - .symlinks
         - Pods
