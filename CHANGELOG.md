@@ -8,6 +8,14 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## Release Notes 🔥 🔥 🔥 🔥 🔥 🔥 🔥 ------- ✅
   
+### 3.1.2
+  - added settings of Extension Simpler FLutter Snippets
+    - add/remove Bloc/Cubit builder wrapper
+    - add/remove Bloc/Cubit consumer wrapper
+    - add/remove Stack wrapper
+    - turn on/turn off remove widget short cut
+    - add Builder Runner With Filter
+    
 ### 3.1.1
   - added some new feature for Flavor
     - adb uninstall
