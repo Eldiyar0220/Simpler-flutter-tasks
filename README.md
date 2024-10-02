@@ -134,6 +134,46 @@ Planning
 
 ## Release Notes 🔥 🔥 🔥 🔥 🔥 🔥 🔥 ------- ✅
 
+### 3.1.4
+  - Changed Model of Flavor 
+### Old Format
+```
+ "SimplerFlutterTasks.Flavors":  [
+        {
+            "title": "prod",
+            "package": "com_packages_of_your_app"
+        },
+        {
+            "title": "staging",
+            "package": "com_packages_of_your_app"
+        },
+        {
+            "title": "dev",
+            "package": "com_packages_of_your_app"
+        }
+    ]
+```
+### New Format
+```
+"SimplerFlutterTasks.Flavors": {
+  "path": "lib/main",
+  "flavors": [
+      {
+          "title": "prod",
+          "package": "com_packages_of_your_app"
+      },
+      {
+          "title": "staging",
+          "package": "com_packages_of_your_app"
+      },
+      {
+          "title": "dev",
+          "package": "com_packages_of_your_app"
+      }
+  ]
+    },
+```
+    
 ### 3.1.3
   - refactor opening new terminal and added counter
   - added killing the port terminal killall -9 dart
