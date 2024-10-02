@@ -134,6 +134,12 @@ Planning
 
 ## Release Notes 🔥 🔥 🔥 🔥 🔥 🔥 🔥 ------- ✅
 
+### 3.1.3
+  - refactor opening new terminal and added counter
+  - added killing the port terminal killall -9 dart
+    - Waiting for another flutter command to release the startup lock
+    
+
 ### 3.1.2
   - added settings of Extension Simpler FLutter Snippets
     - add/remove Bloc/Cubit builder wrapper

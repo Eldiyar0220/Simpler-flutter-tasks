@@ -31,10 +31,6 @@ function StateInline(src, md, env, outTokens) {
 
   // Stack of delimiter lists for upper level tags
   this._prev_delimiters = [];
-
-  // backtick length => last seen position
-  this.backticks = {};
-  this.backticksScanned = false;
 }
 
 
