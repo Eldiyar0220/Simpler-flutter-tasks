@@ -134,6 +134,61 @@ Planning
 
 ## Release Notes 🔥 🔥 🔥 🔥 🔥 🔥 🔥 ------- ✅
 
+### 3.1.5
+  - "warningDialog": true,
+  - "askerForCommand": true
+  - example
+custom commands in user json settings 
+
+```
+"SimplerFlutterTasks.customCommandsList": [
+        {
+            "label": "Go to DEV",
+            "command": "git checkout DEV && git pull",
+            "enabled": true,
+            "color": "#00ff11",
+            "position": "left",
+            "warningDialog": true,
+            "askerForCommand": false
+        },
+        {
+            "label": "push",
+            "command": "git push --set-upstream origin",
+            "enabled": true,
+            "color": "#00ff11",
+            "position": "left",
+            "warningDialog": true,
+            "askerForCommand": false
+        },
+        {
+            "label": "Commit",
+            "command": "git add . && git commit -m ",
+            "enabled": true,
+            "color": "#00ff11",
+            "position": "left",
+            "warningDialog": false,
+            "askerForCommand": false
+        },
+        {
+            "label": "Rebase",
+            "command": "git pull --rebase origin main",
+            "enabled": true,
+            "color": "#00ff11",
+            "position": "left",
+            "warningDialog": true,
+            "askerForCommand": false
+        },
+        {
+            "label": "New Branch",
+            "command": "git checkout -b",
+            "enabled": true,
+            "color": "#00ff11",
+            "position": "left",
+            "warningDialog": false,
+            "askerForCommand": true
+        }
+    ],
+```
 ### 3.1.4
   - Changed Model of Flavor 
 ### Old Format

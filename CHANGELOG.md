@@ -8,7 +8,19 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## Release Notes 🔥 🔥 🔥 🔥 🔥 🔥 🔥 ------- ✅
   
+### 3.1.5
+custom commands in user json settings\
+"label": "----> (pub get)",     -----// Change label\
+"command": "flutter pub get",   ----// write your any Commands\
+"enabled": true,                ---// Change visibility\
+"color": "#00ff15",             --// Change Color\
+"position": "left",				      -// Change position\
+"warningDialog": false,			   -// show confirm start the command\
+"askerForCommand": false	    -// asking alert from user
 
+
+  - "warningDialog": true,
+  - "askerForCommand": true
 ### 3.1.4
   - Changed Model of Flavor 
 ### Old Format
