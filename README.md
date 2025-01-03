@@ -61,15 +61,19 @@ create more commands
         "command": "flutter pub get",
         "enabled": true,
         "color": "#00ff22",
-        "position": "right"
+        "position": "right",
+        "warningDialog": false,
+        "askerForCommand": true
     },
     {
-        "label": "Custom Command 2 $(globe)",
-        "command": "flutter build apk",
+        "label": "New Branch",
+        "command": "git checkout -b",
         "enabled": true,
-        "color": "#09eeb5",
-        "position": "right", 
-    },
+        "color": "#00ff11",
+        "position": "left",
+        "warningDialog": false,
+        "askerForCommand": true
+    }
 ],
 ```
 
