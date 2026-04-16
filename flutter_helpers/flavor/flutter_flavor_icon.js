@@ -109,14 +109,14 @@ function generateFlutterCommands(flavor, context, selectedPackage, path) {
         // 🤖 Android
         { label: 'Android', kind: QuickPickItemKind.Separator },
 
-        { label: 'Build APK ->', command: `flutter build apk --flavor ${flavor} -t ${path}_${flavor}.dart` },
+        { label: 'Build APK ->', command: `flutter build apk --flavor ${flavor} -t ${path}.dart` },
 
         // 🍎 iOS
         { label: 'iOS', kind: QuickPickItemKind.Separator },
 
         { label: 'Build IOS ->', command: `flutter build ios --flavor ${flavor}` },
         { label: 'Build IPA ->', command: `flutter build ipa --flavor ${flavor}` },
-        { label: '', kind: QuickPickItemKind.Separator },
+        { label: 'Android', kind: QuickPickItemKind.Separator },
 
     ];
 
@@ -127,14 +127,14 @@ function generateFlutterCommands(flavor, context, selectedPackage, path) {
         flavor === 'Production'
     ) {
         commands.push(
-            { label: 'Build bundle ->', command: `flutter build appbundle --flavor ${flavor} -t ${path}_${flavor}.dart` },
+            { label: 'Build bundle ->', command: `flutter build appbundle --flavor ${flavor} -t ${path}.dart` },
             { label: 'Open bundle ->', command: flavor.toUpperCase() },
         );
     }
 
     commands.push(
         { label: 'Open APK ->', command: flavor.toUpperCase() },
-        { label: 'Flutter Run ->', command: `flutter run --release --flavor ${flavor} -t ${path}_${flavor}.dart` },
+        { label: 'Flutter Run ->', command: `flutter run --release --flavor ${flavor} -t ${path}.dart` },
         { label: 'Flutter Install $(star-full) ->', command: `adb install build/app/outputs/flutter-apk/app-${flavor}-release.apk` },
         { label: 'Delete Apk', command: `adb uninstall ${selectedPackage}` },
     );
@@ -150,7 +150,7 @@ function generateFlutterCommandsOnlyInstall(flavor, context, selectedPackage, pa
         { label: 'Android', kind: QuickPickItemKind.Separator },
 
         { label: 'Flutter Install $(star-full) ->', command: `adb install build/app/outputs/flutter-apk/app-${flavor}-release.apk` },
-        { label: 'Build APK ->', command: `flutter build apk --flavor ${flavor} -t ${path}_${flavor}.dart` },
+        { label: 'Build APK ->', command: `flutter build apk --flavor ${flavor} -t ${path}.dart` },
     ];
 
     if (
@@ -160,7 +160,7 @@ function generateFlutterCommandsOnlyInstall(flavor, context, selectedPackage, pa
         flavor === 'Production'
     ) {
         commands.push(
-            { label: 'Build bundle ->', command: `flutter build appbundle --flavor ${flavor} -t ${path}_${flavor}.dart` },
+            { label: 'Build bundle ->', command: `flutter build appbundle --flavor ${flavor} -t ${path}.dart` },
             { label: 'Open bundle ->', command: flavor.toUpperCase() },
         );
     }
