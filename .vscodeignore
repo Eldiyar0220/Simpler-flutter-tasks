@@ -3,7 +3,9 @@
 test/**
 .gitignore
 .yarnrc
-vsc-extension-quickstart.md
+PUBLISHING.md
+**/.DS_Store
+**/*.vsix
 **/jsconfig.json
 **/*.map
 **/.eslintrc.json

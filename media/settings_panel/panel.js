@@ -1,0 +1,1167 @@
+(function () {
+    // eslint-disable-next-line no-undef
+    const vscode = acquireVsCodeApi();
+    const SAVE_DELAY_MS = 500;
+    const RENDER_DELAY_MS = 220;
+    const GIT_COMMAND = /^\s*git\s/;
+    const ASK_FLAVOR = /\s*--flavor\s*$/;
+    const TRAILING_FLAVOR = /\s*--flavor(?:[\s=]+[^\s-]\S*)?\s*$/;
+
+    const sectionsRoot = document.getElementById('sections');
+    const navRoot = document.getElementById('nav');
+    const searchInput = document.getElementById('search');
+    const emptySearch = document.getElementById('emptySearch');
+    const toast = document.getElementById('toast');
+
+    let state;
+    let pendingState;
+    let customCommands = [];
+    let commandGroups = [];
+    let saveTimer;
+    let colorTimer;
+    let renderTimer;
+    let toastTimer;
+    let expectSaved = false;
+    let pendingFocusId;
+    const uiState = vscode.getState() || {};
+    const collapsed = new Set(uiState.collapsed || ['statusBar', 'customCommands', 'other']);
+    const collapsedCats = new Set(uiState.collapsedCats || []);
+    const GIT_CAT = 'git';
+
+    /** Tiny DOM builder: h('div', { class: 'x', onclick }, child, 'text'). */
+    function h(tag, attrs, ...children) {
+        const element = document.createElement(tag);
+        for (const [name, value] of Object.entries(attrs || {})) {
+            if (value === undefined || value === null || value === false) {
+                continue;
+            }
+            if (name.startsWith('on')) {
+                element.addEventListener(name.slice(2), value);
+            } else if (name === 'style') {
+                Object.assign(element.style, value);
+            } else if (name in element && typeof value !== 'string') {
+                element[name] = value;
+            } else {
+                element.setAttribute(name, value === true ? '' : value);
+            }
+        }
+        for (const child of children.flat()) {
+            if (child !== undefined && child !== null && child !== false) {
+                element.append(child instanceof Node ? child : String(child));
+            }
+        }
+        return element;
+    }
+
+    function post(message) {
+        expectSaved = true;
+        vscode.postMessage(message);
+    }
+
+    function showToast(text, action) {
+        if (!action && toast.querySelector('.toast__action') && toast.classList.contains('toast--visible')) {
+            return;
+        }
+        clearTimeout(toastTimer);
+        toast.replaceChildren(text);
+        if (action) {
+            toast.append(h('button', { class: 'toast__action', onclick: () => { action.run(); hideToast(); } }, action.label));
+        }
+        toast.classList.add('toast--visible');
+        toastTimer = setTimeout(hideToast, action ? 5000 : 1400);
+    }
+
+    function hideToast() {
+        toast.classList.remove('toast--visible');
+    }
+
+    // ---------- controls ----------
+
+    function switchControl(checked, onChange, label) {
+        return h('label', { class: 'switch', title: label },
+            h('input', { type: 'checkbox', checked, 'aria-label': label, onchange: event => onChange(event.target.checked) }),
+            h('span', { class: 'switch__track' }, h('span', { class: 'switch__thumb' })));
+    }
+
+    function segmented(options, value, onChange) {
+        const group = h('div', { class: 'segmented', role: 'radiogroup' });
+        const select = selected => group.querySelectorAll('.segmented__option').forEach((button, index) => {
+            const active = options[index].value === selected;
+            button.classList.toggle('segmented__option--active', active);
+            button.setAttribute('aria-checked', String(active));
+        });
+        group.append(...options.map(option => h('button', {
+            class: 'segmented__option',
+            role: 'radio',
+            onclick: () => {
+                select(option.value);
+                onChange(option.value);
+            },
+        }, option.label)));
+        select(value);
+        return group;
+    }
+
+    function setControl(control, value) {
+        post({ type: 'set', key: control.key, value });
+    }
+
+    function renderControl(control) {
+        const text = h('div', { class: 'row__text' },
+            h('div', { class: 'row__label' },
+                control.color && h('span', { class: 'dot', style: paint('background', control.color) }),
+                control.label),
+            control.hint && h('div', { class: 'row__hint' }, control.hint));
+
+        let input;
+        let children;
+        if (control.kind === 'boolean' || control.kind === 'visibility') {
+            const toggle = switchControl(Boolean(control.value), value => {
+                control.value = value;
+                setControl(control, value);
+                if (children) {
+                    children.classList.toggle('group__children--open', value);
+                }
+            }, control.label);
+            input = control.colorPicker && state.colorized
+                ? h('div', { class: 'row__end' }, colorInput(control), toggle)
+                : toggle;
+        } else if (control.kind === 'text') {
+            input = h('input', {
+                class: 'text-input',
+                type: 'text',
+                value: control.value || '',
+                onchange: event => setControl(control, event.target.value),
+                onkeydown: event => event.key === 'Enter' && event.target.blur(),
+            });
+        }
+
+        const row = h('div', {
+            class: `row${control.kind === 'text' ? ' row--stacked' : ''}`,
+            'data-search': `${control.label} ${control.hint || ''} ${control.key}`.toLowerCase(),
+        }, text, input);
+
+        if (control.flavorAware) {
+            return h('div', {}, row, flavorOptions(control, input));
+        }
+        if (!control.children) {
+            return row;
+        }
+        const open = Boolean(control.value);
+        children = h('div', { class: `group__children${open ? ' group__children--open' : ''}` },
+            h('div', { class: 'group__inner' }, control.children.map(renderControl)));
+        return h('div', { class: 'group' }, row, children);
+    }
+
+    /**
+     * Extra section under an editable command: a command ending with "--flavor"
+     * asks for a flavor on click, the list shows what will be offered.
+     */
+    function flavorOptions(control, input) {
+        const asks = () => ASK_FLAVOR.test(input.value);
+        const base = () => input.value.replace(TRAILING_FLAVOR, '').trimEnd();
+        const list = h('div', { class: 'flavor-list' });
+        const listWrap = h('div', { class: 'group__children' }, h('div', { class: 'group__inner' }, list));
+
+        const flavorGif = typeof SECTION_ICONS !== 'undefined' && SECTION_ICONS.flavor;
+        const chip = flagChip(h('span', { class: 'flag__text' },
+            flavorGif ? h('img', { class: 'section-icon', src: flavorGif, alt: '' }) : '🎯',
+            'Ask for flavor on click'), {
+            en: 'Adds "--flavor" with no value. On click a menu asks which flavor to use, plus Default without a flavor.',
+            ru: 'Добавляет «--flavor» без значения. По клику откроется меню: prod / staging / dev и Default без flavor.',
+        }, asks(), checked => {
+            input.value = checked ? `${base()} --flavor` : base();
+            setControl(control, input.value);
+            sync();
+        });
+
+        function sync() {
+            const on = asks();
+            chip.classList.toggle('flag--on', on);
+            chip.querySelector('input').checked = on;
+            listWrap.classList.toggle('group__children--open', on);
+            const flavorItems = state.flavors.map(flavor => [`${base()} --flavor ${flavor}`, flavor]);
+            flavorItems.push([base(), 'Default']);
+            list.replaceChildren(...flavorItems.map(([command, name]) => h('div', { class: 'flavor-list__item' },
+                h('code', {}, command),
+                h('span', { class: 'flavor-list__name' }, name))));
+        }
+
+        input.addEventListener('input', sync);
+        sync();
+        return h('div', { class: 'flavor-options' }, chip, listWrap);
+    }
+
+    // ---------- status bar preview ----------
+
+    /** Button colors follow the "Colorized commands" setting, like the real status bar. */
+    function paint(property, color, on = state.colorized) {
+        return on && color ? { [property]: color } : {};
+    }
+
+    function statusBarPreview(section) {
+        const chips = section.controls
+            .filter(control => control.value && control.preview)
+            .map(control => h('span', { class: 'chip', style: paint('color', control.color) }, control.preview));
+        const custom = customCommands.filter(command => command.enabled && !command.archived);
+        const git = custom.filter(command => GIT_COMMAND.test(command.command || ''));
+        const knownGroups = new Set(commandGroups.map(group => group.id));
+        custom.filter(command => !GIT_COMMAND.test(command.command || '') && !(command.group && knownGroups.has(command.group)))
+            .forEach(command => chips.push(h('span', { class: 'chip', style: paint('color', command.color, state.colorizedCustom) }, command.label)));
+        if (git.length > 0 && state.gitMenuIcon !== false) {
+            chips.push(h('span', { class: 'chip', style: paint('color', git[0].color, state.colorizedCustom) }, `⎇ GIT Helps (${git.length})`));
+        }
+        commandGroups.forEach(group => {
+            if (group.enabled === false) {
+                return;
+            }
+            const count = custom.filter(command => command.group === group.id).length;
+            if (count > 0) {
+                chips.push(h('span', { class: 'chip', style: paint('color', group.color, state.colorizedCustom) }, `📂 ${group.label || 'Menu'} (${count})`));
+            }
+        });
+        return h('div', { class: 'statusbar', title: 'Preview of your status bar' },
+            h('span', { class: 'statusbar__branch' }, '⎇ main'),
+            chips.length > 0 ? chips : h('span', { class: 'chip chip--muted' }, 'No buttons'));
+    }
+
+    // ---------- custom commands ----------
+
+    function colorInput(control) {
+        const apply = (color, immediate) => {
+            control.color = color;
+            const dot = picker.closest('.row') && picker.closest('.row').querySelector('.dot');
+            if (dot && state.colorized) {
+                dot.style.background = color;
+            }
+            clearTimeout(colorTimer);
+            const send = () => post({ type: 'setStatusBarColor', setting: control.key, color });
+            if (immediate) {
+                send();
+            } else {
+                colorTimer = setTimeout(send, SAVE_DELAY_MS);
+            }
+        };
+        const picker = h('input', {
+            class: 'color',
+            type: 'color',
+            value: normalizeColor(control.color),
+            title: 'Button color',
+            oninput: event => apply(event.target.value, false),
+            onchange: event => apply(event.target.value, true),
+        });
+        return picker;
+    }
+
+    function normalizeColor(color) {
+        if (/^#[0-9a-f]{6}$/i.test(color || '')) {
+            return color;
+        }
+        const short = /^#([0-9a-f])([0-9a-f])([0-9a-f])$/i.exec(color || '');
+        return short ? `#${short[1]}${short[1]}${short[2]}${short[2]}${short[3]}${short[3]}` : '#ffffff';
+    }
+
+    function saveCustomCommands(immediate) {
+        clearTimeout(saveTimer);
+        const send = () => {
+            saveTimer = undefined;
+            post({ type: 'customCommands', list: customCommands, groups: commandGroups });
+        };
+        if (immediate) {
+            send();
+        } else {
+            saveTimer = setTimeout(send, SAVE_DELAY_MS);
+        }
+    }
+
+    /** Text fields are saved with a delay while typing and right away on blur. */
+    function updateCommand(index, patch, immediate = true) {
+        customCommands[index] = { ...customCommands[index], ...patch };
+        saveCustomCommands(immediate);
+    }
+
+    function lessonButton(id) {
+        return h('button', {
+            class: 'tip__more',
+            type: 'button',
+            onmousedown: event => {
+                event.preventDefault();
+                event.stopPropagation();
+            },
+            onclick: event => {
+                event.preventDefault();
+                event.stopPropagation();
+                openLesson(id);
+            },
+        }, 'Подробнее · More');
+    }
+
+    function tipBody(en, ru, lessonId) {
+        return h('span', { class: 'tip', role: 'tooltip' },
+            h('strong', {}, en),
+            h('span', {}, ru),
+            lessonId && lessonButton(lessonId));
+    }
+
+    function withTip(element, en, ru, lessonId) {
+        element.classList.add('has-tip');
+        element.append(tipBody(en, ru, lessonId));
+        return element;
+    }
+
+    function flagChip(label, tip, checked, onChange, lessonId) {
+        const chip = h('label', { class: `flag${checked ? ' flag--on' : ''}` },
+            h('input', {
+                type: 'checkbox',
+                checked,
+                onchange: event => {
+                    chip.classList.toggle('flag--on', event.target.checked);
+                    onChange(event.target.checked);
+                },
+            }),
+            label,
+            tip && tipBody(tip.en, tip.ru, lessonId));
+        return chip;
+    }
+
+    const LESSONS = {
+        position: {
+            en: 'Left / Right — where the button sits on the status bar.',
+            ru: 'Left / Right — с какой стороны status bar появится кнопка.',
+            demo: 'position',
+        },
+        confirm: {
+            en: 'Confirm — VS Code asks “Are you sure?” before the command runs.',
+            ru: 'Confirm — VS Code спросит «Вы уверены?» и только потом запустит команду.',
+            demo: 'confirm',
+        },
+        edit: {
+            en: 'Edit first — a text field opens, you can change the command, then it runs.',
+            ru: 'Edit first — сначала поле ввода, правите команду, запускается то, что ввели.',
+            demo: 'edit',
+        },
+        then: {
+            en: 'Plus adds a then-command. It runs after the main one: main && then.',
+            ru: 'Плюс добавляет дочернюю команду. Она выполнится после основной: main && then.',
+            demo: 'then',
+        },
+        archive: {
+            en: 'Remove hides the button, but keeps the command in History and settings.json.',
+            ru: 'Крестик убирает кнопку, команда остаётся в истории на панели и в settings.json.',
+            demo: 'archive',
+        },
+        expand: {
+            en: 'On start the Commands sidebar opens this category, like Android with Build APK already visible.',
+            ru: 'При старте в сайдбаре Commands эта категория уже раскрыта — например Android с Build APK.',
+            demo: 'expand',
+        },
+    };
+
+    function renderDemo(kind) {
+        if (kind === 'position') {
+            return h('div', { class: 'demo demo-bar' },
+                h('span', { class: 'demo-chip demo-chip--slide' }, 'Auto Route'),
+                h('span', { class: 'demo-bar__end' }, 'UTF-8'));
+        }
+        if (kind === 'confirm') {
+            return h('div', { class: 'demo demo-confirm' },
+                h('div', { class: 'demo-confirm__dialog' },
+                    h('div', { class: 'demo-confirm__icon' }, '⚠️'),
+                    h('p', { class: 'demo-confirm__title' }, 'Simpler Flutter Tasks'),
+                    h('p', { class: 'demo-confirm__text' }, 'Вы уверены, что хотите продолжить?'),
+                    h('p', { class: 'demo-confirm__cmd' }, '"git checkout -b"'),
+                    h('div', { class: 'demo-confirm__actions' },
+                        h('span', { class: 'demo-confirm__cancel' }, 'Cancel'),
+                        h('span', { class: 'demo-confirm__yes' }, 'YES'))));
+        }
+        if (kind === 'edit') {
+            return h('div', { class: 'demo demo-edit' },
+                h('div', { class: 'demo-edit__box' },
+                    h('div', { class: 'demo-edit__field' },
+                        h('span', {}, 'git add . && git commit -m \''),
+                        h('span', { class: 'demo-edit__typed' }, 'init'),
+                        h('span', { class: 'demo-edit__caret' }),
+                        h('span', {}, '\'')),
+                    h('p', { class: 'demo-edit__hint' }, "Press 'Enter' to confirm your input or 'Escape' to cancel")));
+        }
+        if (kind === 'then') {
+            return h('div', { class: 'demo demo-then' },
+                h('code', {}, 'build_runner …'),
+                h('span', { class: 'demo-then__and' }, '&&'),
+                h('code', {}, 'flutter pub get'));
+        }
+        if (kind === 'expand') {
+            const row = (label, cls) => h('div', { class: `demo-tree__row${cls ? ` ${cls}` : ''}` },
+                h('span', { class: 'demo-tree__chevron' }), label);
+            return h('div', { class: 'demo demo-expand' },
+                h('div', { class: 'demo-expand__switch' },
+                    h('span', {}, 'Android'),
+                    h('span', { class: 'demo-expand__track' }, h('span', { class: 'demo-expand__thumb' }))),
+                h('div', { class: 'demo-tree' },
+                    h('div', { class: 'demo-tree__title' }, 'COMMANDS'),
+                    row('Build Runner'),
+                    row('Flutter'),
+                    h('div', { class: 'demo-tree__cat' },
+                        row('Android', 'demo-tree__row--active'),
+                        h('div', { class: 'demo-tree__kids' },
+                            h('div', { class: 'demo-tree__kids-inner' },
+                                h('div', { class: 'demo-tree__child' }, '1) Build APK'),
+                                h('div', { class: 'demo-tree__child' }, '2) Build App Bundle'),
+                                h('div', { class: 'demo-tree__child' }, '3) Build Small apk')))),
+                    row('iOS'),
+                    row('Git Hub')));
+        }
+        return h('div', { class: 'demo demo-archive' },
+            h('span', { class: 'demo-chip demo-chip--hide' }, 'Auto Route'),
+            h('span', { class: 'demo-history' }, 'History / История'));
+    }
+
+    function openLesson(id) {
+        const lesson = LESSONS[id];
+        if (!lesson) {
+            return;
+        }
+        const close = () => overlay.remove();
+        const gif = !['confirm', 'edit'].includes(id)
+            && typeof LESSON_GIFS !== 'undefined'
+            && LESSON_GIFS[id];
+        const overlay = h('div', { class: 'confirm', onclick: event => event.target === overlay && close() },
+            h('div', { class: 'confirm__box lesson' },
+                gif
+                    ? h('img', { class: 'lesson__gif', src: gif, alt: lesson.en })
+                    : renderDemo(lesson.demo),
+                h('p', { class: 'confirm__en' }, lesson.en),
+                h('p', { class: 'confirm__ru' }, lesson.ru),
+                h('div', { class: 'confirm__actions' },
+                    h('button', { class: 'button', onclick: close }, 'Got it / Понятно'))));
+        document.body.append(overlay);
+    }
+
+    function commandTextInput(index, field, extra) {
+        return h('input', {
+            class: 'text-input',
+            type: 'text',
+            value: customCommands[index][field] || '',
+            'data-focus': `${field}-${index}`,
+            oninput: event => updateCommand(index, { [field]: event.target.value }, false),
+            onchange: () => saveCustomCommands(true),
+            onkeydown: event => event.key === 'Enter' && event.target.blur(),
+            ...extra,
+        });
+    }
+
+    function renderCommandCard(command, index) {
+        const isGit = GIT_COMMAND.test(command.command || '');
+        const actives = laneIndexes(index);
+        const place = actives.indexOf(index);
+        const last = place === actives.length - 1;
+        const grouped = Boolean(command.group && commandGroups.some(group => group.id === command.group));
+        const card = h('div', {
+            class: `command${command.enabled ? '' : ' command--disabled'}`,
+            'data-search': `${command.label} ${command.command} ${(command.then || []).join(' ')} ${isGit ? 'git' : ''}`.toLowerCase(),
+            draggable: !isGit,
+            ondragstart: event => startCommandDrag(event, index),
+            ondragend: event => event.currentTarget.classList.remove('command--dragging'),
+        },
+            h('div', { class: 'command__top' },
+                h('input', {
+                    class: 'color',
+                    type: 'color',
+                    value: normalizeColor(command.color),
+                    title: 'Button color',
+                    oninput: event => updateCommand(index, { color: event.target.value }, false),
+                    onchange: () => saveCustomCommands(true),
+                }),
+                commandTextInput(index, 'label', { class: 'text-input command__label', placeholder: 'Button label' }),
+                switchControl(Boolean(command.enabled), value => {
+                    card.classList.toggle('command--disabled', !value);
+                    updateCommand(index, { enabled: value });
+                }, 'Enabled')),
+            commandTextInput(index, 'command', { class: 'text-input text-input--mono', placeholder: 'flutter pub get' }),
+            renderThenList(index),
+            h('div', { class: 'command__bottom' },
+                !isGit && !grouped && withTip(
+                    segmented([{ value: 'left', label: '← Left' }, { value: 'right', label: 'Right →' }], command.position || 'left',
+                        value => updateCommand(index, { position: value })),
+                    'Puts this button on the left or right of the status bar.',
+                    'Кнопка будет слева или справа на status bar.',
+                    'position',
+                ),
+                flagChip('⚠️ Confirm', {
+                    en: 'Asks “Are you sure?” before running. Protects against accidental clicks.',
+                    ru: 'Перед запуском спросит «Вы уверены?». Защита от случайного нажатия.',
+                }, Boolean(command.warningDialog),
+                    value => updateCommand(index, { warningDialog: value }), 'confirm'),
+                flagChip('✏️ Edit first', {
+                    en: 'Opens a text field so you can change the command, then runs what you typed.',
+                    ru: 'Сначала откроет поле, где можно поправить команду, и запустит то, что вы ввели.',
+                }, Boolean(command.askerForCommand),
+                    value => updateCommand(index, { askerForCommand: value }), 'edit'),
+                h('div', { class: 'spacer' }),
+                h('button', { class: 'icon-button', title: 'Move up', disabled: place === 0, onclick: () => moveCommand(index, -1) }, '↑'),
+                h('button', { class: 'icon-button', title: 'Move down', disabled: last, onclick: () => moveCommand(index, 1) }, '↓'),
+                withTip(h('button', { class: 'icon-button card__add', onclick: () => addThen(index) }, '+'),
+                    'Then-command: runs after this one, chained with &&.',
+                    'Дочерняя команда: запустится после основной, через &&.',
+                    'then'),
+                withTip(h('button', { class: 'icon-button icon-button--trash', title: 'To History / В историю', onclick: () => archiveCommand(index) }, '🗑️'),
+                    'Hide from the status bar. The command stays in History and settings.json.',
+                    'Убрать из status bar. Команда останется в истории на панели и в settings.json.',
+                    'archive')));
+        return card;
+    }
+
+    function activeIndexes() {
+        return customCommands.map((command, index) => command.archived ? -1 : index).filter(index => index >= 0);
+    }
+
+    function askConfirm({ en, ru, ok }) {
+        return new Promise(resolve => {
+            const close = accepted => {
+                overlay.remove();
+                resolve(accepted);
+            };
+            const overlay = h('div', { class: 'confirm', onclick: event => event.target === overlay && close(false) },
+                h('div', { class: 'confirm__box' },
+                    h('p', { class: 'confirm__en' }, en),
+                    h('p', { class: 'confirm__ru' }, ru),
+                    h('div', { class: 'confirm__actions' },
+                        h('button', { class: 'button button--ghost', onclick: () => close(false) }, 'Cancel / Отмена'),
+                        h('button', { class: 'button', onclick: () => close(true) }, ok))));
+            document.body.append(overlay);
+        });
+    }
+
+    function laneIndexes(index) {
+        const command = customCommands[index];
+        const git = GIT_COMMAND.test(command.command || '');
+        const group = command.group || '';
+        return customCommands.map((item, itemIndex) => {
+            if (item.archived) {
+                return -1;
+            }
+            const itemGit = GIT_COMMAND.test(item.command || '');
+            if (git || itemGit) {
+                return git && itemGit ? itemIndex : -1;
+            }
+            return (item.group || '') === group ? itemIndex : -1;
+        }).filter(itemIndex => itemIndex >= 0);
+    }
+
+    function startCommandDrag(event, index) {
+        if (event.target.closest('input, textarea, button, select, a, label, .flag, .segmented')) {
+            event.preventDefault();
+            return;
+        }
+        event.dataTransfer.setData('text/plain', String(index));
+        event.dataTransfer.effectAllowed = 'move';
+        event.currentTarget.classList.add('command--dragging');
+    }
+
+    function bindDrop(element, groupId) {
+        element.addEventListener('dragover', event => {
+            event.preventDefault();
+            element.classList.add('category--dragover');
+        });
+        element.addEventListener('dragleave', event => {
+            if (!element.contains(event.relatedTarget)) {
+                element.classList.remove('category--dragover');
+            }
+        });
+        element.addEventListener('drop', event => {
+            event.preventDefault();
+            element.classList.remove('category--dragover');
+            const index = Number(event.dataTransfer.getData('text/plain'));
+            const command = customCommands[index];
+            if (!command || GIT_COMMAND.test(command.command || '')) {
+                return;
+            }
+            if (groupId) {
+                collapsedCats.delete(groupId);
+                persistUi();
+            }
+            updateCommand(index, { group: groupId || '' });
+            rerender();
+        });
+    }
+
+    function moveCommand(index, delta) {
+        const actives = laneIndexes(index);
+        const place = actives.indexOf(index);
+        const swapWith = actives[place + delta];
+        if (swapWith === undefined) {
+            return;
+        }
+        const current = customCommands[index];
+        customCommands[index] = customCommands[swapWith];
+        customCommands[swapWith] = current;
+        saveCustomCommands(true);
+        rerender();
+    }
+
+    async function archiveCommand(index) {
+        const command = customCommands[index];
+        const ok = await askConfirm({
+            en: `Remove “${command.label || command.command}” from the status bar? It will stay in History on this panel and in settings.json.`,
+            ru: `Убрать «${command.label || command.command}» из status bar? Команда останется в истории на панели и в settings.json.`,
+            ok: 'Remove / Убрать',
+        });
+        if (!ok) {
+            return;
+        }
+        const [removed] = customCommands.splice(index, 1);
+        removed.archived = true;
+        removed.enabled = false;
+        customCommands.push(removed);
+        saveCustomCommands(true);
+        rerender();
+    }
+
+    function restoreCommand(index) {
+        const command = customCommands[index];
+        const group = command.group && commandGroups.some(item => item.id === command.group) ? command.group : '';
+        customCommands[index] = { ...command, archived: false, enabled: true, group };
+        saveCustomCommands(true);
+        rerender();
+    }
+
+    async function forgetCommand(index) {
+        const command = customCommands[index];
+        const ok = await askConfirm({
+            en: `Delete “${command.label || command.command}” from settings.json forever?`,
+            ru: `Удалить «${command.label || command.command}» из settings.json навсегда?`,
+            ok: 'Delete / Удалить',
+        });
+        if (!ok) {
+            return;
+        }
+        customCommands.splice(index, 1);
+        saveCustomCommands(true);
+        rerender();
+    }
+
+    function addCommand(group, draft = {}) {
+        if (group) {
+            collapsedCats.delete(group);
+            persistUi();
+        }
+        customCommands.push({
+            label: draft.label || 'New command',
+            command: draft.command || '',
+            enabled: true,
+            color: draft.color || '#02b5ff',
+            position: draft.position || 'left',
+            warningDialog: false,
+            askerForCommand: false,
+            then: [],
+            group: group || '',
+        });
+        saveCustomCommands(true);
+        rerender();
+        const input = sectionsRoot.querySelector(`[data-focus="command-${customCommands.length - 1}"]`);
+        if (input) {
+            input.focus();
+        }
+    }
+
+    function gitCommands() {
+        return customCommands.map((command, index) => ({ command, index }))
+            .filter(({ command }) => !command.archived && GIT_COMMAND.test(command.command || ''));
+    }
+
+    function addGitCommand() {
+        collapsedCats.delete(GIT_CAT);
+        persistUi();
+        const existing = gitCommands();
+        addCommand('', {
+            label: 'New git command',
+            command: 'git ',
+            color: existing[0] && existing[0].command.color,
+            position: existing[0] && existing[0].command.position,
+        });
+    }
+
+    function thenList(index) {
+        return customCommands[index].then || [];
+    }
+
+    function addThen(index) {
+        updateCommand(index, { then: [...thenList(index), ''] });
+        rerender();
+        const input = sectionsRoot.querySelector(`[data-focus="then-${index}-${thenList(index).length - 1}"]`);
+        if (input) {
+            input.focus();
+        }
+    }
+
+    function updateThen(index, thenIndex, value, immediate) {
+        const then = [...thenList(index)];
+        then[thenIndex] = value;
+        updateCommand(index, { then }, immediate);
+    }
+
+    function deleteThen(index, thenIndex) {
+        updateCommand(index, { then: thenList(index).filter((_, itemIndex) => itemIndex !== thenIndex) });
+        rerender();
+    }
+
+    function renderThenList(index) {
+        const then = thenList(index);
+        if (then.length === 0) {
+            return undefined;
+        }
+        return h('div', { class: 'then-list' },
+            then.map((command, thenIndex) => h('div', { class: 'then-row', 'data-search': command.toLowerCase() },
+                withTip(h('span', { class: 'then-row__step' }, 'then'),
+                    'Runs after the command above.',
+                    'Выполнится после команды выше.'),
+                h('input', {
+                    class: 'text-input text-input--mono',
+                    type: 'text',
+                    value: command,
+                    placeholder: 'flutter pub get',
+                    'data-focus': `then-${index}-${thenIndex}`,
+                    oninput: event => updateThen(index, thenIndex, event.target.value, false),
+                    onchange: () => saveCustomCommands(true),
+                    onkeydown: event => event.key === 'Enter' && event.target.blur(),
+                }),
+                h('button', { class: 'icon-button icon-button--danger', title: 'Remove', onclick: () => deleteThen(index, thenIndex) }, '✕'))));
+    }
+
+    function renderHistory() {
+        const items = customCommands.map((command, index) => ({ command, index })).filter(({ command }) => command.archived);
+        if (items.length === 0) {
+            return undefined;
+        }
+        return h('div', { class: 'history' },
+            h('h3', {}, 'History'),
+            h('p', { class: 'history__hint' }, 'Removed from the status bar, kept in settings.json. \nУбраны из status bar, сохранены в settings.json.'),
+            items.map(({ command, index }) => h('div', {
+                class: 'history__row',
+                'data-search': `${command.label} ${command.command} history история`.toLowerCase(),
+            },
+                h('span', { class: 'dot', style: { background: command.color || 'var(--muted)' } }),
+                h('div', { class: 'history__text' },
+                    h('div', { class: 'row__label' }, command.label || 'Untitled'),
+                    h('div', { class: 'row__hint' }, command.command)),
+                h('button', { class: 'button button--ghost', onclick: () => restoreCommand(index) }, 'Restore / Вернуть'),
+                h('button', { class: 'icon-button icon-button--danger', title: 'Delete forever', onclick: () => forgetCommand(index) }, '✕'))));
+    }
+
+    function addGroup() {
+        commandGroups.push({
+            id: `g${Date.now()}`,
+            label: commandGroups.length === 0 ? 'Menu' : `Menu ${commandGroups.length + 1}`,
+            color: '#02b5ff',
+            position: 'left',
+            enabled: true,
+        });
+        saveCustomCommands(true);
+        rerender();
+    }
+
+    function updateGroup(id, patch, immediate = true) {
+        commandGroups = commandGroups.map(group => group.id === id ? { ...group, ...patch } : group);
+        saveCustomCommands(immediate);
+    }
+
+    function deleteGroup(id) {
+        commandGroups = commandGroups.filter(group => group.id !== id);
+        customCommands.forEach((command, index) => {
+            if (command.group === id) {
+                customCommands[index] = { ...command, group: '' };
+            }
+        });
+        saveCustomCommands(true);
+        rerender();
+    }
+
+    function persistUi() {
+        vscode.setState({ collapsed: [...collapsed], collapsedCats: [...collapsedCats] });
+    }
+
+    function setCategoryCollapsed(id, value) {
+        if (value) {
+            collapsedCats.add(id);
+        } else {
+            collapsedCats.delete(id);
+        }
+        persistUi();
+        const box = sectionsRoot.querySelector(`[data-category="${id}"]`);
+        if (box) {
+            box.classList.toggle('category--collapsed', value);
+            const toggle = box.querySelector('.category__toggle');
+            if (toggle) {
+                toggle.setAttribute('aria-expanded', String(!value));
+                toggle.title = value ? 'Expand / Развернуть' : 'Collapse / Свернуть';
+            }
+        }
+    }
+
+    function categoryToggle(id) {
+        const isCollapsed = collapsedCats.has(id);
+        return h('button', {
+            class: 'category__toggle',
+            type: 'button',
+            'aria-expanded': String(!isCollapsed),
+            title: isCollapsed ? 'Expand / Развернуть' : 'Collapse / Свернуть',
+            onclick: () => setCategoryCollapsed(id, !collapsedCats.has(id)),
+        }, h('span', { class: 'card__chevron', 'aria-hidden': 'true' }));
+    }
+
+    function renderCategory(group) {
+        const members = customCommands.map((command, index) => ({ command, index }))
+            .filter(({ command }) => !command.archived && command.group === group.id);
+        const isCollapsed = collapsedCats.has(group.id);
+        const box = h('div', {
+            class: `category${isCollapsed ? ' category--collapsed' : ''}`,
+            'data-category': group.id,
+            'data-search': `${group.label} category категория menu`.toLowerCase(),
+        },
+            h('div', { class: 'category__bar' },
+                categoryToggle(group.id),
+                h('span', { class: 'category__icon' }, '📂'),
+                h('input', {
+                    class: 'text-input category__name',
+                    type: 'text',
+                    value: group.label,
+                    placeholder: 'Menu',
+                    oninput: event => updateGroup(group.id, { label: event.target.value }, false),
+                    onchange: () => saveCustomCommands(true),
+                }),
+                h('span', { class: 'category__hint' }, `${members.length} in one button · в одной кнопке`),
+                state.colorizedCustom && h('input', {
+                    class: 'color',
+                    type: 'color',
+                    value: normalizeColor(group.color),
+                    title: 'Button color',
+                    oninput: event => updateGroup(group.id, { color: event.target.value }, false),
+                    onchange: () => saveCustomCommands(true),
+                }),
+                withTip(
+                    segmented([{ value: 'left', label: '← Left' }, { value: 'right', label: 'Right →' }], group.position || 'left',
+                        value => { updateGroup(group.id, { position: value }); rerender(); }),
+                    'Position of this category button on the status bar.',
+                    'Позиция этой кнопки-категории на status bar.',
+                    'position',
+                ),
+                h('button', { class: 'icon-button card__add', title: 'Add command here', onclick: () => addCommand(group.id) }, '+'),
+                h('button', { class: 'icon-button icon-button--danger', title: 'Ungroup / Распустить', onclick: () => deleteGroup(group.id) }, '✕')),
+            h('div', { class: 'category__body' },
+                members.length > 0
+                    ? members.map(({ command, index }) => renderCommandCard(command, index))
+                    : h('p', { class: 'category__empty' }, 'Drag commands here · Перетащите команды сюда')));
+        bindDrop(box, group.id);
+        return box;
+    }
+
+    function setGitMenuPosition(position) {
+        customCommands.forEach((command, index) => {
+            if (GIT_COMMAND.test(command.command || '') && !command.archived) {
+                customCommands[index] = { ...command, position };
+            }
+        });
+        saveCustomCommands(true);
+        rerender();
+    }
+
+    function renderGitCategory() {
+        const members = gitCommands();
+        const isCollapsed = collapsedCats.has(GIT_CAT);
+        return h('div', {
+            class: `category${isCollapsed ? ' category--collapsed' : ''}`,
+            'data-category': GIT_CAT,
+            'data-search': 'git helps menu категория category',
+        },
+            h('div', { class: 'category__bar' },
+                categoryToggle(GIT_CAT),
+                h('span', { class: 'category__icon' }, '⎇'),
+                h('span', { class: 'category__name' }, 'GIT Helps'),
+                h('span', { class: 'category__hint' }, `${members.length} in one button · в одной кнопке`),
+                members.length > 0 && state.colorizedCustom && h('input', {
+                    class: 'color',
+                    type: 'color',
+                    value: normalizeColor(members[0].command.color),
+                    title: 'Button color',
+                    oninput: event => updateCommand(members[0].index, { color: event.target.value }, false),
+                    onchange: () => saveCustomCommands(true),
+                }),
+                withTip(
+                    segmented([{ value: 'left', label: '← Left' }, { value: 'right', label: 'Right →' }],
+                        (members[0] && members[0].command.position) || 'left',
+                        setGitMenuPosition),
+                    'Position of the single Git status bar button.',
+                    'Позиция одной кнопки Git на status bar.',
+                    'position',
+                ),
+                h('button', { class: 'icon-button card__add', title: 'Add git command', onclick: addGitCommand }, '+')),
+            h('div', { class: 'category__body' },
+                members.length > 0
+                    ? members.map(({ command, index }) => renderCommandCard(command, index))
+                    : h('p', { class: 'category__empty' }, 'Commands starting with git … go here · Команды git … собираются сюда')));
+    }
+
+    function renderCustomCommands() {
+        const active = customCommands.map((command, index) => ({ command, index })).filter(({ command }) => !command.archived);
+        if (customCommands.length === 0) {
+            return h('div', { class: 'empty' },
+                h('div', { class: 'empty__icon' }, '🛠️'),
+                h('p', {}, 'No custom commands yet.'),
+                h('div', { class: 'actions' },
+                    h('button', { class: 'button', onclick: () => addCommand() }, '+ Add command'),
+                    h('button', { class: 'button button--ghost', onclick: () => post({ type: 'defaultCustomCommands' }) }, 'Use examples')));
+        }
+        const knownGroups = new Set(commandGroups.map(group => group.id));
+        const pins = active.filter(({ command }) =>
+            !GIT_COMMAND.test(command.command || '') && !(command.group && knownGroups.has(command.group)));
+        const pinList = h('div', { class: 'commands__pins' },
+            pins.length > 0
+                ? pins.map(({ command, index }) => renderCommandCard(command, index))
+                : h('p', { class: 'history__hint' }, commandGroups.length > 0
+                    ? 'Drop here for its own status bar button. / Сюда — отдельная кнопка на status bar.'
+                    : 'No active commands. Restore one from History below. / Нет активных команд — верните из истории.'));
+        bindDrop(pinList, '');
+        return h('div', { class: 'commands' },
+            state.gitMenuIcon !== false && renderGitCategory(),
+            commandGroups.map(renderCategory),
+            pinList,
+            h('div', { class: 'commands__actions' },
+                h('button', { class: 'button button--dashed', onclick: () => addCommand() }, '+ Add command'),
+                h('button', { class: 'button button--dashed', onclick: addGroup }, '+ Category')),
+            renderHistory());
+    }
+
+    // ---------- sections ----------
+
+    function sectionCounter(section) {
+        if (section.customCommands) {
+            const live = customCommands.filter(command => command.enabled && !command.archived);
+            return `${live.length}/${customCommands.filter(command => !command.archived).length}`;
+        }
+        const toggles = section.controls.filter(control => control.kind === 'boolean' || control.kind === 'visibility');
+        return toggles.length > 0 ? `${toggles.filter(control => control.value).length}/${toggles.length}` : '';
+    }
+
+    function sectionIcon(section) {
+        const src = typeof SECTION_ICONS !== 'undefined' && SECTION_ICONS[section.id];
+        return src ? h('img', { class: 'section-icon', src, alt: '' }) : section.icon;
+    }
+
+    function focusSection(id) {
+        const card = document.getElementById(`section-${id}`);
+        if (!card) {
+            pendingFocusId = id;
+            return;
+        }
+        pendingFocusId = undefined;
+        setCollapsed(id, false);
+        card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function setCollapsed(id, value) {
+        if (value) {
+            collapsed.add(id);
+        } else {
+            collapsed.delete(id);
+        }
+        persistUi();
+        const card = document.getElementById(`section-${id}`);
+        if (card) {
+            card.classList.toggle('card--collapsed', value);
+            card.querySelector('.card__header').setAttribute('aria-expanded', String(!value));
+        }
+    }
+
+    function renderSection(section) {
+        const body = section.customCommands
+            ? renderCustomCommands()
+            : h('div', { class: section.grid ? 'grid' : 'list' }, section.controls.map(renderControl));
+        const isCollapsed = collapsed.has(section.id);
+
+        return h('section', { class: `card${isCollapsed ? ' card--collapsed' : ''}`, id: `section-${section.id}`, 'data-section': section.id },
+            h('div', { class: 'card__toolbar' },
+                h('button', {
+                    class: 'card__header',
+                    'aria-expanded': String(!isCollapsed),
+                    onclick: () => setCollapsed(section.id, !collapsed.has(section.id)),
+                },
+                    h('span', { class: 'card__icon' }, sectionIcon(section)),
+                    h('span', { class: 'card__titles' },
+                        h('h2', {}, section.title, h('span', { class: 'counter' }, sectionCounter(section))),
+                        h('p', {}, section.description)),
+                    h('span', { class: 'card__chevron', 'aria-hidden': 'true' })),
+                section.customCommands && h('button', {
+                    class: 'icon-button card__add',
+                    title: 'Add command',
+                    onclick: () => {
+                        setCollapsed(section.id, false);
+                        addCommand();
+                    },
+                }, '+')),
+            h('div', { class: 'card__body' },
+                h('div', { class: 'card__inner' },
+                    section.id === 'statusBar' && statusBarPreview(section),
+                    body,
+                    section.lesson && h('button', {
+                        class: 'button button--ghost card__help card__help--inside',
+                        type: 'button',
+                        'data-search': 'подробнее more expand expanded',
+                        onclick: () => openLesson(section.lesson),
+                    }, 'Подробнее · More'))));
+    }
+
+    function renderNav() {
+        return state.sections.map(section => h('a', {
+            class: 'nav__item',
+            href: `#section-${section.id}`,
+            'data-nav': section.id,
+            onclick: event => {
+                event.preventDefault();
+                setCollapsed(section.id, false);
+                document.getElementById(`section-${section.id}`).scrollIntoView({ behavior: 'smooth', block: 'start' });
+            },
+        },
+            h('span', { class: 'nav__icon' }, sectionIcon(section)),
+            h('span', { class: 'nav__title' }, section.title),
+            h('span', { class: 'nav__counter' }, sectionCounter(section))));
+    }
+
+    function rerender() {
+        if (!state) {
+            return;
+        }
+        const focused = document.activeElement && document.activeElement.getAttribute('data-focus');
+        const scrollTop = document.scrollingElement.scrollTop;
+
+        sectionsRoot.replaceChildren(...state.sections.map(renderSection));
+        navRoot.replaceChildren(...renderNav());
+        applySearch();
+        observeSections();
+
+        if (pendingFocusId) {
+            focusSection(pendingFocusId);
+        } else {
+            document.scrollingElement.scrollTop = scrollTop;
+        }
+        if (focused) {
+            const input = sectionsRoot.querySelector(`[data-focus="${focused}"]`);
+            if (input) {
+                input.focus();
+            }
+        }
+    }
+
+    function applySearch() {
+        const query = searchInput.value.trim().toLowerCase();
+        let anyVisible = false;
+        sectionsRoot.classList.toggle('searching', Boolean(query));
+        for (const card of sectionsRoot.querySelectorAll('.card')) {
+            const rows = card.querySelectorAll('[data-search]');
+            let visible = 0;
+            rows.forEach(row => {
+                const match = !query || row.getAttribute('data-search').includes(query);
+                row.classList.toggle('hidden', !match);
+                if (match) {
+                    visible += 1;
+                }
+            });
+            const title = card.querySelector('h2').textContent.toLowerCase();
+            const show = !query || visible > 0 || title.includes(query);
+            if (query && title.includes(query)) {
+                rows.forEach(row => row.classList.remove('hidden'));
+            }
+            card.classList.toggle('hidden', !show);
+            navRoot.querySelector(`[data-nav="${card.getAttribute('data-section')}"]`).classList.toggle('nav__item--dim', !show);
+            anyVisible = anyVisible || show;
+        }
+        emptySearch.hidden = anyVisible;
+    }
+
+    let observer;
+    function observeSections() {
+        if (observer) {
+            observer.disconnect();
+        }
+        observer = new IntersectionObserver(entries => {
+            for (const entry of entries) {
+                if (entry.isIntersecting) {
+                    navRoot.querySelectorAll('.nav__item').forEach(item =>
+                        item.classList.toggle('nav__item--active', item.getAttribute('data-nav') === entry.target.getAttribute('data-section')));
+                }
+            }
+        }, { rootMargin: '-20% 0px -70% 0px' });
+        sectionsRoot.querySelectorAll('.card').forEach(card => observer.observe(card));
+    }
+
+    function isEditingText() {
+        const active = document.activeElement;
+        return active && active.tagName === 'INPUT' && active.type === 'text';
+    }
+
+    function applyState(next) {
+        const first = !state;
+        if (first) {
+            sectionsRoot.classList.add('intro');
+            setTimeout(() => sectionsRoot.classList.remove('intro'), 600);
+        }
+        state = next;
+        customCommands = next.customCommands.map(command => ({ ...command }));
+        commandGroups = (next.customCommandGroups || []).map(group => ({ ...group }));
+        rerender();
+        if (first) {
+            document.body.classList.remove('is-booting');
+        }
+        if (expectSaved) {
+            expectSaved = false;
+            showToast('Saved ✓');
+        }
+    }
+
+    /** Re-renders a bit later so switch animations can finish, and never under the user's cursor. */
+    function flushPendingState() {
+        if (!state) {
+            const next = pendingState;
+            pendingState = undefined;
+            if (next) {
+                applyState(next);
+            }
+            return;
+        }
+        clearTimeout(renderTimer);
+        renderTimer = setTimeout(() => {
+            if (pendingState && !isEditingText()) {
+                const next = pendingState;
+                pendingState = undefined;
+                applyState(next);
+            }
+        }, RENDER_DELAY_MS);
+    }
+
+    window.addEventListener('message', event => {
+        if (event.data.type === 'state') {
+            pendingState = event.data.state;
+            flushPendingState();
+        }
+        if (event.data.type === 'focusSection') {
+            focusSection(event.data.id);
+        }
+    });
+
+    document.addEventListener('focusout', flushPendingState);
+
+    searchInput.addEventListener('input', applySearch);
+    document.querySelector('[data-action="openSettingsJson"]').addEventListener('click', () => vscode.postMessage({ type: 'openSettingsJson' }));
+    document.querySelector('[data-action="exportSettings"]').addEventListener('click', () => vscode.postMessage({ type: 'exportSettings' }));
+    document.querySelector('[data-action="importSettings"]').addEventListener('click', () => vscode.postMessage({ type: 'importSettings' }));
+    // TODO: EXPORT ALL JSON SETTINGS
+    const exportAllJson = document.querySelector('[data-action="exportSettingsJson"]');
+    const importAllJson = document.querySelector('[data-action="importSettingsJson"]');
+    if (exportAllJson) {
+        exportAllJson.addEventListener('click', () => vscode.postMessage({ type: 'exportSettingsJson' }));
+    }
+    if (importAllJson) {
+        importAllJson.addEventListener('click', () => vscode.postMessage({ type: 'importSettingsJson' }));
+    }
+
+    vscode.postMessage({ type: 'ready' });
+}());

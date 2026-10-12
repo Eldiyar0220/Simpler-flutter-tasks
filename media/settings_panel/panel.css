@@ -1,0 +1,1547 @@
+:root {
+    --flutter-dark: #02569b;
+    --flutter-light: #13b9fd;
+    --accent: var(--vscode-button-background, var(--flutter-light));
+    --accent-fg: var(--vscode-button-foreground, #fff);
+    --card: var(--vscode-editorWidget-background, rgba(127, 127, 127, 0.06));
+    --border: var(--vscode-widget-border, rgba(127, 127, 127, 0.22));
+    --muted: var(--vscode-descriptionForeground, rgba(127, 127, 127, 0.9));
+    --input: var(--vscode-input-background, rgba(127, 127, 127, 0.1));
+    --hover: var(--vscode-list-hoverBackground, rgba(127, 127, 127, 0.1));
+    --danger: var(--vscode-errorForeground, #f14c4c);
+    --radius: 12px;
+    --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0 0 80px;
+    color: var(--vscode-foreground);
+    background: var(--vscode-editor-background);
+    font-family: var(--vscode-font-family);
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+button {
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+}
+
+button:disabled {
+    cursor: default;
+    opacity: 0.4;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ---------- hero ---------- */
+
+.hero {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    padding: 28px 32px;
+    overflow: hidden;
+    color: #fff;
+    background: linear-gradient(120deg, var(--flutter-dark), var(--flutter-light));
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    right: -60px;
+    top: -80px;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    pointer-events: none;
+}
+
+.hero__logo {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.hero__text {
+    flex: 1;
+}
+
+.hero h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+}
+
+.hero p {
+    margin: 2px 0 0;
+    opacity: 0.85;
+}
+
+.hero__actions {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.hero .button--ghost {
+    color: var(--flutter-dark);
+    border-color: transparent;
+    background: #fff;
+    font-weight: 600;
+    box-shadow: 0 2px 12px rgba(2, 43, 94, 0.22);
+}
+
+.hero .button--ghost:hover {
+    filter: none;
+    color: #fff;
+    background: var(--flutter-dark);
+}
+
+.hero .button--small {
+    padding: 5px 10px;
+    font-size: 11px;
+}
+
+/* ---------- layout ---------- */
+
+.layout {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 32px;
+}
+
+@media (max-width: 760px) {
+    .layout {
+        grid-template-columns: 1fr;
+        padding: 16px;
+    }
+
+    .nav {
+        display: none !important;
+    }
+}
+
+.nav {
+    position: sticky;
+    top: 16px;
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.nav__item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    color: inherit;
+    text-decoration: none;
+    transition: background 0.15s, opacity 0.15s;
+}
+
+.nav__item:hover {
+    background: var(--hover);
+}
+
+.nav__item--active {
+    background: var(--vscode-list-activeSelectionBackground, var(--hover));
+    color: var(--vscode-list-activeSelectionForeground, inherit);
+}
+
+.nav__item--dim {
+    opacity: 0.35;
+}
+
+.nav__title {
+    flex: 1;
+}
+
+.nav__counter,
+.counter {
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    color: var(--muted);
+}
+
+.counter {
+    margin-left: 8px;
+    font-weight: 400;
+}
+
+.search {
+    width: 100%;
+    padding: 10px 14px;
+    margin-bottom: 18px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    outline: none;
+    color: var(--vscode-input-foreground);
+    background: var(--input);
+    font: inherit;
+}
+
+.search:focus,
+.text-input:focus {
+    border-color: var(--vscode-focusBorder);
+}
+
+.empty-search {
+    text-align: center;
+    color: var(--muted);
+}
+
+/* ---------- cards ---------- */
+
+.card {
+    margin-bottom: 18px;
+    padding: 18px 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--card);
+    scroll-margin-top: 16px;
+}
+
+.intro .card {
+    animation: rise 0.35s var(--ease) both;
+}
+
+@keyframes rise {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+}
+
+.card__toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.card__header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    text-align: left;
+    background: none;
+}
+
+.card__help {
+    flex: none;
+    padding: 5px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.card__help--inside {
+    margin: 8px 8px 4px;
+}
+
+.card__add {
+    flex: none;
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--flutter-light);
+    background: color-mix(in srgb, var(--flutter-light) 12%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--flutter-light) 28%, transparent);
+}
+
+.card__add:hover:not(:disabled) {
+    color: #fff;
+    background: var(--flutter-light);
+    box-shadow: none;
+}
+
+.card__header:focus-visible {
+    outline: 2px solid var(--vscode-focusBorder);
+    outline-offset: 4px;
+    border-radius: 8px;
+}
+
+.card__icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    font-size: 19px;
+    background: var(--hover);
+}
+
+.section-icon {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+}
+
+.nav__icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 22px;
+    height: 22px;
+}
+
+.nav__icon .section-icon {
+    width: 18px;
+    height: 18px;
+}
+
+.card__titles {
+    flex: 1;
+}
+
+.card__titles h2 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.card__titles p {
+    margin: 2px 0 0;
+    color: var(--muted);
+}
+
+.card__chevron {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    color: var(--muted);
+    background: var(--input);
+    box-shadow: inset 0 0 0 1px var(--border);
+    transition: color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.card__chevron::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(-45deg);
+    transition: transform 0.28s var(--ease);
+}
+
+.card__header:hover .card__chevron {
+    color: var(--flutter-light);
+    background: color-mix(in srgb, var(--flutter-light) 14%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--flutter-light) 45%, transparent);
+}
+
+.card:not(.card--collapsed) .card__chevron {
+    color: var(--flutter-light);
+    background: color-mix(in srgb, var(--flutter-light) 14%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--flutter-light) 40%, transparent);
+}
+
+.card:not(.card--collapsed) .card__chevron::before {
+    transform: rotate(45deg);
+}
+
+.card__body {
+    display: grid;
+    grid-template-rows: 1fr;
+    transition: grid-template-rows 0.3s var(--ease), visibility 0.3s;
+}
+
+.card__inner {
+    min-height: 0;
+    overflow: hidden;
+}
+
+.card:not(.card--collapsed) .card__inner {
+    overflow: visible;
+}
+
+/* Spacer instead of padding: padding would keep a collapsed card open by its height. */
+.card__inner::before {
+    content: '';
+    display: block;
+    height: 14px;
+}
+
+.card--collapsed .card__body {
+    grid-template-rows: 0fr;
+    visibility: hidden;
+}
+
+.searching .card--collapsed .card__body {
+    grid-template-rows: 1fr;
+    visibility: visible;
+}
+
+/* ---------- rows ---------- */
+
+.list {
+    display: flex;
+    flex-direction: column;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 0 16px;
+}
+
+.grid > .group {
+    grid-column: 1 / -1;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 8px;
+    border-radius: 8px;
+    transition: background 0.15s;
+}
+
+.row:hover {
+    background: var(--hover);
+}
+
+.row--stacked {
+    flex-wrap: wrap;
+}
+
+.row--stacked .text-input {
+    flex: 1 1 260px;
+}
+
+.row__end {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: none;
+}
+
+.row__label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.row__hint {
+    margin-top: 1px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.dot {
+    flex: none;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--muted);
+    box-shadow: 0 0 6px currentColor;
+}
+
+.group__children {
+    display: grid;
+    grid-template-rows: 0fr;
+    visibility: hidden;
+    transition: grid-template-rows 0.3s var(--ease), visibility 0.3s;
+}
+
+.group__children--open {
+    grid-template-rows: 1fr;
+    visibility: visible;
+}
+
+.group__inner {
+    overflow: hidden;
+    margin-left: 18px;
+    padding-left: 12px;
+    border-left: 2px solid var(--border);
+}
+
+.flavor-options {
+    padding: 0 8px 10px;
+}
+
+.flavor-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 8px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: var(--input);
+}
+
+.flavor-list__item {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+}
+
+.flavor-list__name {
+    margin-left: auto;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+.flavor-list code {
+    font-family: var(--vscode-editor-font-family, monospace);
+    font-size: 12px;
+}
+
+/* ---------- switch ---------- */
+
+.switch {
+    position: relative;
+    flex: none;
+    width: 38px;
+    height: 22px;
+    cursor: pointer;
+}
+
+.switch input {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    cursor: pointer;
+}
+
+.switch__track {
+    position: absolute;
+    inset: 0;
+    border-radius: 11px;
+    background: rgba(127, 127, 127, 0.35);
+    transition: background 0.2s;
+    pointer-events: none;
+}
+
+.switch__thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+    transition: transform 0.22s var(--ease);
+}
+
+.switch input:checked + .switch__track {
+    background: linear-gradient(120deg, var(--flutter-dark), var(--flutter-light));
+}
+
+.switch input:checked + .switch__track .switch__thumb {
+    transform: translateX(16px);
+}
+
+.switch input:focus-visible + .switch__track {
+    outline: 2px solid var(--vscode-focusBorder);
+    outline-offset: 2px;
+}
+
+.switch input:disabled + .switch__track {
+    opacity: 0.5;
+}
+
+/* ---------- segmented ---------- */
+
+.segmented {
+    display: inline-flex;
+    padding: 3px;
+    border-radius: 9px;
+    background: var(--input);
+    border: 1px solid var(--border);
+}
+
+.segmented__option {
+    padding: 4px 12px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    transition: background 0.18s, color 0.18s;
+}
+
+.segmented__option:hover:not(:disabled) {
+    background: var(--hover);
+}
+
+.segmented__option--active,
+.segmented__option--active:hover:not(:disabled) {
+    color: var(--accent-fg);
+    background: var(--accent);
+}
+
+/* ---------- inputs & buttons ---------- */
+
+.text-input {
+    min-width: 0;
+    padding: 7px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    outline: none;
+    color: var(--vscode-input-foreground);
+    background: var(--input);
+    font: inherit;
+}
+
+.text-input--mono {
+    width: 100%;
+    font-family: var(--vscode-editor-font-family, monospace);
+    font-size: 12px;
+}
+
+.button {
+    padding: 7px 14px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    color: var(--accent-fg);
+    background: var(--accent);
+    transition: filter 0.15s, transform 0.1s;
+}
+
+.button:hover {
+    filter: brightness(1.1);
+}
+
+.button:active {
+    transform: scale(0.98);
+}
+
+.button--ghost {
+    color: inherit;
+    background: transparent;
+    border-color: var(--border);
+}
+
+.button--dashed {
+    width: 100%;
+    padding: 10px;
+    color: var(--muted);
+    background: transparent;
+    border: 1px dashed var(--border);
+}
+
+.button--dashed:hover {
+    color: inherit;
+    border-color: var(--vscode-focusBorder);
+}
+
+.icon-button {
+    width: 28px;
+    height: 28px;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    transition: background 0.15s, color 0.15s;
+}
+
+.icon-button:hover:not(:disabled) {
+    background: var(--hover);
+}
+
+.icon-button--danger:hover:not(:disabled) {
+    color: var(--danger);
+}
+
+.icon-button--trash {
+    font-size: 15px;
+    line-height: 1;
+}
+
+.icon-button--trash:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--danger) 16%, transparent);
+}
+
+/* ---------- status bar preview ---------- */
+
+.statusbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px 12px;
+    margin-bottom: 14px;
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--vscode-statusBar-foreground, #fff);
+    background: var(--vscode-statusBar-background, #007acc);
+}
+
+.statusbar__branch {
+    opacity: 0.85;
+}
+
+.chip {
+    white-space: nowrap;
+}
+
+.chip--muted {
+    opacity: 0.6;
+}
+
+/* ---------- custom commands ---------- */
+
+.commands {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.commands__pins,
+.category {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 48px;
+    padding: 10px;
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.commands__pins {
+    padding: 8px;
+    border-style: dashed;
+    border-color: transparent;
+}
+
+.commands__pins.category--dragover,
+.category--dragover {
+    border: 1px dashed var(--flutter-light);
+    background: color-mix(in srgb, var(--flutter-light) 8%, transparent);
+}
+
+.category__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.category__toggle {
+    flex: none;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+}
+
+.category:not(.category--collapsed) .category__toggle .card__chevron {
+    color: var(--flutter-light);
+    background: color-mix(in srgb, var(--flutter-light) 14%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--flutter-light) 40%, transparent);
+}
+
+.category:not(.category--collapsed) .category__toggle .card__chevron::before {
+    transform: rotate(45deg);
+}
+
+.category__toggle:hover .card__chevron {
+    color: var(--flutter-light);
+    background: color-mix(in srgb, var(--flutter-light) 14%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--flutter-light) 45%, transparent);
+}
+
+.category--collapsed {
+    gap: 0;
+}
+
+.category--collapsed .category__body {
+    display: none;
+}
+
+.searching .category--collapsed .category__body {
+    display: flex;
+}
+
+.category__icon {
+    font-size: 16px;
+}
+
+.category__name {
+    flex: 0 1 160px;
+    font-weight: 600;
+}
+
+span.category__name {
+    padding: 6px 0;
+}
+
+.category__body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.category__hint {
+    flex: 1;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.category__empty {
+    margin: 0;
+    padding: 16px 8px;
+    text-align: center;
+    color: var(--muted);
+}
+
+.commands__actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.command--dragging {
+    opacity: 0.45;
+}
+
+.command {
+    position: relative;
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    overflow: visible;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--vscode-editor-background);
+    transition: opacity 0.2s, border-color 0.2s;
+}
+
+.command:hover,
+.command:focus-within {
+    z-index: 2;
+}
+
+.command:hover {
+    border-color: var(--vscode-focusBorder);
+}
+
+.command--disabled {
+    opacity: 0.55;
+}
+
+.command__top,
+.command__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.command__label {
+    flex: 1 1 160px;
+    font-weight: 600;
+}
+
+.then-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-left: 18px;
+    padding-left: 12px;
+    border-left: 2px solid var(--border);
+}
+
+.then-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.then-row__step {
+    flex: none;
+    min-width: 36px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: lowercase;
+    color: var(--muted);
+}
+
+.then-row .text-input {
+    flex: 1;
+}
+
+.color {
+    flex: none;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: none;
+    cursor: pointer;
+}
+
+.color::-webkit-color-swatch-wrapper {
+    padding: 3px;
+}
+
+.color::-webkit-color-swatch {
+    border: 0;
+    border-radius: 5px;
+}
+
+.flag {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 12px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.flag__text {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.flag .section-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.has-tip {
+    position: relative;
+}
+
+.tip {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 4px);
+    z-index: 6;
+    box-sizing: border-box;
+    width: 240px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    color: var(--vscode-editorHoverWidget-foreground, var(--vscode-foreground));
+    background: var(--vscode-editorHoverWidget-background, var(--card));
+    border: 1px solid var(--vscode-editorHoverWidget-border, var(--border));
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    transform: translateX(-50%);
+    white-space: normal;
+    text-align: left;
+    overflow-wrap: anywhere;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.12s 0.45s, visibility 0.12s 0.45s;
+}
+
+.tip::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -12px;
+    height: 12px;
+}
+
+.command__bottom .has-tip .tip,
+.command__bottom .flag .tip {
+    left: auto;
+    right: 0;
+    bottom: auto;
+    top: calc(100% + 4px);
+    transform: none;
+}
+
+.command__bottom .has-tip .tip::before,
+.command__bottom .flag .tip::before {
+    bottom: auto;
+    top: -12px;
+}
+
+.tip strong,
+.tip span {
+    display: block;
+    white-space: normal;
+}
+
+.tip strong {
+    font-weight: 600;
+}
+
+.tip span {
+    margin-top: 4px;
+    color: var(--muted);
+}
+
+.tip__more {
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+    padding: 6px 8px;
+    border: 0;
+    border-radius: 6px;
+    background: var(--hover);
+    color: var(--vscode-textLink-foreground, var(--flutter-light));
+    font-size: 12px;
+    font-weight: 600;
+    text-align: left;
+}
+
+.tip__more:hover {
+    filter: brightness(1.15);
+}
+
+.flag:hover .tip,
+.has-tip:hover .tip,
+.flag:focus-within .tip,
+.has-tip:focus-within .tip {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    transition-delay: 0s;
+}
+
+.flag input {
+    display: none;
+}
+
+.flag--on {
+    border-color: var(--vscode-focusBorder);
+    background: var(--hover);
+}
+
+.spacer {
+    flex: 1;
+}
+
+.empty {
+    padding: 22px;
+    text-align: center;
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+}
+
+.empty__icon {
+    font-size: 30px;
+}
+
+.empty p {
+    margin: 6px 0 12px;
+    color: var(--muted);
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.history {
+    margin-top: 8px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--border);
+}
+
+.history h3 {
+    margin: 0 0 4px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.history__hint {
+    margin: 0 0 10px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.history__row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+.history__row:hover {
+    background: var(--hover);
+}
+
+.history__text {
+    flex: 1;
+    min-width: 0;
+}
+
+.history__text .row__hint {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.confirm {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.confirm__box {
+    width: min(420px, 100%);
+    padding: 18px 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--vscode-editorWidget-background, var(--card));
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+}
+
+.confirm__en {
+    margin: 0;
+    font-weight: 600;
+}
+
+.confirm__ru {
+    margin: 8px 0 0;
+    color: var(--muted);
+}
+
+.confirm__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.lesson.confirm__box {
+    width: min(460px, 100%);
+}
+
+.lesson__gif {
+    display: block;
+    width: 100%;
+    margin: 0 0 14px;
+    border-radius: 8px;
+    background: #1e1e1e;
+}
+
+.lesson .demo {
+    margin-bottom: 14px;
+    padding: 16px;
+    overflow: hidden;
+    border-radius: 10px;
+    background: var(--vscode-editor-background, #1e1e1e);
+}
+
+.demo-bar {
+    display: flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 4px 8px;
+    color: #fff;
+    background: var(--vscode-statusBar-background, #007acc);
+}
+
+.demo-bar__end {
+    margin-left: auto;
+    opacity: 0.7;
+    font-size: 11px;
+}
+
+.demo-chip {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.demo-chip--slide {
+    animation: demo-slide 2.4s var(--ease) infinite;
+}
+
+.demo-confirm {
+    display: grid;
+    place-items: center;
+    min-height: 240px;
+}
+
+.demo-confirm__dialog {
+    width: min(268px, 100%);
+    padding: 22px 18px 14px;
+    border-radius: 14px;
+    text-align: center;
+    background: var(--vscode-editorWidget-background, #2c2c2e);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.08);
+    animation: demo-pop 3.4s var(--ease) infinite;
+}
+
+.demo-confirm__icon {
+    font-size: 38px;
+    line-height: 1;
+}
+
+.demo-confirm__title,
+.demo-confirm__text,
+.demo-confirm__cmd {
+    margin: 0;
+}
+
+.demo-confirm__title {
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.demo-confirm__text {
+    margin-top: 8px;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.demo-confirm__cmd {
+    margin-top: 10px;
+    font-size: 12px;
+    font-family: var(--vscode-editor-font-family, ui-monospace, monospace);
+    color: var(--muted);
+}
+
+.demo-confirm__actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.demo-confirm__cancel,
+.demo-confirm__yes {
+    flex: 1;
+    padding: 7px 0;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.demo-confirm__cancel {
+    background: rgba(127, 127, 127, 0.28);
+}
+
+.demo-confirm__yes {
+    color: #fff;
+    background: #0a84ff;
+    animation: demo-pulse 1.5s var(--ease) infinite 0.7s;
+}
+
+.demo-edit {
+    display: flex;
+    align-items: center;
+    min-height: 132px;
+}
+
+.demo-edit__box {
+    width: 100%;
+    padding: 8px;
+    border-radius: 6px;
+    background: var(--vscode-quickInput-background, #252526);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.06);
+    animation: demo-pop 3.6s var(--ease) infinite;
+}
+
+.demo-edit__field {
+    display: flex;
+    align-items: center;
+    padding: 7px 10px;
+    overflow: hidden;
+    border: 1px solid var(--vscode-focusBorder, #007acc);
+    border-radius: 2px;
+    background: var(--vscode-input-background, #3c3c3c);
+    font-family: var(--vscode-font-family);
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.demo-edit__typed {
+    display: inline-block;
+    overflow: hidden;
+    max-width: 0;
+    vertical-align: bottom;
+    animation: demo-edit-type 3.6s steps(4, end) infinite;
+}
+
+.demo-edit__caret {
+    flex: none;
+    width: 1px;
+    height: 1.15em;
+    margin: 0 1px;
+    background: currentColor;
+    animation: demo-caret 1s step-end infinite;
+}
+
+.demo-edit__hint {
+    margin: 7px 4px 2px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.demo-expand {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.demo-expand__switch {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: var(--input);
+}
+
+.demo-expand__track {
+    position: relative;
+    width: 38px;
+    height: 20px;
+    border-radius: 999px;
+    background: rgba(127, 127, 127, 0.35);
+    animation: demo-expand-track 3.4s var(--ease) infinite;
+}
+
+.demo-expand__thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    animation: demo-expand-thumb 3.4s var(--ease) infinite;
+}
+
+.demo-tree {
+    padding: 10px 8px;
+    border-radius: 8px;
+    font-size: 12px;
+    background: var(--vscode-sideBar-background, #252526);
+}
+
+.demo-tree__title {
+    margin: 0 8px 8px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    opacity: 0.55;
+}
+
+.demo-tree__row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.demo-tree__chevron {
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: rotate(-45deg);
+    opacity: 0.7;
+}
+
+.demo-tree__cat .demo-tree__chevron {
+    animation: demo-expand-chevron 3.4s var(--ease) infinite;
+}
+
+.demo-tree__row--active {
+    animation: demo-expand-hl 3.4s var(--ease) infinite;
+}
+
+.demo-tree__kids {
+    display: grid;
+    grid-template-rows: 0fr;
+    animation: demo-expand-kids 3.4s var(--ease) infinite;
+}
+
+.demo-tree__kids-inner {
+    overflow: hidden;
+}
+
+.demo-tree__child {
+    padding: 3px 8px 3px 28px;
+    opacity: 0.9;
+}
+
+.grid .row.has-tip:hover,
+.grid .row.has-tip:focus-within {
+    z-index: 4;
+}
+
+.demo-then {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.demo-then__and {
+    font-weight: 700;
+    color: var(--accent);
+    animation: demo-pulse 1.4s var(--ease) infinite;
+}
+
+.demo-archive {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 36px;
+}
+
+.demo-chip--hide {
+    animation: demo-hide 2.8s var(--ease) infinite;
+}
+
+.demo-history {
+    opacity: 0;
+    animation: demo-show 2.8s var(--ease) infinite;
+}
+
+@keyframes demo-slide {
+    0%, 40% { margin-left: 0; margin-right: auto; }
+    50%, 90% { margin-left: auto; margin-right: 0; }
+    100% { margin-left: 0; margin-right: auto; }
+}
+
+@keyframes demo-pulse {
+    50% { filter: brightness(1.25); transform: scale(1.04); }
+}
+
+@keyframes demo-pop {
+    0%, 8% { opacity: 0; transform: scale(0.92); }
+    18%, 78% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(0.98); }
+}
+
+@keyframes demo-edit-type {
+    0%, 18% { max-width: 0; }
+    42%, 72% { max-width: 4ch; }
+    100% { max-width: 0; }
+}
+
+@keyframes demo-caret {
+    50% { opacity: 0; }
+}
+
+@keyframes demo-expand-track {
+    0%, 22% { background: rgba(127, 127, 127, 0.35); }
+    38%, 100% { background: var(--vscode-button-background, #0a84ff); }
+}
+
+@keyframes demo-expand-thumb {
+    0%, 22% { transform: translateX(0); }
+    38%, 100% { transform: translateX(18px); }
+}
+
+@keyframes demo-expand-chevron {
+    0%, 28% { transform: rotate(-45deg); }
+    42%, 100% { transform: rotate(45deg); }
+}
+
+@keyframes demo-expand-hl {
+    0%, 28% { background: transparent; }
+    42%, 100% { background: var(--vscode-list-activeSelectionBackground, #094771); }
+}
+
+@keyframes demo-expand-kids {
+    0%, 28% { grid-template-rows: 0fr; }
+    42%, 100% { grid-template-rows: 1fr; }
+}
+
+@keyframes demo-hide {
+    0%, 35% { opacity: 1; transform: none; }
+    55%, 100% { opacity: 0; transform: translateY(-8px); }
+}
+
+@keyframes demo-show {
+    0%, 40% { opacity: 0; }
+    60%, 100% { opacity: 1; }
+}
+
+/* ---------- toast ---------- */
+
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: 22px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    color: var(--vscode-notifications-foreground, #fff);
+    background: var(--vscode-notifications-background, #333);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, 16px);
+    transition: opacity 0.2s, transform 0.25s var(--ease);
+}
+
+.toast--visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, 0);
+}
+
+.toast__action {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--vscode-textLink-foreground, var(--flutter-light));
+    font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}

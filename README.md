@@ -26,7 +26,7 @@
 
 ```json
   "SimplerFlutterTasks.flutterCleanIcon": "show",
-  "SimplerFlutterTasks.flutterPubGetIcon": "show",
+  "SimplerFlutterTasks.flutterPubGetIcon": "hide",
   "SimplerFlutterTasks.buildApkIcon": "show",
   "SimplerFlutterTasks.iosIcon": "show",
   "SimplerFlutterTasks.ipaIcon": "show",
@@ -35,7 +35,6 @@
   "SimplerFlutterTasks.openApkIcon": "show",
   "SimplerFlutterTasks.gitPullIcon": "hide",
   "SimplerFlutterTasks.smallApkIcon": "hide",
-  "SimplerFlutterTasks.spiderBuildIcon": "hide",
   "SimplerFlutterTasks.easyLocalizationsIcon": "hide",
   "SimplerFlutterTasks.createNewTerminal": false,
 ```
@@ -105,18 +104,15 @@ I'm working hard to select all the day to day commands, so wait for more command
 | Flutter quick commands   |    Visibility icons   |
 | -------------------------|-----------------------|
 | `Flutter clean`          |    default  -  show   |
-| `Flutter pub get`        |    default  -  show   |
+| `Flutter pub get`        |    default  -  hide   |
 | `Flutter build apk`      |    default  -  show   |
 | `Flutter build ios`      |    default  -  hide   |
 | `Flutter build ipa`      |    default  -  hide   |
 | `flutter install`        |    default  -  hide   |
 | `Build runner`           |    default  -  show   |
-| `Open Apk Folder`        |    default  -  show   |
+| `Open Build Folder`      |    default  -  show   |
 | `Git pull`               |    default  -  hide   |
 | `Small Apk`              |    default  -  hide   |
-| `Spider Build`           |    default  -  hide   |
-| `Open Ios Folder`        |    default  -  hide   |
-| `Open Ipa Folder`        |    default  -  hide   |
 | `Easy Localizations`     |    default  -  show   |
 
 
