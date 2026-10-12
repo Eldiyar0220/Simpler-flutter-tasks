@@ -17,7 +17,9 @@
     let pendingState;
     let customCommands = [];
     let commandGroups = [];
+    let flavorConfig = { path: 'lib/main', flavors: [], commands: [] };
     let saveTimer;
+    let flavorTimer;
     let colorTimer;
     let renderTimer;
     let toastTimer;
@@ -140,17 +142,24 @@
             class: `row${control.kind === 'text' ? ' row--stacked' : ''}`,
             'data-search': `${control.label} ${control.hint || ''} ${control.key}`.toLowerCase(),
         }, text, input);
+        const barId = control.kind === 'visibility' ? control.key : undefined;
 
         if (control.flavorAware) {
-            return h('div', {}, row, flavorOptions(control, input));
+            return withBarHover(h('div', {}, row, flavorOptions(control, input)), barId);
+        }
+        if (control.flavorEditor) {
+            const open = Boolean(control.value);
+            children = h('div', { class: `group__children${open ? ' group__children--open' : ''}` },
+                h('div', { class: 'group__inner' }, renderFlavorEditor()));
+            return withBarHover(h('div', { class: 'group' }, row, children), barId);
         }
         if (!control.children) {
-            return row;
+            return withBarHover(row, barId);
         }
         const open = Boolean(control.value);
         children = h('div', { class: `group__children${open ? ' group__children--open' : ''}` },
             h('div', { class: 'group__inner' }, control.children.map(renderControl)));
-        return h('div', { class: 'group' }, row, children);
+        return withBarHover(h('div', { class: 'group' }, row, children), barId);
     }
 
     /**
@@ -192,6 +201,180 @@
         return h('div', { class: 'flavor-options' }, chip, listWrap);
     }
 
+    function saveFlavors(immediate) {
+        clearTimeout(flavorTimer);
+        const send = () => {
+            flavorTimer = undefined;
+            post({ type: 'flavors', value: flavorConfig });
+        };
+        if (immediate) {
+            send();
+        } else {
+            flavorTimer = setTimeout(send, SAVE_DELAY_MS);
+        }
+    }
+
+    function flavorField(value, placeholder, key, extra) {
+        return h('input', {
+            class: extra && extra.class || 'text-input',
+            type: 'text',
+            value: value || '',
+            placeholder,
+            'data-focus': key,
+            oninput: event => extra && extra.oninput(event.target.value),
+            onchange: () => saveFlavors(true),
+            onkeydown: event => event.key === 'Enter' && event.target.blur(),
+        });
+    }
+
+    function renderFlavorEditor() {
+        const flavors = flavorConfig.flavors || [];
+        const commands = flavorConfig.commands || [];
+        return h('div', { class: 'flavor-editor', 'data-search': 'flavor flavors prod staging dev package apk install' },
+            h('p', { class: 'flavor-editor__hint' },
+                'Placeholders: ',
+                h('code', {}, '${flavor}'), ' ',
+                h('code', {}, '${package}'), ' ',
+                h('code', {}, '${path}')),
+            h('div', { class: 'row row--stacked' },
+                h('div', { class: 'row__text' },
+                    h('div', { class: 'row__label' }, 'Main path'),
+                    h('div', { class: 'row__hint' }, 'Used as ${path} — e.g. lib/main_prod.dart')),
+                flavorField(flavorConfig.path, 'lib/main', 'flavor-path', {
+                    oninput: value => {
+                        flavorConfig.path = value;
+                        saveFlavors(false);
+                    },
+                })),
+            h('div', { class: 'flavor-editor__title' }, 'Flavors'),
+            ...flavors.map((flavor, index) => h('div', {
+                class: 'flavor-row',
+                'data-search': `${flavor.title} ${flavor.package} flavor`,
+            },
+                flavorField(flavor.title, 'prod', `flavor-title-${index}`, {
+                    oninput: value => {
+                        flavorConfig.flavors[index] = { ...flavorConfig.flavors[index], title: value };
+                        saveFlavors(false);
+                    },
+                }),
+                flavorField(flavor.package, 'com_packages_of_your_app', `flavor-package-${index}`, {
+                    class: 'text-input text-input--mono',
+                    oninput: value => {
+                        flavorConfig.flavors[index] = { ...flavorConfig.flavors[index], package: value };
+                        saveFlavors(false);
+                    },
+                }),
+                h('button', {
+                    class: 'icon-button icon-button--trash',
+                    title: 'Remove flavor',
+                    onclick: () => {
+                        flavorConfig.flavors.splice(index, 1);
+                        saveFlavors(true);
+                        rerender();
+                    },
+                }, '🗑️'))),
+            h('button', {
+                class: 'button button--dashed',
+                onclick: () => {
+                    flavorConfig.flavors.push({ title: '', package: '' });
+                    rerender();
+                    const input = sectionsRoot.querySelector(`[data-focus="flavor-title-${flavorConfig.flavors.length - 1}"]`);
+                    if (input) {
+                        input.focus();
+                    }
+                },
+            }, '+ Add flavor'),
+            h('div', { class: 'flavor-editor__title' }, 'Menu commands'),
+            ...commands.map((command, index) => renderFlavorCommand(command, index)),
+            h('button', {
+                class: 'button button--dashed',
+                onclick: () => {
+                    flavorConfig.commands.push({ label: '', command: '', action: 'run' });
+                    rerender();
+                    const input = sectionsRoot.querySelector(`[data-focus="flavor-cmd-label-${flavorConfig.commands.length - 1}"]`);
+                    if (input) {
+                        input.focus();
+                    }
+                },
+            }, '+ Add command'));
+    }
+
+    function renderFlavorCommand(command, index) {
+        const last = index === flavorConfig.commands.length - 1;
+        const isLine = command.action === 'separator';
+        return h('div', {
+            class: `flavor-cmd${isLine ? ' flavor-cmd--line' : ''}`,
+            'data-search': `${command.label} ${command.command} flavor`,
+        },
+            h('div', { class: 'flavor-cmd__top' },
+                flavorField(command.label, isLine ? 'Android' : 'Flutter Install ->', `flavor-cmd-label-${index}`, {
+                    class: 'text-input command__label',
+                    oninput: value => {
+                        flavorConfig.commands[index] = { ...flavorConfig.commands[index], label: value };
+                        saveFlavors(false);
+                    },
+                }),
+                h('select', {
+                    class: 'text-input flavor-cmd__action',
+                    value: command.action || 'run',
+                    'aria-label': 'Action',
+                    onchange: event => {
+                        flavorConfig.commands[index] = { ...flavorConfig.commands[index], action: event.target.value };
+                        saveFlavors(true);
+                        rerender();
+                    },
+                },
+                    [['run', 'Run'], ['openApk', 'Open APK'], ['openBundle', 'Open bundle'], ['deleteApk', 'Delete APK'], ['separator', 'Heading']]
+                        .map(([value, label]) => h('option', { value, selected: (command.action || 'run') === value }, label))),
+                h('button', { class: 'icon-button', title: 'Move up', disabled: index === 0, onclick: () => moveFlavorCommand(index, -1) }, '↑'),
+                h('button', { class: 'icon-button', title: 'Move down', disabled: last, onclick: () => moveFlavorCommand(index, 1) }, '↓'),
+                h('button', {
+                    class: 'icon-button icon-button--trash',
+                    title: 'Remove',
+                    onclick: () => {
+                        flavorConfig.commands.splice(index, 1);
+                        saveFlavors(true);
+                        rerender();
+                    },
+                }, '🗑️')),
+            !isLine && flavorField(command.command, 'adb install … ${flavor}', `flavor-cmd-${index}`, {
+                class: 'text-input text-input--mono',
+                oninput: value => {
+                    flavorConfig.commands[index] = { ...flavorConfig.commands[index], command: value };
+                    saveFlavors(false);
+                },
+            }),
+            !isLine && h('div', { class: 'flavor-cmd__flags' },
+                flagChip('Prod only', {
+                    en: 'Shown only for prod / production flavors.',
+                    ru: 'Только для prod / production.',
+                }, Boolean(command.prodOnly), value => {
+                    flavorConfig.commands[index] = { ...flavorConfig.commands[index], prodOnly: value };
+                    saveFlavors(true);
+                    rerender();
+                }),
+                flagChip('After delete', {
+                    en: 'Stays in the short menu after Delete Apk.',
+                    ru: 'Остаётся в коротком меню после Delete Apk.',
+                }, Boolean(command.afterDelete), value => {
+                    flavorConfig.commands[index] = { ...flavorConfig.commands[index], afterDelete: value };
+                    saveFlavors(true);
+                    rerender();
+                })));
+    }
+
+    function moveFlavorCommand(index, delta) {
+        const swapWith = index + delta;
+        if (swapWith < 0 || swapWith >= flavorConfig.commands.length) {
+            return;
+        }
+        const current = flavorConfig.commands[index];
+        flavorConfig.commands[index] = flavorConfig.commands[swapWith];
+        flavorConfig.commands[swapWith] = current;
+        saveFlavors(true);
+        rerender();
+    }
+
     // ---------- status bar preview ----------
 
     /** Button colors follow the "Colorized commands" setting, like the real status bar. */
@@ -199,17 +382,40 @@
         return on && color ? { [property]: color } : {};
     }
 
+    function highlightBar(id, on) {
+        document.querySelectorAll(`[data-bar="${id}"]`).forEach(element => {
+            element.classList.toggle('is-bar-hot', on);
+        });
+    }
+
+    function withBarHover(element, id) {
+        if (!id || !element) {
+            return element;
+        }
+        element.setAttribute('data-bar', id);
+        element.addEventListener('mouseenter', () => highlightBar(id, true));
+        element.addEventListener('mouseleave', () => highlightBar(id, false));
+        return element;
+    }
+
+    function barChip(id, style, label) {
+        return withBarHover(h('span', { class: 'chip', style }, label), id);
+    }
+
     function statusBarPreview(section) {
         const chips = section.controls
             .filter(control => control.value && control.preview)
-            .map(control => h('span', { class: 'chip', style: paint('color', control.color) }, control.preview));
+            .map(control => barChip(control.key, paint('color', control.color), control.preview));
         const custom = customCommands.filter(command => command.enabled && !command.archived);
         const git = custom.filter(command => GIT_COMMAND.test(command.command || ''));
         const knownGroups = new Set(commandGroups.map(group => group.id));
         custom.filter(command => !GIT_COMMAND.test(command.command || '') && !(command.group && knownGroups.has(command.group)))
-            .forEach(command => chips.push(h('span', { class: 'chip', style: paint('color', command.color, state.colorizedCustom) }, command.label)));
+            .forEach(command => {
+                const index = customCommands.indexOf(command);
+                chips.push(barChip(`custom:${index}`, paint('color', command.color, state.colorizedCustom), command.label));
+            });
         if (git.length > 0 && state.gitMenuIcon !== false) {
-            chips.push(h('span', { class: 'chip', style: paint('color', git[0].color, state.colorizedCustom) }, `⎇ GIT Helps (${git.length})`));
+            chips.push(barChip('customGitMenuIcon', paint('color', git[0].color, state.colorizedCustom), `⎇ GIT Helps (${git.length})`));
         }
         commandGroups.forEach(group => {
             if (group.enabled === false) {
@@ -217,7 +423,7 @@
             }
             const count = custom.filter(command => command.group === group.id).length;
             if (count > 0) {
-                chips.push(h('span', { class: 'chip', style: paint('color', group.color, state.colorizedCustom) }, `📂 ${group.label || 'Menu'} (${count})`));
+                chips.push(barChip(`group:${group.id}`, paint('color', group.color, state.colorizedCustom), `📂 ${group.label || 'Menu'} (${count})`));
             }
         });
         return h('div', { class: 'statusbar', title: 'Preview of your status bar' },
@@ -508,7 +714,7 @@
                     'Hide from the status bar. The command stays in History and settings.json.',
                     'Убрать из status bar. Команда останется в истории на панели и в settings.json.',
                     'archive')));
-        return card;
+        return withBarHover(card, isGit || grouped ? undefined : `custom:${index}`);
     }
 
     function activeIndexes() {
@@ -852,7 +1058,7 @@
                     ? members.map(({ command, index }) => renderCommandCard(command, index))
                     : h('p', { class: 'category__empty' }, 'Drag commands here · Перетащите команды сюда')));
         bindDrop(box, group.id);
-        return box;
+        return withBarHover(box, `group:${group.id}`);
     }
 
     function setGitMenuPosition(position) {
@@ -868,7 +1074,7 @@
     function renderGitCategory() {
         const members = gitCommands();
         const isCollapsed = collapsedCats.has(GIT_CAT);
-        return h('div', {
+        return withBarHover(h('div', {
             class: `category${isCollapsed ? ' category--collapsed' : ''}`,
             'data-category': GIT_CAT,
             'data-search': 'git helps menu категория category',
@@ -898,7 +1104,7 @@
             h('div', { class: 'category__body' },
                 members.length > 0
                     ? members.map(({ command, index }) => renderCommandCard(command, index))
-                    : h('p', { class: 'category__empty' }, 'Commands starting with git … go here · Команды git … собираются сюда')));
+                    : h('p', { class: 'category__empty' }, 'Commands starting with git … go here · Команды git … собираются сюда'))));
     }
 
     function renderCustomCommands() {
@@ -1095,7 +1301,59 @@
 
     function isEditingText() {
         const active = document.activeElement;
-        return active && active.tagName === 'INPUT' && active.type === 'text';
+        return active && ((active.tagName === 'INPUT' && active.type === 'text') || active.tagName === 'SELECT' || active.tagName === 'TEXTAREA');
+    }
+
+    function typeHeroTitle() {
+        const title = document.querySelector('.hero__title');
+        if (!title || title.dataset.typed === '1') {
+            return;
+        }
+        const text = title.getAttribute('data-type') || 'Simpler Flutter Tasks';
+        title.dataset.typed = '1';
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            title.textContent = text;
+            title.classList.add('is-typed');
+            return;
+        }
+        let index = 0;
+        const tick = () => {
+            index += 1;
+            title.textContent = text.slice(0, index);
+            if (index < text.length) {
+                setTimeout(tick, 48);
+            } else {
+                setTimeout(() => title.classList.add('is-typed'), 900);
+            }
+        };
+        setTimeout(tick, 180);
+    }
+
+    function setupHeroLogoMotion() {
+        const wrap = document.querySelector('.hero__logo-wrap');
+        const logo = wrap && wrap.querySelector('.hero__logo');
+        if (!wrap || !logo || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            return;
+        }
+        const setTilt = (rx, ry, tz, sc) => {
+            logo.style.setProperty('--rx', `${rx}deg`);
+            logo.style.setProperty('--ry', `${ry}deg`);
+            logo.style.setProperty('--tz', `${tz}px`);
+            logo.style.setProperty('--sc', String(sc));
+        };
+        wrap.addEventListener('pointermove', event => {
+            const box = wrap.getBoundingClientRect();
+            const x = (event.clientX - box.left) / box.width;
+            const y = (event.clientY - box.top) / box.height;
+            wrap.style.setProperty('--mx', `${x * 100}%`);
+            wrap.style.setProperty('--my', `${y * 100}%`);
+            wrap.classList.add('is-hot');
+            setTilt((0.5 - y) * 24, (x - 0.5) * 32, 14, 1.1);
+        });
+        wrap.addEventListener('pointerleave', () => {
+            wrap.classList.remove('is-hot');
+            setTilt(0, 0, 0, 1);
+        });
     }
 
     function applyState(next) {
@@ -1107,9 +1365,15 @@
         state = next;
         customCommands = next.customCommands.map(command => ({ ...command }));
         commandGroups = (next.customCommandGroups || []).map(group => ({ ...group }));
+        flavorConfig = {
+            path: (next.flavorConfig && next.flavorConfig.path) || 'lib/main',
+            flavors: ((next.flavorConfig && next.flavorConfig.flavors) || []).map(item => ({ ...item })),
+            commands: ((next.flavorConfig && next.flavorConfig.commands) || []).map(item => ({ ...item })),
+        };
         rerender();
         if (first) {
             document.body.classList.remove('is-booting');
+            typeHeroTitle();
         }
         if (expectSaved) {
             expectSaved = false;
@@ -1163,5 +1427,6 @@
         importAllJson.addEventListener('click', () => vscode.postMessage({ type: 'importSettingsJson' }));
     }
 
+    setupHeroLogoMotion();
     vscode.postMessage({ type: 'ready' });
 }());

@@ -7,7 +7,7 @@
   },
   "description": "Flutter quick commands",
   "publisher": "Eldiyar-Dev",
-  "version": "3.2.2",
+  "version": "4.0.0",
   "icon": "images/eldiyar_profile_icon.png",
   "engines": {
     "vscode": "^1.80.0"
@@ -730,7 +730,7 @@
         },
         "SimplerFlutterTasks.treeViewCopyText": {
           "type": "boolean",
-          "default": false,
+          "default": true,
           "enum": [
             false,
             true
@@ -751,22 +751,22 @@
             },
             "flavors": {
               "type": "array",
+              "default": [
+                {
+                  "title": "prod",
+                  "package": "com_packages_of_your_app"
+                },
+                {
+                  "title": "staging",
+                  "package": "com_packages_of_your_app"
+                },
+                {
+                  "title": "dev",
+                  "package": "com_packages_of_your_app"
+                }
+              ],
               "items": {
                 "type": "object",
-                "default": [
-                  {
-                    "title": "prod",
-                    "package": "com.kp.megapay.kg"
-                  },
-                  {
-                    "title": "staging",
-                    "package": "com.kp.megapay.stagging"
-                  },
-                  {
-                    "title": "dev",
-                    "package": "com.kp.megapay.dev"
-                  }
-                ],
                 "properties": {
                   "title": {
                     "type": "string",
@@ -774,13 +774,30 @@
                   },
                   "package": {
                     "type": "string",
-                    "description": "Package name (e.g., com.mega.kg)"
+                    "description": "Package name (e.g., com_packages_of_your_app)"
                   }
                 },
                 "required": [
                   "title",
                   "package"
                 ]
+              }
+            },
+            "commands": {
+              "type": "array",
+              "description": "Commands shown after picking a flavor. Use ${flavor}, ${package}, ${path}.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "label": { "type": "string" },
+                  "command": { "type": "string" },
+                  "action": {
+                    "type": "string",
+                    "enum": ["run", "openApk", "openBundle", "deleteApk", "separator"]
+                  },
+                  "prodOnly": { "type": "boolean" },
+                  "afterDelete": { "type": "boolean" }
+                }
               }
             }
           },

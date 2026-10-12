@@ -31,7 +31,7 @@ const DEFAULT_GIT_HELPS = [
     },
     {
         label: '3 Rebase [Слияния]',
-        command: 'git pull --rebase origin integrate_mega24',
+        command: 'git pull --rebase origin fix/some_branch',
         enabled: true,
         color: '#00fff7',
         position: 'left',

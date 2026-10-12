@@ -1,6 +1,6 @@
 const { getSetting, isShown } = require('../../utils/config');
 const { STATUS_BAR_ITEMS, itemColor } = require('../status_bar/status_bar_items');
-const { flavorTitles } = require('../flavor');
+const { flavorTitles, getFlavorConfig } = require('../flavor');
 
 /**
  * Controls of the settings panel. `kind` defines how a value is stored:
@@ -44,7 +44,7 @@ const SECTIONS = [
             icon('Open Build Folder', 'openApkIcon', 'Open build: APK / AAB / IPA / .app'),
             icon('Git Pull', 'gitPullIcon', 'git pull'),
             icon('GIT Helps', 'customGitMenuIcon', 'New Branch, Commit, Rebase, Push — one Git menu'),
-            icon('Flutter Flavor', 'flutterFlavor', 'Run with flavor, Alt+F'),
+            icon('Flutter Flavor', 'flutterFlavor', 'Run with flavor, Alt+F', { flavorEditor: true }),
             editable('Build APK', 'buildApkIcon', 'buildApkCommand', 'Editable, e.g. add --flavor'),
             editable('Build iOS', 'iosIcon', 'iosCommand', 'Editable, e.g. add --flavor'),
             editable('Build IPA', 'ipaIcon', 'ipaCommand', 'Editable, e.g. add --flavor'),
@@ -109,6 +109,7 @@ function buildPanelState() {
         colorizedCustom: Boolean(getSetting('colorizedCustomCommands')),
         gitMenuIcon: getSetting('customGitMenuIcon') !== 'hide',
         flavors: flavorTitles(),
+        flavorConfig: getFlavorConfig(),
     };
 }
 

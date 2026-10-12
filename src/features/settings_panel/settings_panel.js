@@ -5,6 +5,8 @@ const { getSetting, updateGlobalSetting } = require('../../utils/config');
 const { DEFAULT_CUSTOM_COMMANDS, DEFAULT_GIT_HELPS, isGitCommand } = require('../status_bar/custom_commands');
 const { STATUS_BAR_ITEMS } = require('../status_bar/status_bar_items');
 const { buildPanelState, findControl, toStoredValue, panelSettingKeys } = require('./settings_schema');
+const { revealUserSettingsJson } = require('../settings_json');
+const { sanitizeFlavorConfig } = require('../flavor');
 
 const EXPORT_KIND = 1;
 const EXTRA_EXPORT_KEYS = ['customCommandsList', 'customCommandGroups', 'statusBarColors', 'Flavors'];
@@ -95,7 +97,7 @@ async function handleMessage(message, postState, webview) {
                 await updateGlobalSetting('customCommandsList', DEFAULT_CUSTOM_COMMANDS);
                 break;
             case 'openSettingsJson':
-                await vscode.commands.executeCommand('workbench.action.openSettingsJson');
+                setTimeout(() => { void revealUserSettingsJson(); }, 0);
                 break;
             case 'exportSettings':
                 await exportPanelSettings();
@@ -111,6 +113,9 @@ async function handleMessage(message, postState, webview) {
             case 'importSettings':
                 await importPanelSettings();
                 postState();
+                break;
+            case 'flavors':
+                await updateGlobalSetting('Flavors', sanitizeFlavorConfig(message.value));
                 break;
         }
     } catch (error) {
@@ -237,7 +242,7 @@ function sanitizeImportedValue(key, value) {
         return sanitizeColors(value);
     }
     if (key === 'Flavors') {
-        return value && typeof value === 'object' ? value : getSetting('Flavors');
+        return sanitizeFlavorConfig(value);
     }
     const control = findControl(key);
     if (!control) {
@@ -407,9 +412,11 @@ function renderHtml(webview, mediaRoot, imagesRoot, iconsRoot) {
         <p>Loading Settings…</p>
     </div>
     <header class="hero">
-        <img class="hero__logo" src="${asset(imagesRoot, 'eldiyar_profile_icon.png')}" alt="">
+        <div class="hero__logo-wrap">
+            <img class="hero__logo" src="${asset(imagesRoot, 'eldiyar_profile_icon.png')}" alt="">
+        </div>
         <div class="hero__text">
-            <h1>Simpler Flutter Tasks</h1>
+            <h1 class="hero__title" data-type="Simpler Flutter Tasks" aria-label="Simpler Flutter Tasks"></h1>
             <p>Settings are saved to your user settings.json and applied instantly.</p>
         </div>
         <div class="hero__actions">

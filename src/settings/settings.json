@@ -1,0 +1,291 @@
+{
+    "editor.codeActionsOnSave": {
+        "dart.previewLsp": "always",
+        "source.fixAll": "always",
+        "source.organizeImports": "always",
+        "quickfix.add.required": "always",
+        "quickfix.add.required.multi": "always",
+        "quickfix.create.constructorForFinalFields": "always"
+    },
+    "dart.analysisExcludedFolders": [
+        "**/deprecated/"
+    ],
+    "dart.lineLength": 80,
+    "[dart]": {
+        "editor.formatOnType": true,
+        "editor.formatOnSave": true,
+        "editor.rulers": [
+            0
+        ],
+        "editor.selectionHighlight": true,
+        "editor.suggest.snippetsPreventQuickSuggestions": true,
+        "editor.suggestSelection": "first",
+        "editor.tabCompletion": "off",
+        "editor.wordBasedSuggestions": "off"
+    },
+    "workbench.colorCustomizations": {
+        "statusBar.background": "#141212",
+        "statusBar.debuggingBackground": "#141212",
+        "statusBar.border": "#1f1c1c",
+        "editor.background": "#1c1919",
+        "editor.findMatchHighlightBorder": "#aaabae65",
+        "editor.findMatchHighlightBackground": "#8380809e",
+        "editorBracketMatch.border": "#aaaaaa"
+    },
+    "security.workspace.trust.untrustedFiles": "open",
+    "editor.unicodeHighlight.ambiguousCharacters": false,
+    "editor.renderWhitespace": "none",
+    "editor.fontSize": 14,
+    "dart.flutterSdkPath": ".fvm/flutter_sdk",
+    "dart.maxCompletionItems": 100000,
+    "workbench.editorAssociations": {
+        "*.html": "default",
+        "*.pdf": "default"
+    },
+    "gitlens.defaultTimeFormat": null,
+    "files.autoSaveDelay": 500,
+    "editor.minimap.enabled": true,
+    "dart.debugSdkLibraries": true,
+    "grunt.autoDetect": "on",
+    "jake.autoDetect": "on",
+    "gulp.autoDetect": "on",
+    "diffEditor.ignoreTrimWhitespace": false,
+    "dart.debugExternalPackageLibraries": true,
+    "cSpell.userWords": [
+        "объекта",
+        "обычный",
+        "позволяет",
+        "разные",
+        "экземпляр",
+        "bookit",
+        "Eldiyar",
+        "Iherit",
+        "Interactor",
+        "megapay",
+        "msisidn",
+        "ressemble",
+        "stagging",
+        "unfocus",
+        "usecase"
+    ],
+    "editor.formatOnSave": true,
+    "bloc.newBlocTemplate.useSealedClasses": false,
+    "bloc.newCubitTemplate.type": "freezed",
+    "window.commandCenter": true,
+    "task.problemMatchers.neverPrompt": {
+        "shell": true
+    },
+    "dart.showTodos": true,
+    "dart.promptToRunIfErrors": true,
+    "workbench.iconTheme": "material-icon-theme",
+    "bloc.newBlocTemplate.type": "freezed",
+    "SimplerFlutterGenerator.stateWidget": "StateFullWidget",
+    "SimplerFlutterGenerator.createStateWidget": true,
+    "SimplerFlutterTasks.easyLocalizationsIcon": "show",
+    "SimplerFlutterTasks.createNewTerminal": false,
+    "SimplerFlutterTasks.treeViewCopyText": true,
+    "files.watcherExclude": {
+        "**/.dart_tool/**": true,
+        "**/build/**": true,
+        "**/.git/**": true
+    },
+    "SimplerFlutterTasks.flutterCleanIcon": "show",
+    "SimplerFlutterTasks.iosIcon": "show",
+    "SimplerFlutterTasks.ipaIcon": "show",
+    "SimplerFlutterTasks.flutterPubGetIcon": "hide",
+    "SimplerFlutterTasks.colorized": false,
+    "SimplerFlutterTasks.openIosIcon": "show",
+    "SimplerFlutterTasks.installIcon": "show",
+    "SimplerFlutterTasks.buildRunnerCategoryExpandable": false,
+    "SimplerFlutterTasks.flutterCategoryExpandable": false,
+    "SimplerFlutterTasks.androidCategoryExpandable": false,
+    "SimplerFlutterTasks.gitCategoryExpandable": false,
+    "SimplerFlutterTasks.iosCategoryExpandable": false,
+    "SimplerFlutterTasks.openIpaIcon": "hide",
+    "SimplerFlutterTasks.spiderBuildIcon": "hide",
+    "SimplerFlutterTasks.smallApkIcon": "hide",
+    "SimplerFlutterTasks.gitPullIcon": "hide",
+    "SimplerFlutterTasks.openApkIcon": "show",
+    "SimplerFlutterTasks.buildRunnerIcon": "show",
+    "SimplerFlutterTasks.buildApkIcon": "hide",
+    "dart.previewFlutterUiGuides": false,
+    "dart.previewFlutterUiGuidesCustomTracking": false,
+    "editor.accessibilitySupport": "off",
+    "SimplerFlutterTasks.flutterFlavor": "show",
+    "chatgpt.lang": "en",
+    "SimplerFlutterSnippets.WrapperStack": true,
+    "SimplerFlutterSnippets.CubitBuilder": true,
+    "SimplerFlutterSnippets.CubitConsumer": true,
+    "SimplerFlutterSnippets.StateFullBuilder": true,
+    "SimplerFlutterSnippets.FutureBuilder": true,
+    "SimplerFlutterSnippets.removeThisWidget": true,
+    "SimplerFlutterSnippets.AnimatedBuilder": true,
+    "SimplerFlutterSnippets.SingleChildScrollViewBuilder": true,
+    "SimplerFlutterSnippets.ValueListenableBuilder": true,
+    "SimplerFlutterSnippets.WrapperOnMenu": "hide",
+    "SimplerFlutterSnippets.selectedImport": false,
+    "SimplerFlutterSnippets.autoFix": false,
+    "SimplerFlutterSnippets.StreamBuilder": true,
+    "SimplerFlutterSnippets.TweenBuilder": true,
+    "editor.codeLens": true,
+    "SimplerFlutterGenerator.enableCodeLens": true,
+    "SimplerFlutterTasks.customCommandsList": [
+        {
+            "label": "Auto Route",
+            "command": "dart run build_runner build --delete-conflicting-outputs --build-filter 'lib/app/router/*.dart'",
+            "enabled": true,
+            "archived": false,
+            "color": "#00bbff",
+            "position": "left",
+            "warningDialog": false,
+            "askerForCommand": false,
+            "group": ""
+        },
+        {
+            "label": "1 New Branch",
+            "command": "git checkout -b",
+            "enabled": true,
+            "color": "#FFFF00",
+            "position": "left",
+            "warningDialog": false,
+            "askerForCommand": true
+        },
+        {
+            "label": "2 Commit",
+            "command": "git add . && git commit -m ",
+            "enabled": true,
+            "color": "#FFFF00",
+            "position": "left",
+            "warningDialog": false,
+            "askerForCommand": false
+        },
+        {
+            "label": "3 Rebase [Слияния]",
+            "command": "git pull --rebase origin integrate_mega24",
+            "enabled": true,
+            "color": "#00fff7",
+            "position": "left",
+            "warningDialog": true,
+            "askerForCommand": false
+        },
+        {
+            "label": "3 Rebase",
+            "command": "git pull --rebase origin DEV",
+            "enabled": true,
+            "color": "#FFFF00",
+            "position": "left",
+            "warningDialog": true,
+            "askerForCommand": false
+        },
+        {
+            "label": "4 Push",
+            "command": "git push --set-upstream origin",
+            "enabled": true,
+            "color": "#FFFF00",
+            "position": "left",
+            "warningDialog": true,
+            "askerForCommand": false
+        },
+        {
+            "label": "5 Go to DEV",
+            "command": "git checkout DEV && git pull",
+            "enabled": true,
+            "color": "#FFFF00",
+            "position": "left",
+            "warningDialog": true,
+            "askerForCommand": false
+        }
+    ],
+    "SimplerFlutterTasks.Flavors": {
+        "path": "lib/main",
+        "flavors": [
+            {
+                "title": "prod",
+                "package": "com.kp.megapay.kg"
+            },
+            {
+                "title": "staging",
+                "package": "com.kp.megapay.stagging"
+            },
+            {
+                "title": "dev",
+                "package": "com.kp.megapay.dev"
+            }
+        ]
+    },
+    "SimplerFlutterSnippets.customWraps": [
+        {
+            "name": "Stack custom -->",
+            "autoFormat": true,
+            "autoCopy": "",
+            "_comment": "your widget -- ${widget} -- | auto select -- ${1:listenable} -- | selection menu -- ${1|start,center|} --",
+            "body": [
+                "  Stack(",
+                "  children: [",
+                "    ${widget}",
+                "  ],",
+                ")"
+            ]
+        },
+        {
+            "name": "Bottom Area -->",
+            "autoFormat": true,
+            "autoCopy": "",
+            "body": [
+                "FloatingBottomArea(",
+                "  areaContent: const DeleteAccountWidget(),",
+                "  child: ${widget}",
+                ",)"
+            ]
+        },
+        {
+            "name": "Value listenable -->",
+            "autoFormat": true,
+            "autoCopy": "ValueNotifier<bool> customValueX = ValueNotifier<bool>(false);",
+            "body": [
+                "ValueListenableBuilder(",
+                " valueListenable: ${1:listenable},",
+                " builder: (context, value, child) {",
+                "    return ${widget};",
+                " },",
+                ")"
+            ]
+        },
+        {
+            "name": "Column -->",
+            "autoCopy": "",
+            "autoFormat": false,
+            "body": [
+                "Column(",
+                "crossAxisAlignment: CrossAxisAlignment.${1|start,center|},",
+                "children: [",
+                "${widget}",
+                "]",
+                ")"
+            ]
+        }
+    ],
+    "geminicodeassist.project": "learnlang-6ac62",
+    "workbench.editor.enablePreview": false,
+    "files.autoSave": "afterDelay",
+    "workbench.colorTheme": "Default Dark Modern",
+    "window.autoDetectColorScheme": false,
+    "dart.flutterCreatePlatforms": [
+        "android",
+        "ios"
+    ],
+    "SimplerFlutterTasks.commandsMenuIcon": "show",
+    "SimplerFlutterTasks.smallApkCommand": "flutter build apk --split-per-abi",
+    "SimplerFlutterTasks.installCommand": "flutter install --flavor",
+    "SimplerFlutterTasks.iosCommand": "flutter build ios --flavor",
+    "SimplerFlutterTasks.ipaCommand": "flutter build ipa",
+    "SimplerFlutterTasks.statusBarColors": {
+        "commandsMenuIcon": "#ff2600"
+    },
+    "SimplerFlutterTasks.colorizedCustomCommands": false,
+    "SimplerFlutterTasks.customCommandGroups": [],
+    "SimplerFlutterTasks.customGitMenuIcon": "show",
+    "SimplerFlutterTasks.buildApkCommand": "flutter build apk",
+    "SimplerFlutterTasks.easyLocalizationFirst": "dart run easy_localization:generate -S assets/langs -O lib/langs",
+    "SimplerFlutterTasks.easyLocalizationSecond": "dart run easy_localization:generate -S assets/langs -f keys -o locale_keys.g.dart"
+}
