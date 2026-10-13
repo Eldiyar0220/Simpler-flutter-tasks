@@ -846,5 +846,8 @@
         "mocha": "^10.2.0",
         "typescript": "^5.1.6"
     },
-    "license": "MIT"
+    "license": "MIT",
+    "dependencies": {
+        "jsonc-parser": "^3.3.1"
+    }
 }

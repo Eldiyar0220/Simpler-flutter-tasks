@@ -914,6 +914,26 @@ button:disabled {
 .category--dragover {
     border: 1px dashed var(--flutter-light);
     background: color-mix(in srgb, var(--flutter-light) 8%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--flutter-light) 25%, transparent),
+        0 0 18px color-mix(in srgb, var(--flutter-light) 18%, transparent);
+}
+
+.category,
+.commands__pins {
+    transition: border-color 0.2s, background-color 0.2s, box-shadow 0.25s;
+}
+
+.is-dragging-command .category,
+.is-dragging-command .commands__pins {
+    border-color: color-mix(in srgb, var(--flutter-light) 35%, var(--border));
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .command--landed,
+    .command--drop-before::before,
+    .command--drop-after::after {
+        animation: none;
+    }
 }
 
 .category__bar {
@@ -998,7 +1018,26 @@ span.category__name {
 }
 
 .command--dragging {
-    opacity: 0.45;
+    opacity: 0.4;
+    border-style: dashed;
+    border-color: var(--flutter-light);
+    transform: scale(0.97);
+}
+
+.command--landed {
+    z-index: 3;
+    animation: command-landed 1s ease-out;
+}
+
+@keyframes command-landed {
+    0% {
+        border-color: var(--flutter-light);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--flutter-light) 45%, transparent),
+            0 10px 28px color-mix(in srgb, var(--flutter-light) 30%, transparent);
+    }
+    100% {
+        box-shadow: 0 0 0 0 transparent, 0 0 0 transparent;
+    }
 }
 
 .command__cmd {
@@ -1101,6 +1140,18 @@ span.category__name {
     background: var(--flutter-light);
     box-shadow: 0 0 8px color-mix(in srgb, var(--flutter-light) 70%, transparent);
     pointer-events: none;
+    animation: drop-line 0.18s ease-out;
+}
+
+@keyframes drop-line {
+    from {
+        opacity: 0;
+        transform: scaleX(0.3);
+    }
+    to {
+        opacity: 1;
+        transform: scaleX(1);
+    }
 }
 
 .command--drop-before::before {
@@ -1126,7 +1177,7 @@ span.category__name {
     border: 1px solid var(--border);
     border-radius: 10px;
     background: var(--vscode-editor-background);
-    transition: opacity 0.2s, border-color 0.2s;
+    transition: opacity 0.2s, border-color 0.2s, transform 0.2s ease, box-shadow 0.2s;
 }
 
 .command:hover,

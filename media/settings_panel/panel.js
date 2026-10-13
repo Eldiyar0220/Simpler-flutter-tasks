@@ -20,6 +20,10 @@
     let saveTimer;
     let flavorTimer;
     let draggingIndex;
+    const MOTION_MS = 380;
+    const commandKeys = new WeakMap();
+    let commandKeyCounter = 0;
+    let motionUntil = 0;
     let colorTimer;
     let renderTimer;
     let toastTimer;
@@ -514,8 +518,65 @@
 
     /** Text fields are saved with a delay while typing and right away on blur. */
     function updateCommand(index, patch, immediate = true) {
-        customCommands[index] = { ...customCommands[index], ...patch };
+        customCommands[index] = withKey(customCommands[index], { ...customCommands[index], ...patch });
         saveCustomCommands(immediate);
+    }
+
+    /** Stable id of a command card across re-renders, so a moved card can glide to its new place. */
+    function commandKey(command) {
+        if (!commandKeys.has(command)) {
+            commandKeys.set(command, `c${commandKeyCounter++}`);
+        }
+        return commandKeys.get(command);
+    }
+
+    function withKey(from, to) {
+        commandKeys.set(to, commandKey(from));
+        return to;
+    }
+
+    /** FLIP: remembers where cards were, applies the change, then animates them from the old place to the new one. */
+    function animateLayout(change, landedKey) {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            change();
+            return;
+        }
+        const before = new Map();
+        const heights = new Map();
+        sectionsRoot.querySelectorAll('[data-flip]').forEach(element => before.set(element.dataset.flip, element.getBoundingClientRect()));
+        sectionsRoot.querySelectorAll('[data-flip-size]').forEach(element => heights.set(element.dataset.flipSize, element.offsetHeight));
+        change();
+        motionUntil = Date.now() + MOTION_MS + 80;
+        const easing = 'cubic-bezier(0.2, 0.8, 0.2, 1)';
+        sectionsRoot.querySelectorAll('[data-flip-size]').forEach(element => {
+            const old = heights.get(element.dataset.flipSize);
+            const now = element.offsetHeight;
+            if (old !== undefined && old > 0 && now > 0 && Math.abs(old - now) >= 1) {
+                element.animate([{ height: `${old}px` }, { height: `${now}px` }], { duration: MOTION_MS, easing });
+            }
+        });
+        sectionsRoot.querySelectorAll('[data-flip]').forEach(element => {
+            const now = element.getBoundingClientRect();
+            if (now.width === 0 && now.height === 0) {
+                return;
+            }
+            const old = before.get(element.dataset.flip);
+            if (!old || (old.width === 0 && old.height === 0)) {
+                element.animate([{ opacity: 0, transform: 'scale(0.96)' }, { opacity: 1, transform: 'none' }], { duration: MOTION_MS, easing });
+                return;
+            }
+            const dx = old.left - now.left;
+            const dy = old.top - now.top;
+            if (Math.abs(dx) < 1 && Math.abs(dy) < 1) {
+                return;
+            }
+            element.animate([{ transform: `translate(${dx}px, ${dy}px)` }, { transform: 'translate(0, 0)' }], { duration: MOTION_MS, easing });
+        });
+        const landed = landedKey && sectionsRoot.querySelector(`[data-flip="${landedKey}"]`);
+        if (landed) {
+            landed.classList.add('command--landed');
+            setTimeout(() => landed.classList.remove('command--landed'), 1000);
+        }
     }
 
     function lessonButton(id) {
@@ -694,6 +755,7 @@
         const grouped = Boolean(command.group && commandGroups.some(group => group.id === command.group));
         const card = h('div', {
             class: `command${command.enabled ? '' : ' command--disabled'}${linked ? ' command--linked' : ''}`,
+            'data-flip': commandKey(command),
             'data-search': `${command.label} ${command.command} ${(command.then || []).join(' ')} ${isGit ? 'git' : ''}`.toLowerCase(),
             draggable: true,
             ondragstart: event => startCommandDrag(event, index),
@@ -791,7 +853,13 @@
         draggingIndex = index;
         event.dataTransfer.setData('text/plain', String(index));
         event.dataTransfer.effectAllowed = 'move';
-        event.currentTarget.classList.add('command--dragging');
+        const card = event.currentTarget;
+        // The drag image is taken right after dragstart, so dim the card a frame later.
+        requestAnimationFrame(() => {
+            if (draggingIndex !== undefined) {
+                card.classList.add('command--dragging');
+            }
+        });
         sectionsRoot.classList.add('is-dragging-command');
     }
 
@@ -845,15 +913,17 @@
 
     function moveCommandTo(from, target, before) {
         const group = customCommands[target].group || '';
-        const [moved] = customCommands.splice(from, 1);
-        const targetIndex = from < target ? target - 1 : target;
-        customCommands.splice(before ? targetIndex : targetIndex + 1, 0, { ...moved, group });
-        if (group) {
-            collapsedCats.delete(group);
-            persistUi();
-        }
-        saveCustomCommands(true);
-        rerender();
+        animateLayout(() => {
+            const [moved] = customCommands.splice(from, 1);
+            const targetIndex = from < target ? target - 1 : target;
+            customCommands.splice(before ? targetIndex : targetIndex + 1, 0, withKey(moved, { ...moved, group }));
+            if (group) {
+                collapsedCats.delete(group);
+                persistUi();
+            }
+            saveCustomCommands(true);
+            rerender();
+        }, commandKey(customCommands[from]));
     }
 
     function bindDrop(element, groupId) {
@@ -874,12 +944,14 @@
             if (!command || (command.group || '') === (groupId || '')) {
                 return;
             }
-            if (groupId) {
-                collapsedCats.delete(groupId);
-                persistUi();
-            }
-            updateCommand(index, { group: groupId || '' });
-            rerender();
+            animateLayout(() => {
+                if (groupId) {
+                    collapsedCats.delete(groupId);
+                    persistUi();
+                }
+                updateCommand(index, { group: groupId || '' });
+                rerender();
+            }, commandKey(command));
         });
     }
 
@@ -1233,9 +1305,10 @@
         const box = h('div', {
             class: `category${isCollapsed ? ' category--collapsed' : ''}`,
             'data-category': group.id,
+            'data-flip-size': `group:${group.id}`,
             'data-search': `${group.label} category категория menu`.toLowerCase(),
         },
-            h('div', { class: 'category__bar' },
+            h('div', { class: 'category__bar', 'data-flip': `group:${group.id}` },
                 categoryToggle(group.id),
                 h('span', { class: 'category__icon' }, '📂'),
                 h('input', {
@@ -1292,9 +1365,10 @@
         const box = h('div', {
             class: `category${isCollapsed ? ' category--collapsed' : ''}`,
             'data-category': GIT_CAT,
+            'data-flip-size': `group:${GIT_CAT}`,
             'data-search': 'git helps menu категория category',
         },
-            h('div', { class: 'category__bar' },
+            h('div', { class: 'category__bar', 'data-flip': `group:${GIT_CAT}` },
                 categoryToggle(GIT_CAT),
                 h('span', { class: 'category__icon' }, '⎇'),
                 h('span', { class: 'category__name' }, 'GIT Helps'),
@@ -1341,7 +1415,7 @@
         const knownGroups = new Set(commandGroups.map(group => group.id));
         const pins = active.filter(({ command }) =>
             !isGitItem(command) && !(command.group && knownGroups.has(command.group)));
-        const pinList = h('div', { class: 'commands__pins' },
+        const pinList = h('div', { class: 'commands__pins', 'data-flip-size': 'pins' },
             pins.length > 0
                 ? pins.map(({ command, index }) => renderCommandCard(command, index))
                 : h('p', { class: 'history__hint' }, commandGroups.length > 0
@@ -1614,6 +1688,10 @@
         }
         clearTimeout(renderTimer);
         renderTimer = setTimeout(() => {
+            if (Date.now() < motionUntil) {
+                flushPendingState();
+                return;
+            }
             if (pendingState && !isEditingText()) {
                 const next = pendingState;
                 pendingState = undefined;

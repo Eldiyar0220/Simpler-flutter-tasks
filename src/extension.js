@@ -8,11 +8,13 @@ const { registerFlavorCommands } = require('./features/flavor');
 const { registerExplorer } = require('./features/explorer/explorer');
 const { registerSettingsJsonCommands } = require('./features/settings_json');
 const { registerSettingsPanel } = require('./features/settings_panel/settings_panel');
+const { initConfig } = require('./utils/config');
 
 /**
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
+    initConfig(context);
     // Explorer first so the sidebar never stays on "Loading Settings..." if something later throws.
     // Do not install companion extensions here: `installExtension` can restart or stall the host.
     for (const [label, register] of [

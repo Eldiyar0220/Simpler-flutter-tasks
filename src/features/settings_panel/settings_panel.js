@@ -1,7 +1,7 @@
 const vscode = require('vscode');
 const crypto = require('crypto');
 const { CONFIG_SECTION } = require('../../constants');
-const { getSetting, updateGlobalSetting } = require('../../utils/config');
+const { getSetting, updateGlobalSetting, userSettingsUri } = require('../../utils/config');
 const { DEFAULT_CUSTOM_COMMANDS, DEFAULT_GIT_HELPS, isGitCommand } = require('../status_bar/custom_commands');
 const { STATUS_BAR_ITEMS } = require('../status_bar/status_bar_items');
 const { buildPanelState, findControl, toStoredValue, panelSettingKeys } = require('./settings_schema');
@@ -18,8 +18,6 @@ const BOOLEAN_FIELDS = new Set(['enabled', 'archived', 'warningDialog', 'askerFo
 
 let currentPanel;
 let pendingFocusSection;
-let panelContext;
-
 function registerSettingsPanel(context) {
     context.subscriptions.push(
         vscode.commands.registerCommand(OPEN_COMMAND, item => openSettingsPanel(context, item)),
@@ -45,7 +43,6 @@ function openSettingsPanel(context, item) {
         localResourceRoots: [mediaRoot, imagesRoot, iconsRoot],
     });
     currentPanel = panel;
-    panelContext = context;
     pendingFocusSection = section;
     panel.iconPath = vscode.Uri.joinPath(context.extensionUri, 'assets', 'icons', 'main_settings_icon.gif');
 
@@ -271,10 +268,6 @@ async function exportPanelSettings() {
     const json = `${JSON.stringify(buildExport(), null, 2)}\n`;
     await vscode.workspace.fs.writeFile(uri, Buffer.from(json, 'utf8'));
     vscode.window.showInformationMessage('Settings exported ✓');
-}
-
-function userSettingsUri() {
-    return vscode.Uri.joinPath(panelContext.globalStorageUri, '..', '..', 'settings.json');
 }
 
 // TODO: EXPORT ALL JSON SETTINGS

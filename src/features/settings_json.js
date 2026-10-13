@@ -1,17 +1,11 @@
 const vscode = require('vscode');
 const { showTimedNotification } = require('../utils/notifications');
-
-let extensionContext;
-
-function userSettingsUri() {
-    return vscode.Uri.joinPath(extensionContext.globalStorageUri, '..', '..', 'settings.json');
-}
+const { userSettingsUri } = require('../utils/config');
 
 /** Opens the real User/settings.json. Avoid `openSettingsJson` — it can freeze the host from a webview. */
 async function revealUserSettingsJson() {
-    const uri = userSettingsUri();
     try {
-        const document = await vscode.workspace.openTextDocument(uri);
+        const document = await vscode.workspace.openTextDocument(userSettingsUri());
         await vscode.window.showTextDocument(document, { preview: false });
     } catch {
         void vscode.commands.executeCommand('workbench.action.openSettingsJson');
@@ -27,7 +21,6 @@ function openSettingsJson() {
 }
 
 function registerSettingsJsonCommands(context) {
-    extensionContext = context;
     context.subscriptions.push(
         vscode.commands.registerCommand('flutter-tasks.openSettingsJson', openSettingsJson),
         vscode.commands.registerCommand('flutter-tasks.openSettingsJsonWithIcon', openSettingsJson),
