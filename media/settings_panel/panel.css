@@ -843,8 +843,18 @@ button:disabled {
     padding: 2px 5px;
     margin: -2px -5px;
     border-radius: 4px;
-    cursor: default;
+    cursor: pointer;
     transition: background 0.15s, box-shadow 0.15s;
+}
+
+.is-bar-flash {
+    border-radius: 8px;
+    animation: bar-flash 1.4s ease-out;
+}
+
+@keyframes bar-flash {
+    0%, 35% { box-shadow: 0 0 0 2px var(--flutter-light), 0 0 18px color-mix(in srgb, var(--flutter-light) 55%, transparent); }
+    100% { box-shadow: 0 0 0 0 transparent; }
 }
 
 .chip.is-bar-hot {

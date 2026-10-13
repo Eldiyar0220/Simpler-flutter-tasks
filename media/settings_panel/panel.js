@@ -398,8 +398,38 @@
         return element;
     }
 
+    function scrollToBar(id) {
+        const target = [...sectionsRoot.querySelectorAll(`[data-bar="${id}"]`)].find(element => !element.classList.contains('chip'));
+        if (!target) {
+            return;
+        }
+        const card = target.closest('.card');
+        const sectionId = card && card.getAttribute('data-section');
+        const sectionCollapsed = sectionId && collapsed.has(sectionId);
+        if (sectionCollapsed) {
+            setCollapsed(sectionId, false);
+        }
+        const category = target.parentElement && target.parentElement.closest('[data-category]');
+        const categoryId = category && category.getAttribute('data-category');
+        const categoryCollapsed = categoryId && collapsedCats.has(categoryId);
+        if (categoryCollapsed) {
+            setCategoryCollapsed(categoryId, false);
+        }
+        setTimeout(() => {
+            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            const toggle = target.querySelector('.switch input');
+            if (toggle) {
+                toggle.focus({ preventScroll: true });
+            }
+            target.classList.remove('is-bar-flash');
+            void target.offsetWidth;
+            target.classList.add('is-bar-flash');
+            setTimeout(() => target.classList.remove('is-bar-flash'), 1400);
+        }, sectionCollapsed || categoryCollapsed ? 320 : 0);
+    }
+
     function barChip(id, style, label) {
-        return withBarHover(h('span', { class: 'chip', style }, label), id);
+        return withBarHover(h('span', { class: 'chip', style, onclick: () => scrollToBar(id) }, label), id);
     }
 
     function statusBarPreview(section) {

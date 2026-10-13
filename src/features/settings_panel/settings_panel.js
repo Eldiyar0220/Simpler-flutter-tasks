@@ -385,7 +385,7 @@ function renderHtml(webview, mediaRoot, imagesRoot, iconsRoot) {
     const sectionIcons = [
         `general:"${asset(iconsRoot, 'main_settings_icon.gif')}"`,
         `statusBar:"${asset(iconsRoot, 'status_bar_icons.gif')}"`,
-        `customCommands:"${asset(iconsRoot, 'wired-outline-1418-rhombus.gif')}"`,
+        `customCommands:"${asset(iconsRoot, 'settings_hover.gif')}"`,
         `other:"${asset(iconsRoot, 'other_settings.gif')}"`,
         `flavor:"${asset(iconsRoot, 'sub_set.gif')}"`,
     ].join(',');
