@@ -1,831 +1,846 @@
 {
-  "name": "simpler-flutter-tasks",
-  "displayName": "Simpler Flutter Tasks",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Eldiyar0220/simpler-flutter-tasks"
-  },
-  "description": "Flutter quick commands",
-  "publisher": "Eldiyar-Dev",
-  "version": "4.0.0",
-  "icon": "images/eldiyar_profile_icon.png",
-  "engines": {
-    "vscode": "^1.80.0"
-  },
-  "categories": [
-    "Other",
-    "Programming Languages",
-    "Snippets",
-    "Linters",
-    "Formatters",
-    "Debuggers",
-    "Testing"
-  ],
-  "keywords": [
-    "Flutter",
-    "Dart",
-    "Snippets",
-    "commands",
-    "fast commands"
-  ],
-  "activationEvents": [
-    "onStartupFinished",
-    "onCommand:flutter-tasks.activateFlavor"
-  ],
-  "main": "./src/extension.js",
-  "enabledApiProposals": [],
-  "contributes": {
-    "commands": [
-      {
-        "command": "flutter-tasks.commandsMenu",
-        "title": "Commands Menu",
-        "category": "Simpler Flutter Tasks",
-        "icon": "$(rocket)"
-      },
-      {
-        "command": "flutter-tasks.openSettingsPanel",
-        "title": "Open Settings Panel",
-        "category": "Simpler Flutter Tasks",
-        "icon": "$(settings-gear)"
-      },
-      {
-        "command": "flutter-tasks.showWelcome",
-        "title": "Show Welcome / What’s New",
-        "category": "Simpler Flutter Tasks"
-      },
-      {
-        "command": "flutter-tasks.openBuild",
-        "title": "Open Build (APK / AAB / IPA)",
-        "category": "Simpler Flutter Tasks",
-        "icon": {
-          "light": "assets/icons/open_ios_ipa_folders.gif",
-          "dark": "assets/icons/open_ios_ipa_folders.gif"
-        }
-      },
-      {
-        "command": "flutter-tasks.editLocale",
-        "title": "Edit",
-        "icon": {
-          "light": "assets/icons/edit_locale.gif",
-          "dark": "assets/icons/edit_locale.gif"
-        }
-      },
-      {
-        "command": "flutter-tasks.refreshEntry",
-        "title": "Refresh",
-        "icon": {
-          "light": "assets/icons/refresh.svg",
-          "dark": "assets/icons/refresh.svg"
-        }
-      },
-      {
-        "command": "flutter-tasks.runTheCommand",
-        "title": "Run The Command",
-        "icon": {
-          "light": "assets/icons/start_black.svg",
-          "dark": "assets/icons/start_icon.svg"
-        }
-      },
-      {
-        "command": "flutter-tasks.screenShot",
-        "title": "Run The Command",
-        "icon": {
-          "light": "assets/icons/flutter_screen_shot_dark.gif",
-          "dark": "assets/icons/flutter_screen_shot.gif"
-        }
-      },
-      {
-        "command": "flutter-tasks.doctor",
-        "title": "Run The Command",
-        "icon": {
-          "light": "assets/icons/flutter_doctor_light.gif",
-          "dark": "assets/icons/flutter_doctor_dark.gif"
-        }
-      },
-      {
-        "command": "flutter-tasks.copyTheCommand",
-        "title": "Copy"
-      },
-      {
-        "command": "flutter-tasks.openSettingsJson",
-        "title": "Open Settings Json",
-        "icon": {
-          "light": "assets/icons/code_light.gif",
-          "dark": "assets/icons/settings_hover.gif"
-        }
-      },
-      {
-        "command": "flutter-tasks.openSettingsJsonWithIcon",
-        "title": "Open Settings Json",
-        "icon": {
-          "light": "assets/icons/code_light.gif",
-          "dark": "assets/icons/settings_hover.gif"
-        }
-      },
-      {
-        "command": "flutter-tasks.activateCustomCommands",
-        "title": "Open Settings Json",
-        "icon": {
-          "light": "assets/icons/code_light.gif",
-          "dark": "assets/icons/open_folder_new.gif"
-        }
-      }
-    ],
-    "keybindings": [
-      {
-        "command": "flutter-tasks.activateFlavor",
-        "key": "alt+f",
-        "when": "editorTextFocus"
-      }
-    ],
-    "menus": {
-      "editor/title": [
-        {
-          "command": "flutter-tasks.openSettingsJson",
-          "when": "editorTextFocus && editorLangId == dart",
-          "group": "navigation"
-        }
-      ],
-      "view/item/context": [
-        {
-          "command": "flutter-tasks.runTheCommand",
-          "when": "view == flutter-Commands && viewItem == child || view == flutterView && viewItem == child",
-          "group": "inline"
-        },
-        {
-          "command": "flutter-tasks.screenShot",
-          "when": "view == flutter-Commands && viewItem == screenShot || view == flutterView && viewItem == screenShot",
-          "group": "inline"
-        },
-        {
-          "command": "flutter-tasks.doctor",
-          "when": "view == flutter-Commands && viewItem == doctor || view == flutterView && viewItem == doctor",
-          "group": "inline"
-        },
-        {
-          "command": "flutter-tasks.runTheCommand",
-          "when": "view == flutter-Commands && viewItem == child || viewItem == doctor || viewItem == screenShot"
-        },
-        {
-          "command": "flutter-tasks.copyTheCommand",
-          "when": "view == flutter-Commands && viewItem == child || viewItem == doctor || viewItem == screenShot || viewItem == copyOnly"
-        },
-        {
-          "command": "flutter-tasks.openSettingsJsonWithIcon",
-          "when": "view == flutter-Commands && viewItem == settings",
-          "group": "inline"
-        },
-        {
-          "command": "flutter-tasks.editLocale",
-          "when": "view == flutter-Commands && viewItem == easyLocale",
-          "group": "inline"
-        },
-        {
-          "command": "flutter-tasks.openBuild",
-          "when": "view == flutter-Commands && viewItem == openBuild || view == flutterView && viewItem == openBuild",
-          "group": "inline"
-        },
-        {
-          "command": "flutter-tasks.activateCustomCommands",
-          "when": "view == flutter-Commands && viewItem == customCommands",
-          "group": "inline"
-        }
-      ],
-      "view/title": [
-        {
-          "command": "flutter-tasks.openSettingsPanel",
-          "when": "view == flutter-Commands",
-          "group": "navigation"
-        },
-        {
-          "command": "flutter-tasks.refreshEntry",
-          "when": "view == flutter-Commands || view == flutterView",
-          "group": "navigation"
-        },
-        {
-          "command": "flutter-tasks.openSettingsJson",
-          "when": "view == flutter-Commands || view == flutterView",
-          "group": "navigation"
-        }
-      ]
+    "name": "simpler-flutter-tasks",
+    "displayName": "Simpler Flutter Tasks",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Eldiyar0220/simpler-flutter-tasks"
     },
-    "viewsWelcome": [
-      {
-        "view": "flutter-Commands",
-        "contents": "Starting…\n\n[Reload Window](command:workbench.action.reloadWindow)"
-      },
-      {
-        "view": "flutterView",
-        "contents": "Starting…\n\n[Reload Window](command:workbench.action.reloadWindow)"
-      }
-    ],
-    "viewsContainers": {
-      "activitybar": [
-        {
-          "id": "flutter-commands-container",
-          "title": "Simpler Flutter Tasks",
-          "icon": "assets/icons/ios_assets.svg"
-        }
-      ]
+    "description": "Flutter quick commands",
+    "publisher": "Eldiyar-Dev",
+    "version": "4.0.2",
+    "icon": "images/eldiyar_profile_icon.png",
+    "engines": {
+        "vscode": "^1.80.0"
     },
-    "views": {
-      "flutter-commands-container": [
-        {
-          "id": "flutter-Commands",
-          "name": "Commands"
-        }
-      ],
-      "explorer": [
-        {
-          "id": "flutterView",
-          "name": "Simpler Flutter Tasks 😉"
-        }
-      ]
-    },
-    "walkthroughs": [
-      {
-        "id": "simplerFlutterTasks.customCommands",
-        "title": "Custom Commands",
-        "description": "How Left/Right, Confirm, Edit first, then-commands and History work.",
-        "steps": [
-          {
-            "id": "position",
-            "title": "Left / Right",
-            "description": "The button sits on the left or right of the status bar.\n\nКнопка будет слева или справа на status bar.",
-            "media": {
-              "image": "media/settings_panel/lessons/position.gif",
-              "altText": "Button sliding between left and right of the status bar"
-            }
-          },
-          {
-            "id": "confirm",
-            "title": "Confirm",
-            "description": "VS Code asks “Are you sure?” before the command runs.\n\nПеред запуском спросит «Вы уверены?»",
-            "media": {
-              "image": "media/settings_panel/lessons/confirm.gif",
-              "altText": "Confirm dialog before running a command"
-            }
-          },
-          {
-            "id": "edit",
-            "title": "Edit first",
-            "description": "A text field opens so you can change the command, then it runs.\n\nСначала поле, правите команду, запускается то, что ввели.",
-            "media": {
-              "image": "media/settings_panel/lessons/edit.gif",
-              "altText": "Editing the command in an input box"
-            }
-          },
-          {
-            "id": "then",
-            "title": "Then-command",
-            "description": "Plus adds a command that runs after the main one: main && then.\n\nПлюс добавляет дочернюю команду после основной.",
-            "media": {
-              "image": "media/settings_panel/lessons/then.gif",
-              "altText": "Then-command chained after the main command"
-            }
-          },
-          {
-            "id": "archive",
-            "title": "History",
-            "description": "Remove hides the button. The command stays in History and settings.json.\n\nКрестик убирает кнопку, команда остаётся в истории.",
-            "media": {
-              "image": "media/settings_panel/lessons/archive.gif",
-              "altText": "Command moving from the status bar into History"
-            }
-          }
-        ]
-      }
+    "categories": [
+        "Other",
+        "Programming Languages",
+        "Snippets",
+        "Linters",
+        "Formatters",
+        "Debuggers",
+        "Testing"
     ],
-    "configuration": {
-      "title": "Simpler Flutter Tasks",
-      "properties": {
-        "SimplerFlutterTasks.buildRunnerCategoryExpandable": {
-          "type": "boolean",
-          "default": false,
-          "enum": [
-            false,
-            true
-          ],
-          "enumDescriptions": [
-            "Always Expand -> false",
-            "Always Expand -> true"
-          ],
-          "description": "Complete boolean with hide or show Icon"
-        },
-        "SimplerFlutterTasks.flutterCategoryExpandable": {
-          "type": "boolean",
-          "default": false,
-          "enum": [
-            false,
-            true
-          ],
-          "enumDescriptions": [
-            "Always Expand -> false",
-            "Always Expand -> true"
-          ],
-          "description": "Complete boolean with hide or show Icon"
-        },
-        "SimplerFlutterTasks.androidCategoryExpandable": {
-          "type": "boolean",
-          "default": false,
-          "enum": [
-            false,
-            true
-          ],
-          "enumDescriptions": [
-            "Always Expand -> false",
-            "Always Expand -> true"
-          ],
-          "description": "Complete boolean with hide or show Icon"
-        },
-        "SimplerFlutterTasks.iosCategoryExpandable": {
-          "type": "boolean",
-          "default": false,
-          "enum": [
-            false,
-            true
-          ],
-          "enumDescriptions": [
-            "Always Expand -> false",
-            "Always Expand -> true"
-          ],
-          "description": "Complete boolean with hide or show Icon"
-        },
-        "SimplerFlutterTasks.gitCategoryExpandable": {
-          "type": "boolean",
-          "default": false,
-          "enum": [
-            false,
-            true
-          ],
-          "enumDescriptions": [
-            "Always Expand -> false",
-            "Always Expand -> true"
-          ],
-          "description": "Complete boolean with hide or show Icon"
-        },
-        "SimplerFlutterTasks.commandsMenuIcon": {
-          "type": "string",
-          "default": "show",
-          "enum": [
-            "show",
-            "hide"
-          ],
-          "enumDescriptions": [
-            "Commands Menu icon -> show",
-            "Commands Menu icon -> hide"
-          ],
-          "description": "One status bar button that opens a menu with all commands"
-        },
-        "SimplerFlutterTasks.customGitMenuIcon": {
-          "type": "string",
-          "default": "show",
-          "enum": [
-            "show",
-            "hide"
-          ],
-          "enumDescriptions": [
-            "GIT Helps -> show",
-            "GIT Helps -> hide"
-          ],
-          "description": "GIT Helps: New Branch, Commit, Rebase, Push in one status bar menu"
-        },
-        "SimplerFlutterTasks.flutterCleanIcon": {
-          "type": "string",
-          "default": "show",
-          "enum": [
-            "show",
-            "hide"
-          ],
-          "enumDescriptions": [
-            "Clean icon -> show",
-            "Clean icon -> hide"
-          ],
-          "description": "Complete boolean with hide or show Icon"
-        },
-        "SimplerFlutterTasks.flutterPubGetIcon": {
-          "type": "string",
-          "default": "hide",
-          "enum": [
-            "show",
-            "hide"
-          ],
-          "enumDescriptions": [
-            "Pub Get icon -> show",
-            "Pub Get icon -> hide"
-          ],
-          "description": "Complete boolean with hide or show Icon"
-        },
-        "SimplerFlutterTasks.buildApkIcon": {
-          "type": "string",
-          "default": "show",
-          "enum": [
-            "show",
-            "hide"
-          ],
-          "enumDescriptions": [
-            "Apk icon -> show",
-            "Apk icon -> hide"
-          ],
-          "description": "Complete boolean with hide or show Icon"
-        },
-        "SimplerFlutterTasks.iosIcon": {
-          "type": "string",
-          "default": "hide",
-          "enum": [
-            "show",
-            "hide"
-          ],
-          "enumDescriptions": [
-            "Ios icon -> show",
-            "Ios icon -> hide"
-          ],
-          "description": "Complete boolean with hide or show Icon"
-        },
-        "SimplerFlutterTasks.ipaIcon": {
-          "type": "string",
-          "default": "hide",
-          "enum": [
-            "show",
-            "hide"
-          ],
-          "enumDescriptions": [
-            "Ipa icon -> show",
-            "Ipa icon -> hide"
-          ],
-          "description": "Complete boolean with hide or show Icon"
-        },
-        "SimplerFlutterTasks.buildRunnerIcon": {
-          "type": "string",
-          "default": "show",
-          "enum": [
-            "show",
-            "hide"
-          ],
-          "enumDescriptions": [
-            "Runner icon -> show",
-            "Runner icon -> hide"
-          ],
-          "description": "Complete boolean with hide or show Icon"
-        },
-        "SimplerFlutterTasks.openApkIcon": {
-          "type": "string",
-          "default": "show",
-          "enum": [
-            "show",
-            "hide"
-          ],
-          "enumDescriptions": [
-            "Open Build Folder icon -> show",
-            "Open Build Folder icon -> hide"
-          ],
-          "description": "Complete String with hide or show Icon"
-        },
-        "SimplerFlutterTasks.installIcon": {
-          "type": "string",
-          "default": "hide",
-          "enum": [
-            "show",
-            "hide"
-          ],
-          "enumDescriptions": [
-            "Install icon -> show",
-            "Install icon -> hide"
-          ],
-          "description": "Complete String with hide or show Icon"
-        },
-        "SimplerFlutterTasks.gitPullIcon": {
-          "type": "string",
-          "default": "hide",
-          "enum": [
-            "show",
-            "hide"
-          ],
-          "enumDescriptions": [
-            "Git pull icon -> show",
-            "Git pull icon -> hide"
-          ],
-          "description": "Complete String with hide or show Icon"
-        },
-        "SimplerFlutterTasks.smallApkIcon": {
-          "type": "string",
-          "default": "hide",
-          "enum": [
-            "show",
-            "hide"
-          ],
-          "enumDescriptions": [
-            "Small Apk icon -> show",
-            "Small Apk icon -> hide"
-          ],
-          "description": "Complete String with hide or show Icon"
-        },
-        "SimplerFlutterTasks.flutterFlavor": {
-          "type": "string",
-          "default": "hide",
-          "enum": [
-            "show",
-            "hide"
-          ],
-          "enumDescriptions": [
-            "Flavor Build icon -> show",
-            "Flavor Build icon -> hide"
-          ],
-          "description": "Complete String with hide or show Icon"
-        },
-        "SimplerFlutterTasks.easyLocalizationsIcon": {
-          "type": "string",
-          "default": "hide",
-          "enum": [
-            "show",
-            "hide"
-          ],
-          "enumDescriptions": [
-            "Easy Localizations icon -> show",
-            "Easy Localizations icon -> hide"
-          ],
-          "description": "Complete String with hide or show Icon"
-        },
-        "SimplerFlutterTasks.buildApkCommand": {
-          "type": "string",
-          "default": "flutter build apk",
-          "description": "Command of the Build APK button, e.g. flutter build apk --flavor prod -t lib/main_prod.dart"
-        },
-        "SimplerFlutterTasks.iosCommand": {
-          "type": "string",
-          "default": "flutter build ios",
-          "description": "Command of the Build iOS button"
-        },
-        "SimplerFlutterTasks.ipaCommand": {
-          "type": "string",
-          "default": "flutter build ipa",
-          "description": "Command of the Build IPA button, e.g. flutter build ipa --flavor prod --export-method ad-hoc"
-        },
-        "SimplerFlutterTasks.installCommand": {
-          "type": "string",
-          "default": "flutter install",
-          "description": "Command of the Flutter Install button, e.g. flutter install --flavor prod"
-        },
-        "SimplerFlutterTasks.smallApkCommand": {
-          "type": "string",
-          "default": "flutter build apk --split-per-abi",
-          "description": "Command of the Small APK button, e.g. flutter build apk --split-per-abi --flavor prod -t lib/main_prod.dart"
-        },
-        "SimplerFlutterTasks.easyLocalizationFirst": {
-          "type": "string",
-          "default": "dart run easy_localization:generate -S assets/langs -O lib/langs",
-          "description": "Easy Localizations < codegen_loader.g.dart > if u change the command reload Vs Code"
-        },
-        "SimplerFlutterTasks.easyLocalizationSecond": {
-          "type": "string",
-          "default": "dart run easy_localization:generate -S assets/langs -f keys -o locale_keys.g.dart",
-          "description": "Easy Localizations < locale_keys.g.dart > if u change the command reload Vs Code"
-        },
-        "SimplerFlutterTasks.customCommandsList": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "label": {
-                "type": "string",
-                "description": "Label for the Custom Command"
-              },
-              "enabled": {
-                "type": "boolean",
-                "default": true,
-                "description": "Label for the Custom Command"
-              },
-              "archived": {
-                "type": "boolean",
-                "default": false,
-                "description": "Hidden from the status bar and menus; kept in History on the settings panel"
-              },
-              "color": {
-                "type": "string",
-                "default": "white",
-                "format": "color",
-                "description": "Label for the Custom Command"
-              },
-              "command": {
-                "type": "string",
-                "default": "flutter build apk",
-                "description": "Initial state of the Custom Command"
-              },
-              "warningDialog": {
-                "type": "boolean",
-                "default": false,
-                "description": "Protection Against Accidental Clicks"
-              },
-              "askerForCommand": {
-                "type": "boolean",
-                "default": false,
-                "description": "Ask from user"
-              },
-              "then": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                },
-                "default": [],
-                "description": "Commands that run after the main command, in order"
-              },
-              "position": {
-                "type": "string",
-                "default": "left",
-                "enum": [
-                  "left",
-                  "right"
-                ],
-                "description": "The alignment of the status bar item (left or right)."
-              },
-              "group": {
-                "type": "string",
-                "default": "",
-                "description": "If set, the command is shown inside this category menu instead of its own status bar button"
-              }
-            }
-          },
-          "description": "List of Custom Commands"
-        },
-        "SimplerFlutterTasks.customCommandGroups": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "string"
-              },
-              "label": {
-                "type": "string",
-                "default": "Menu"
-              },
-              "color": {
-                "type": "string",
-                "format": "color"
-              },
-              "position": {
-                "type": "string",
-                "enum": [
-                  "left",
-                  "right"
-                ]
-              },
-              "enabled": {
-                "type": "boolean",
-                "default": true,
-                "description": "Show this category as a status bar button"
-              }
-            }
-          },
-          "default": [],
-          "description": "Categories that fold several custom commands into one status bar menu"
-        },
-        "SimplerFlutterTasks.createNewTerminal": {
-          "type": "boolean",
-          "default": false,
-          "enum": [
-            false,
-            true
-          ],
-          "enumDescriptions": [
-            "The Command -> start on opened Terminal",
-            "The Command -> create new Terminal"
-          ],
-          "description": "Complete String with hide or show Icon"
-        },
-        "SimplerFlutterTasks.statusBarColors": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string",
-            "format": "color"
-          },
-          "default": {},
-          "description": "Custom colors of built-in status bar buttons. Used when Colorized commands is on."
-        },
-        "SimplerFlutterTasks.colorized": {
-          "type": "boolean",
-          "default": false,
-          "enum": [
-            false,
-            true
-          ],
-          "enumDescriptions": [
-            "Colorized -> true",
-            "Colorized -> false"
-          ],
-          "description": "Color of built-in status bar buttons"
-        },
-        "SimplerFlutterTasks.colorizedCustomCommands": {
-          "type": "boolean",
-          "default": false,
-          "enum": [
-            false,
-            true
-          ],
-          "enumDescriptions": [
-            "Colorized -> true",
-            "Colorized -> false"
-          ],
-          "description": "Color of your custom status bar buttons"
-        },
-        "SimplerFlutterTasks.treeViewCopyText": {
-          "type": "boolean",
-          "default": true,
-          "enum": [
-            false,
-            true
-          ],
-          "enumDescriptions": [
-            "Copy Text -> true",
-            "Copy Text -> false"
-          ],
-          "description": "Complete String with hide or show Icon"
-        },
-        "SimplerFlutterTasks.Flavors": {
-          "type": "object",
-          "properties": {
-            "path": {
-              "type": "string",
-              "description": "Path to the main file (e.g., lib/main) -- lib/main_prod, lib/main_dev, lib/main_stagging ",
-              "default": "lib/main"
+    "keywords": [
+        "Flutter",
+        "Dart",
+        "Snippets",
+        "commands",
+        "fast commands"
+    ],
+    "activationEvents": [
+        "onStartupFinished",
+        "onCommand:flutter-tasks.activateFlavor"
+    ],
+    "main": "./src/extension.js",
+    "enabledApiProposals": [],
+    "contributes": {
+        "commands": [
+            {
+                "command": "flutter-tasks.commandsMenu",
+                "title": "Commands Menu",
+                "category": "Simpler Flutter Tasks",
+                "icon": "$(rocket)"
             },
-            "flavors": {
-              "type": "array",
-              "default": [
-                {
-                  "title": "prod",
-                  "package": "com_packages_of_your_app"
-                },
-                {
-                  "title": "staging",
-                  "package": "com_packages_of_your_app"
-                },
-                {
-                  "title": "dev",
-                  "package": "com_packages_of_your_app"
-                }
-              ],
-              "items": {
-                "type": "object",
-                "properties": {
-                  "title": {
-                    "type": "string",
-                    "description": "Flavor title (e.g., prod)"
-                  },
-                  "package": {
-                    "type": "string",
-                    "description": "Package name (e.g., com_packages_of_your_app)"
-                  }
-                },
-                "required": [
-                  "title",
-                  "package"
-                ]
-              }
+            {
+                "command": "flutter-tasks.openSettingsPanel",
+                "title": "Open Settings Panel",
+                "category": "Simpler Flutter Tasks",
+                "icon": "$(settings-gear)"
             },
-            "commands": {
-              "type": "array",
-              "description": "Commands shown after picking a flavor. Use ${flavor}, ${package}, ${path}.",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "label": { "type": "string" },
-                  "command": { "type": "string" },
-                  "action": {
-                    "type": "string",
-                    "enum": ["run", "openApk", "openBundle", "deleteApk", "separator"]
-                  },
-                  "prodOnly": { "type": "boolean" },
-                  "afterDelete": { "type": "boolean" }
+            {
+                "command": "flutter-tasks.showWelcome",
+                "title": "Show Welcome / What’s New",
+                "category": "Simpler Flutter Tasks"
+            },
+            {
+                "command": "flutter-tasks.openBuild",
+                "title": "Open Build (APK / AAB / IPA)",
+                "category": "Simpler Flutter Tasks",
+                "icon": {
+                    "light": "assets/icons/open_ios_ipa_folders.gif",
+                    "dark": "assets/icons/open_ios_ipa_folders.gif"
                 }
-              }
+            },
+            {
+                "command": "flutter-tasks.editLocale",
+                "title": "Edit",
+                "icon": {
+                    "light": "assets/icons/edit_locale.gif",
+                    "dark": "assets/icons/edit_locale.gif"
+                }
+            },
+            {
+                "command": "flutter-tasks.refreshEntry",
+                "title": "Refresh",
+                "icon": {
+                    "light": "assets/icons/refresh.svg",
+                    "dark": "assets/icons/refresh.svg"
+                }
+            },
+            {
+                "command": "flutter-tasks.runTheCommand",
+                "title": "Run The Command",
+                "icon": {
+                    "light": "assets/icons/start_black.svg",
+                    "dark": "assets/icons/start_icon.svg"
+                }
+            },
+            {
+                "command": "flutter-tasks.screenShot",
+                "title": "Run The Command",
+                "icon": {
+                    "light": "assets/icons/flutter_screen_shot_dark.gif",
+                    "dark": "assets/icons/flutter_screen_shot.gif"
+                }
+            },
+            {
+                "command": "flutter-tasks.doctor",
+                "title": "Run The Command",
+                "icon": {
+                    "light": "assets/icons/flutter_doctor_light.gif",
+                    "dark": "assets/icons/flutter_doctor_dark.gif"
+                }
+            },
+            {
+                "command": "flutter-tasks.copyTheCommand",
+                "title": "Copy"
+            },
+            {
+                "command": "flutter-tasks.openSettingsJson",
+                "title": "Open Settings Json",
+                "icon": {
+                    "light": "assets/icons/code_light.gif",
+                    "dark": "assets/icons/settings_hover.gif"
+                }
+            },
+            {
+                "command": "flutter-tasks.openSettingsJsonWithIcon",
+                "title": "Open Settings Json",
+                "icon": {
+                    "light": "assets/icons/code_light.gif",
+                    "dark": "assets/icons/settings_hover.gif"
+                }
+            },
+            {
+                "command": "flutter-tasks.activateCustomCommands",
+                "title": "Open Settings Json",
+                "icon": {
+                    "light": "assets/icons/code_light.gif",
+                    "dark": "assets/icons/open_folder_new.gif"
+                }
             }
-          },
-          "required": [
-            "path",
-            "flavors"
-          ],
-          "description": "Configuration for Flutter flavors"
+        ],
+        "keybindings": [
+            {
+                "command": "flutter-tasks.activateFlavor",
+                "key": "alt+f",
+                "when": "editorTextFocus"
+            }
+        ],
+        "menus": {
+            "editor/title": [
+                {
+                    "command": "flutter-tasks.openSettingsJson",
+                    "when": "editorTextFocus && editorLangId == dart",
+                    "group": "navigation"
+                }
+            ],
+            "view/item/context": [
+                {
+                    "command": "flutter-tasks.runTheCommand",
+                    "when": "view == flutter-Commands && viewItem == child || view == flutterView && viewItem == child",
+                    "group": "inline"
+                },
+                {
+                    "command": "flutter-tasks.screenShot",
+                    "when": "view == flutter-Commands && viewItem == screenShot || view == flutterView && viewItem == screenShot",
+                    "group": "inline"
+                },
+                {
+                    "command": "flutter-tasks.doctor",
+                    "when": "view == flutter-Commands && viewItem == doctor || view == flutterView && viewItem == doctor",
+                    "group": "inline"
+                },
+                {
+                    "command": "flutter-tasks.runTheCommand",
+                    "when": "view == flutter-Commands && viewItem == child || viewItem == doctor || viewItem == screenShot"
+                },
+                {
+                    "command": "flutter-tasks.copyTheCommand",
+                    "when": "view == flutter-Commands && viewItem == child || viewItem == doctor || viewItem == screenShot || viewItem == copyOnly"
+                },
+                {
+                    "command": "flutter-tasks.openSettingsJsonWithIcon",
+                    "when": "view == flutter-Commands && viewItem == settings",
+                    "group": "inline"
+                },
+                {
+                    "command": "flutter-tasks.editLocale",
+                    "when": "view == flutter-Commands && viewItem == easyLocale",
+                    "group": "inline"
+                },
+                {
+                    "command": "flutter-tasks.openBuild",
+                    "when": "view == flutter-Commands && viewItem == openBuild || view == flutterView && viewItem == openBuild",
+                    "group": "inline"
+                },
+                {
+                    "command": "flutter-tasks.activateCustomCommands",
+                    "when": "view == flutter-Commands && viewItem == customCommands",
+                    "group": "inline"
+                }
+            ],
+            "view/title": [
+                {
+                    "command": "flutter-tasks.openSettingsPanel",
+                    "when": "view == flutter-Commands",
+                    "group": "navigation"
+                },
+                {
+                    "command": "flutter-tasks.refreshEntry",
+                    "when": "view == flutter-Commands || view == flutterView",
+                    "group": "navigation"
+                },
+                {
+                    "command": "flutter-tasks.openSettingsJson",
+                    "when": "view == flutter-Commands || view == flutterView",
+                    "group": "navigation"
+                }
+            ]
+        },
+        "viewsWelcome": [
+            {
+                "view": "flutter-Commands",
+                "contents": "Starting…\n\n[Reload Window](command:workbench.action.reloadWindow)"
+            },
+            {
+                "view": "flutterView",
+                "contents": "Starting…\n\n[Reload Window](command:workbench.action.reloadWindow)"
+            }
+        ],
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "flutter-commands-container",
+                    "title": "Simpler Flutter Tasks",
+                    "icon": "assets/icons/ios_assets.svg"
+                }
+            ]
+        },
+        "views": {
+            "flutter-commands-container": [
+                {
+                    "id": "flutter-Commands",
+                    "name": "Commands"
+                }
+            ],
+            "explorer": [
+                {
+                    "id": "flutterView",
+                    "name": "Simpler Flutter Tasks 😉"
+                }
+            ]
+        },
+        "walkthroughs": [
+            {
+                "id": "simplerFlutterTasks.customCommands",
+                "title": "Custom Commands",
+                "description": "How Left/Right, Confirm, Edit first, then-commands and History work.",
+                "steps": [
+                    {
+                        "id": "position",
+                        "title": "Left / Right",
+                        "description": "The button sits on the left or right of the status bar.\n\nКнопка будет слева или справа на status bar.",
+                        "media": {
+                            "image": "media/settings_panel/lessons/position.gif",
+                            "altText": "Button sliding between left and right of the status bar"
+                        }
+                    },
+                    {
+                        "id": "confirm",
+                        "title": "Confirm",
+                        "description": "VS Code asks “Are you sure?” before the command runs.\n\nПеред запуском спросит «Вы уверены?»",
+                        "media": {
+                            "image": "media/settings_panel/lessons/confirm.gif",
+                            "altText": "Confirm dialog before running a command"
+                        }
+                    },
+                    {
+                        "id": "edit",
+                        "title": "Edit first",
+                        "description": "A text field opens so you can change the command, then it runs.\n\nСначала поле, правите команду, запускается то, что ввели.",
+                        "media": {
+                            "image": "media/settings_panel/lessons/edit.gif",
+                            "altText": "Editing the command in an input box"
+                        }
+                    },
+                    {
+                        "id": "then",
+                        "title": "Then-command",
+                        "description": "Plus adds a command that runs after the main one: main && then.\n\nПлюс добавляет дочернюю команду после основной.",
+                        "media": {
+                            "image": "media/settings_panel/lessons/then.gif",
+                            "altText": "Then-command chained after the main command"
+                        }
+                    },
+                    {
+                        "id": "archive",
+                        "title": "History",
+                        "description": "Remove hides the button. The command stays in History and settings.json.\n\nКрестик убирает кнопку, команда остаётся в истории.",
+                        "media": {
+                            "image": "media/settings_panel/lessons/archive.gif",
+                            "altText": "Command moving from the status bar into History"
+                        }
+                    }
+                ]
+            }
+        ],
+        "configuration": {
+            "title": "Simpler Flutter Tasks",
+            "properties": {
+                "SimplerFlutterTasks.buildRunnerCategoryExpandable": {
+                    "type": "boolean",
+                    "default": false,
+                    "enum": [
+                        false,
+                        true
+                    ],
+                    "enumDescriptions": [
+                        "Always Expand -> false",
+                        "Always Expand -> true"
+                    ],
+                    "description": "Complete boolean with hide or show Icon"
+                },
+                "SimplerFlutterTasks.flutterCategoryExpandable": {
+                    "type": "boolean",
+                    "default": false,
+                    "enum": [
+                        false,
+                        true
+                    ],
+                    "enumDescriptions": [
+                        "Always Expand -> false",
+                        "Always Expand -> true"
+                    ],
+                    "description": "Complete boolean with hide or show Icon"
+                },
+                "SimplerFlutterTasks.androidCategoryExpandable": {
+                    "type": "boolean",
+                    "default": false,
+                    "enum": [
+                        false,
+                        true
+                    ],
+                    "enumDescriptions": [
+                        "Always Expand -> false",
+                        "Always Expand -> true"
+                    ],
+                    "description": "Complete boolean with hide or show Icon"
+                },
+                "SimplerFlutterTasks.iosCategoryExpandable": {
+                    "type": "boolean",
+                    "default": false,
+                    "enum": [
+                        false,
+                        true
+                    ],
+                    "enumDescriptions": [
+                        "Always Expand -> false",
+                        "Always Expand -> true"
+                    ],
+                    "description": "Complete boolean with hide or show Icon"
+                },
+                "SimplerFlutterTasks.gitCategoryExpandable": {
+                    "type": "boolean",
+                    "default": false,
+                    "enum": [
+                        false,
+                        true
+                    ],
+                    "enumDescriptions": [
+                        "Always Expand -> false",
+                        "Always Expand -> true"
+                    ],
+                    "description": "Complete boolean with hide or show Icon"
+                },
+                "SimplerFlutterTasks.commandsMenuIcon": {
+                    "type": "string",
+                    "default": "show",
+                    "enum": [
+                        "show",
+                        "hide"
+                    ],
+                    "enumDescriptions": [
+                        "Commands Menu icon -> show",
+                        "Commands Menu icon -> hide"
+                    ],
+                    "description": "One status bar button that opens a menu with all commands"
+                },
+                "SimplerFlutterTasks.customGitMenuIcon": {
+                    "type": "string",
+                    "default": "show",
+                    "enum": [
+                        "show",
+                        "hide"
+                    ],
+                    "enumDescriptions": [
+                        "GIT Helps -> show",
+                        "GIT Helps -> hide"
+                    ],
+                    "description": "GIT Helps: New Branch, Commit, Rebase, Push in one status bar menu"
+                },
+                "SimplerFlutterTasks.flutterCleanIcon": {
+                    "type": "string",
+                    "default": "show",
+                    "enum": [
+                        "show",
+                        "hide"
+                    ],
+                    "enumDescriptions": [
+                        "Clean icon -> show",
+                        "Clean icon -> hide"
+                    ],
+                    "description": "Complete boolean with hide or show Icon"
+                },
+                "SimplerFlutterTasks.flutterPubGetIcon": {
+                    "type": "string",
+                    "default": "hide",
+                    "enum": [
+                        "show",
+                        "hide"
+                    ],
+                    "enumDescriptions": [
+                        "Pub Get icon -> show",
+                        "Pub Get icon -> hide"
+                    ],
+                    "description": "Complete boolean with hide or show Icon"
+                },
+                "SimplerFlutterTasks.buildApkIcon": {
+                    "type": "string",
+                    "default": "show",
+                    "enum": [
+                        "show",
+                        "hide"
+                    ],
+                    "enumDescriptions": [
+                        "Apk icon -> show",
+                        "Apk icon -> hide"
+                    ],
+                    "description": "Complete boolean with hide or show Icon"
+                },
+                "SimplerFlutterTasks.iosIcon": {
+                    "type": "string",
+                    "default": "hide",
+                    "enum": [
+                        "show",
+                        "hide"
+                    ],
+                    "enumDescriptions": [
+                        "Ios icon -> show",
+                        "Ios icon -> hide"
+                    ],
+                    "description": "Complete boolean with hide or show Icon"
+                },
+                "SimplerFlutterTasks.ipaIcon": {
+                    "type": "string",
+                    "default": "hide",
+                    "enum": [
+                        "show",
+                        "hide"
+                    ],
+                    "enumDescriptions": [
+                        "Ipa icon -> show",
+                        "Ipa icon -> hide"
+                    ],
+                    "description": "Complete boolean with hide or show Icon"
+                },
+                "SimplerFlutterTasks.buildRunnerIcon": {
+                    "type": "string",
+                    "default": "show",
+                    "enum": [
+                        "show",
+                        "hide"
+                    ],
+                    "enumDescriptions": [
+                        "Runner icon -> show",
+                        "Runner icon -> hide"
+                    ],
+                    "description": "Complete boolean with hide or show Icon"
+                },
+                "SimplerFlutterTasks.openApkIcon": {
+                    "type": "string",
+                    "default": "show",
+                    "enum": [
+                        "show",
+                        "hide"
+                    ],
+                    "enumDescriptions": [
+                        "Open Build Folder icon -> show",
+                        "Open Build Folder icon -> hide"
+                    ],
+                    "description": "Complete String with hide or show Icon"
+                },
+                "SimplerFlutterTasks.installIcon": {
+                    "type": "string",
+                    "default": "hide",
+                    "enum": [
+                        "show",
+                        "hide"
+                    ],
+                    "enumDescriptions": [
+                        "Install icon -> show",
+                        "Install icon -> hide"
+                    ],
+                    "description": "Complete String with hide or show Icon"
+                },
+                "SimplerFlutterTasks.gitPullIcon": {
+                    "type": "string",
+                    "default": "hide",
+                    "enum": [
+                        "show",
+                        "hide"
+                    ],
+                    "enumDescriptions": [
+                        "Git pull icon -> show",
+                        "Git pull icon -> hide"
+                    ],
+                    "description": "Complete String with hide or show Icon"
+                },
+                "SimplerFlutterTasks.smallApkIcon": {
+                    "type": "string",
+                    "default": "hide",
+                    "enum": [
+                        "show",
+                        "hide"
+                    ],
+                    "enumDescriptions": [
+                        "Small Apk icon -> show",
+                        "Small Apk icon -> hide"
+                    ],
+                    "description": "Complete String with hide or show Icon"
+                },
+                "SimplerFlutterTasks.flutterFlavor": {
+                    "type": "string",
+                    "default": "hide",
+                    "enum": [
+                        "show",
+                        "hide"
+                    ],
+                    "enumDescriptions": [
+                        "Flavor Build icon -> show",
+                        "Flavor Build icon -> hide"
+                    ],
+                    "description": "Complete String with hide or show Icon"
+                },
+                "SimplerFlutterTasks.easyLocalizationsIcon": {
+                    "type": "string",
+                    "default": "hide",
+                    "enum": [
+                        "show",
+                        "hide"
+                    ],
+                    "enumDescriptions": [
+                        "Easy Localizations icon -> show",
+                        "Easy Localizations icon -> hide"
+                    ],
+                    "description": "Complete String with hide or show Icon"
+                },
+                "SimplerFlutterTasks.buildApkCommand": {
+                    "type": "string",
+                    "default": "flutter build apk",
+                    "description": "Command of the Build APK button, e.g. flutter build apk --flavor prod -t lib/main_prod.dart"
+                },
+                "SimplerFlutterTasks.iosCommand": {
+                    "type": "string",
+                    "default": "flutter build ios",
+                    "description": "Command of the Build iOS button"
+                },
+                "SimplerFlutterTasks.ipaCommand": {
+                    "type": "string",
+                    "default": "flutter build ipa",
+                    "description": "Command of the Build IPA button, e.g. flutter build ipa --flavor prod --export-method ad-hoc"
+                },
+                "SimplerFlutterTasks.installCommand": {
+                    "type": "string",
+                    "default": "flutter install",
+                    "description": "Command of the Flutter Install button, e.g. flutter install --flavor prod"
+                },
+                "SimplerFlutterTasks.smallApkCommand": {
+                    "type": "string",
+                    "default": "flutter build apk --split-per-abi",
+                    "description": "Command of the Small APK button, e.g. flutter build apk --split-per-abi --flavor prod -t lib/main_prod.dart"
+                },
+                "SimplerFlutterTasks.easyLocalizationFirst": {
+                    "type": "string",
+                    "default": "dart run easy_localization:generate -S assets/langs -O lib/langs",
+                    "description": "Easy Localizations < codegen_loader.g.dart > if u change the command reload Vs Code"
+                },
+                "SimplerFlutterTasks.easyLocalizationSecond": {
+                    "type": "string",
+                    "default": "dart run easy_localization:generate -S assets/langs -f keys -o locale_keys.g.dart",
+                    "description": "Easy Localizations < locale_keys.g.dart > if u change the command reload Vs Code"
+                },
+                "SimplerFlutterTasks.customCommandsList": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "label": {
+                                "type": "string",
+                                "description": "Label for the Custom Command"
+                            },
+                            "enabled": {
+                                "type": "boolean",
+                                "default": true,
+                                "description": "Label for the Custom Command"
+                            },
+                            "archived": {
+                                "type": "boolean",
+                                "default": false,
+                                "description": "Hidden from the status bar and menus; kept in History on the settings panel"
+                            },
+                            "color": {
+                                "type": "string",
+                                "default": "white",
+                                "format": "color",
+                                "description": "Label for the Custom Command"
+                            },
+                            "command": {
+                                "type": "string",
+                                "default": "flutter build apk",
+                                "description": "Initial state of the Custom Command"
+                            },
+                            "warningDialog": {
+                                "type": "boolean",
+                                "default": false,
+                                "description": "Protection Against Accidental Clicks"
+                            },
+                            "askerForCommand": {
+                                "type": "boolean",
+                                "default": false,
+                                "description": "Ask from user"
+                            },
+                            "then": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "default": [],
+                                "description": "Commands that run after the main command, in order"
+                            },
+                            "position": {
+                                "type": "string",
+                                "default": "left",
+                                "enum": [
+                                    "left",
+                                    "right"
+                                ],
+                                "description": "The alignment of the status bar item (left or right)."
+                            },
+                            "group": {
+                                "type": "string",
+                                "default": "",
+                                "description": "If set, the command is shown inside this category menu instead of its own status bar button"
+                            }
+                        }
+                    },
+                    "description": "List of Custom Commands"
+                },
+                "SimplerFlutterTasks.customCommandGroups": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "label": {
+                                "type": "string",
+                                "default": "Menu"
+                            },
+                            "color": {
+                                "type": "string",
+                                "format": "color"
+                            },
+                            "position": {
+                                "type": "string",
+                                "enum": [
+                                    "left",
+                                    "right"
+                                ]
+                            },
+                            "enabled": {
+                                "type": "boolean",
+                                "default": true,
+                                "description": "Show this category as a status bar button"
+                            }
+                        }
+                    },
+                    "default": [],
+                    "description": "Categories that fold several custom commands into one status bar menu"
+                },
+                "SimplerFlutterTasks.createNewTerminal": {
+                    "type": "boolean",
+                    "default": false,
+                    "enum": [
+                        false,
+                        true
+                    ],
+                    "enumDescriptions": [
+                        "The Command -> start on opened Terminal",
+                        "The Command -> create new Terminal"
+                    ],
+                    "description": "Complete String with hide or show Icon"
+                },
+                "SimplerFlutterTasks.statusBarColors": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string",
+                        "format": "color"
+                    },
+                    "default": {},
+                    "description": "Custom colors of built-in status bar buttons. Used when Colorized commands is on."
+                },
+                "SimplerFlutterTasks.colorized": {
+                    "type": "boolean",
+                    "default": false,
+                    "enum": [
+                        false,
+                        true
+                    ],
+                    "enumDescriptions": [
+                        "Colorized -> true",
+                        "Colorized -> false"
+                    ],
+                    "description": "Color of built-in status bar buttons"
+                },
+                "SimplerFlutterTasks.colorizedCustomCommands": {
+                    "type": "boolean",
+                    "default": false,
+                    "enum": [
+                        false,
+                        true
+                    ],
+                    "enumDescriptions": [
+                        "Colorized -> true",
+                        "Colorized -> false"
+                    ],
+                    "description": "Color of your custom status bar buttons"
+                },
+                "SimplerFlutterTasks.treeViewCopyText": {
+                    "type": "boolean",
+                    "default": true,
+                    "enum": [
+                        false,
+                        true
+                    ],
+                    "enumDescriptions": [
+                        "Copy Text -> true",
+                        "Copy Text -> false"
+                    ],
+                    "description": "Complete String with hide or show Icon"
+                },
+                "SimplerFlutterTasks.Flavors": {
+                    "type": "object",
+                    "properties": {
+                        "path": {
+                            "type": "string",
+                            "description": "Path to the main file (e.g., lib/main) -- lib/main_prod, lib/main_dev, lib/main_stagging ",
+                            "default": "lib/main"
+                        },
+                        "flavors": {
+                            "type": "array",
+                            "default": [
+                                {
+                                    "title": "prod",
+                                    "package": "com_packages_of_your_app"
+                                },
+                                {
+                                    "title": "staging",
+                                    "package": "com_packages_of_your_app"
+                                },
+                                {
+                                    "title": "dev",
+                                    "package": "com_packages_of_your_app"
+                                }
+                            ],
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "description": "Flavor title (e.g., prod)"
+                                    },
+                                    "package": {
+                                        "type": "string",
+                                        "description": "Package name (e.g., com_packages_of_your_app)"
+                                    }
+                                },
+                                "required": [
+                                    "title",
+                                    "package"
+                                ]
+                            }
+                        },
+                        "commands": {
+                            "type": "array",
+                            "description": "Commands shown after picking a flavor. Use ${flavor}, ${package}, ${path}.",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "label": {
+                                        "type": "string"
+                                    },
+                                    "command": {
+                                        "type": "string"
+                                    },
+                                    "action": {
+                                        "type": "string",
+                                        "enum": [
+                                            "run",
+                                            "openApk",
+                                            "openBundle",
+                                            "deleteApk",
+                                            "separator"
+                                        ]
+                                    },
+                                    "prodOnly": {
+                                        "type": "boolean"
+                                    },
+                                    "afterDelete": {
+                                        "type": "boolean"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": [
+                        "path",
+                        "flavors"
+                    ],
+                    "description": "Configuration for Flutter flavors"
+                }
+            }
         }
-      }
-    }
-  },
-  "scripts": {
-    "package": "vsce package",
-    "release": "vsce publish",
-    "lint": "eslint .",
-    "pretest": "npm run lint",
-    "test": "node ./test/runTest.js"
-  },
-  "devDependencies": {
-    "@types/mocha": "^10.0.1",
-    "@types/node": "16.x",
-    "@types/vscode": "^1.80.0",
-    "@vscode/test-electron": "^2.3.4",
-    "@vscode/vsce": "^3.7.1",
-    "eslint": "^8.47.0",
-    "glob": "^10.3.3",
-    "mocha": "^10.2.0",
-    "typescript": "^5.1.6"
-  }
+    },
+    "scripts": {
+        "package": "vsce package",
+        "release": "vsce publish",
+        "lint": "eslint .",
+        "pretest": "npm run lint",
+        "test": "node ./test/runTest.js"
+    },
+    "devDependencies": {
+        "@types/mocha": "^10.0.1",
+        "@types/node": "16.x",
+        "@types/vscode": "^1.80.0",
+        "@vscode/test-electron": "^2.3.4",
+        "@vscode/vsce": "^3.7.1",
+        "eslint": "^8.47.0",
+        "glob": "^10.3.3",
+        "mocha": "^10.2.0",
+        "typescript": "^5.1.6"
+    },
+    "license": "MIT"
 }

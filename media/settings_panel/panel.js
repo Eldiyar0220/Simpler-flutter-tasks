@@ -3,7 +3,6 @@
     const vscode = acquireVsCodeApi();
     const SAVE_DELAY_MS = 500;
     const RENDER_DELAY_MS = 220;
-    const GIT_COMMAND = /^\s*git\s/;
     const ASK_FLAVOR = /\s*--flavor\s*$/;
     const TRAILING_FLAVOR = /\s*--flavor(?:[\s=]+[^\s-]\S*)?\s*$/;
 
@@ -29,6 +28,8 @@
     const collapsed = new Set(uiState.collapsed || ['customCommands', 'other']);
     const collapsedCats = new Set(uiState.collapsedCats || []);
     const GIT_CAT = 'git';
+    /** Only commands marked with group "git" live in GIT Helps; other "git …" commands are normal buttons. */
+    const isGitItem = command => Boolean(command) && command.group === GIT_CAT;
 
     /** Tiny DOM builder: h('div', { class: 'x', onclick }, child, 'text'). */
     function h(tag, attrs, ...children) {
@@ -437,9 +438,9 @@
             .filter(control => control.value && control.preview)
             .map(control => barChip(control.key, paint('color', control.color), control.preview));
         const custom = customCommands.filter(command => command.enabled && !command.archived);
-        const git = custom.filter(command => GIT_COMMAND.test(command.command || ''));
+        const git = custom.filter(isGitItem);
         const knownGroups = new Set(commandGroups.map(group => group.id));
-        custom.filter(command => !GIT_COMMAND.test(command.command || '') && !(command.group && knownGroups.has(command.group)))
+        custom.filter(command => !isGitItem(command) && !(command.group && knownGroups.has(command.group)))
             .forEach(command => {
                 const index = customCommands.indexOf(command);
                 chips.push(barChip(`custom:${index}`, paint('color', command.color, state.colorizedCustom), command.label));
@@ -687,7 +688,7 @@
     }
 
     function renderCommandCard(command, index) {
-        const isGit = GIT_COMMAND.test(command.command || '');
+        const isGit = isGitItem(command);
         const actives = laneIndexes(index);
         const place = actives.indexOf(index);
         const last = place === actives.length - 1;
@@ -695,7 +696,7 @@
         const card = h('div', {
             class: `command${command.enabled ? '' : ' command--disabled'}`,
             'data-search': `${command.label} ${command.command} ${(command.then || []).join(' ')} ${isGit ? 'git' : ''}`.toLowerCase(),
-            draggable: !isGit,
+            draggable: true,
             ondragstart: event => startCommandDrag(event, index),
             ondragend: event => event.currentTarget.classList.remove('command--dragging'),
         },
@@ -770,15 +771,10 @@
 
     function laneIndexes(index) {
         const command = customCommands[index];
-        const git = GIT_COMMAND.test(command.command || '');
         const group = command.group || '';
         return customCommands.map((item, itemIndex) => {
             if (item.archived) {
                 return -1;
-            }
-            const itemGit = GIT_COMMAND.test(item.command || '');
-            if (git || itemGit) {
-                return git && itemGit ? itemIndex : -1;
             }
             return (item.group || '') === group ? itemIndex : -1;
         }).filter(itemIndex => itemIndex >= 0);
@@ -809,7 +805,7 @@
             element.classList.remove('category--dragover');
             const index = Number(event.dataTransfer.getData('text/plain'));
             const command = customCommands[index];
-            if (!command || GIT_COMMAND.test(command.command || '')) {
+            if (!command || (command.group || '') === (groupId || '')) {
                 return;
             }
             if (groupId) {
@@ -855,7 +851,7 @@
 
     function restoreCommand(index) {
         const command = customCommands[index];
-        const group = command.group && commandGroups.some(item => item.id === command.group) ? command.group : '';
+        const group = isGitItem(command) || (command.group && commandGroups.some(item => item.id === command.group)) ? command.group : '';
         customCommands[index] = { ...command, archived: false, enabled: true, group };
         saveCustomCommands(true);
         rerender();
@@ -872,6 +868,21 @@
             return;
         }
         customCommands.splice(index, 1);
+        saveCustomCommands(true);
+        rerender();
+    }
+
+    async function clearHistory() {
+        const count = customCommands.filter(command => command.archived).length;
+        const ok = await askConfirm({
+            en: `Delete all ${count} commands from History and settings.json forever?`,
+            ru: `Удалить все ${count} команд из истории и settings.json навсегда?`,
+            ok: 'Delete all / Удалить все',
+        });
+        if (!ok) {
+            return;
+        }
+        customCommands = customCommands.filter(command => !command.archived);
         saveCustomCommands(true);
         rerender();
     }
@@ -902,14 +913,12 @@
 
     function gitCommands() {
         return customCommands.map((command, index) => ({ command, index }))
-            .filter(({ command }) => !command.archived && GIT_COMMAND.test(command.command || ''));
+            .filter(({ command }) => !command.archived && isGitItem(command));
     }
 
     function addGitCommand() {
-        collapsedCats.delete(GIT_CAT);
-        persistUi();
         const existing = gitCommands();
-        addCommand('', {
+        addCommand(GIT_CAT, {
             label: 'New git command',
             command: 'git ',
             color: existing[0] && existing[0].command.color,
@@ -970,7 +979,13 @@
             return undefined;
         }
         return h('div', { class: 'history' },
-            h('h3', {}, 'History'),
+            h('div', { class: 'history__head' },
+                h('h3', {}, 'History', h('span', { class: 'counter' }, String(items.length))),
+                h('button', {
+                    class: 'button button--ghost button--danger',
+                    title: 'Delete all History forever',
+                    onclick: clearHistory,
+                }, '🗑️ Clear all / Удалить все')),
             h('p', { class: 'history__hint' }, 'Removed from the status bar, kept in settings.json. \nУбраны из status bar, сохранены в settings.json.'),
             items.map(({ command, index }) => h('div', {
                 class: 'history__row',
@@ -1093,7 +1108,7 @@
 
     function setGitMenuPosition(position) {
         customCommands.forEach((command, index) => {
-            if (GIT_COMMAND.test(command.command || '') && !command.archived) {
+            if (isGitItem(command) && !command.archived) {
                 customCommands[index] = { ...command, position };
             }
         });
@@ -1104,7 +1119,7 @@
     function renderGitCategory() {
         const members = gitCommands();
         const isCollapsed = collapsedCats.has(GIT_CAT);
-        return withBarHover(h('div', {
+        const box = h('div', {
             class: `category${isCollapsed ? ' category--collapsed' : ''}`,
             'data-category': GIT_CAT,
             'data-search': 'git helps menu категория category',
@@ -1134,7 +1149,9 @@
             h('div', { class: 'category__body' },
                 members.length > 0
                     ? members.map(({ command, index }) => renderCommandCard(command, index))
-                    : h('p', { class: 'category__empty' }, 'Commands starting with git … go here · Команды git … собираются сюда'))));
+                    : h('p', { class: 'category__empty' }, 'Drag commands here or add with + · Перетащите команды сюда или добавьте через +')));
+        bindDrop(box, GIT_CAT);
+        return withBarHover(box, 'customGitMenuIcon');
     }
 
     function renderCustomCommands() {
@@ -1149,7 +1166,7 @@
         }
         const knownGroups = new Set(commandGroups.map(group => group.id));
         const pins = active.filter(({ command }) =>
-            !GIT_COMMAND.test(command.command || '') && !(command.group && knownGroups.has(command.group)));
+            !isGitItem(command) && !(command.group && knownGroups.has(command.group)));
         const pinList = h('div', { class: 'commands__pins' },
             pins.length > 0
                 ? pins.map(({ command, index }) => renderCommandCard(command, index))

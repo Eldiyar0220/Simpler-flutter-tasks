@@ -49,3 +49,9 @@ module.exports = {
     activate,
     deactivate,
 };
+
+
+// При каждом релизе, после npm run release:
+
+
+// npx ovsx publish -p ТВОЙ_ТОКЕН

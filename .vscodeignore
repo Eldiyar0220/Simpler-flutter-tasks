@@ -9,3 +9,4 @@ PUBLISHING.md
 **/jsconfig.json
 **/*.map
 **/.eslintrc.json
+src/settings/**

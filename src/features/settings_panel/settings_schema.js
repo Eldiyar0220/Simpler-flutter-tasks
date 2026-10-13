@@ -62,7 +62,7 @@ const SECTIONS = [
         id: 'customCommands',
         title: 'Custom Commands',
         icon: '🛠️',
-        description: 'Your own status bar buttons. Git commands share one Git menu. Extra commands can be dragged into a category so they share one button.',
+        description: 'Your own status bar buttons. GIT Helps keeps its own git menu. Extra commands can be dragged into a category so they share one button.',
         customCommands: true,
         controls: [],
     },

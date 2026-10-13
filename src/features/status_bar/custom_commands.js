@@ -1,13 +1,14 @@
 const vscode = require('vscode');
 const { exec } = require('child_process');
 const { CONFIG_SECTION } = require('../../constants');
-const { getSetting } = require('../../utils/config');
+const { getSetting, updateGlobalSetting } = require('../../utils/config');
 const { showTimedNotification } = require('../../utils/notifications');
 const { runInTerminal } = require('../../utils/terminal');
 const { getWorkspaceRoot } = require('../../utils/workspace');
 
 const GIT_PUSH_MARKER = '--set-upstream origin';
 const GIT_COMMIT_MARKER = 'git commit -m';
+const GIT_GROUP = 'git';
 
 /** Git menu filled when GIT Helps is turned on. */
 const DEFAULT_GIT_HELPS = [
@@ -65,7 +66,9 @@ const DEFAULT_GIT_HELPS = [
         warningDialog: true,
         askerForCommand: false,
     },
-];
+].map(command => ({ ...command, group: GIT_GROUP }));
+
+const DEFAULT_GIT_COMMANDS = new Set(DEFAULT_GIT_HELPS.map(command => command.command.trim()));
 
 /** Default list written to settings.json when the user enables custom commands. */
 const DEFAULT_CUSTOM_COMMANDS = [
@@ -96,8 +99,30 @@ function customCommandId(config) {
     return `flutter-tasks.${config.command}`;
 }
 
+function isDefaultGitCommand(config) {
+    return DEFAULT_GIT_COMMANDS.has(String(config.command || '').trim());
+}
+
+/** Member of the GIT Helps menu: group "git", or a default git command saved before groups existed. */
 function isGitCommand(config) {
-    return /^\s*git\s/.test(config.command || '');
+    if (config.group === undefined) {
+        return isDefaultGitCommand(config);
+    }
+    return groupIdOf(config) === GIT_GROUP;
+}
+
+/** One-time: older versions put git commands in GIT Helps by their text, so mark the default ones explicitly. */
+async function migrateGitGroup(context) {
+    const key = `${CONFIG_SECTION}:git-group-migrated`;
+    if (context.globalState.get(key)) {
+        return;
+    }
+    const list = getSetting('customCommandsList') || [];
+    if (list.some(item => !item.group && isDefaultGitCommand(item))) {
+        await updateGlobalSetting('customCommandsList',
+            list.map(item => (!item.group && isDefaultGitCommand(item) ? { ...item, group: GIT_GROUP } : item)));
+    }
+    await context.globalState.update(key, true);
 }
 
 function isFlagOn(value) {
@@ -213,6 +238,7 @@ function registerCustomCommands(context) {
     );
 
     refresh();
+    migrateGitGroup(context).catch(error => console.error('Simpler Flutter Tasks: git group migration', error));
 }
 
 async function showPickMenu(placeHolder, configs) {
@@ -298,4 +324,5 @@ module.exports = {
     isActiveCustomCommand,
     DEFAULT_CUSTOM_COMMANDS,
     DEFAULT_GIT_HELPS,
+    GIT_GROUP,
 };
