@@ -8,6 +8,13 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## Release Notes 🔥 🔥 🔥 🔥 🔥 🔥 🔥 ------- ✅
 
+### 4.0.4
+  - Fixed: "customCommandGroups is not a registered configuration" right after updating the extension — settings are saved without reloading the window
+  - Smooth drag & drop in Custom Commands
+    - Cards glide to their new place, categories grow and shrink smoothly
+    - The moved card glows for a moment, drop zones are highlighted while dragging
+    - Respects the system "reduce motion" setting
+
 ### 4.0.3
   - Categories
     - "+" and "New category" open a picker: add your own commands (as a copy) or Status Bar Icons
