@@ -7,7 +7,7 @@
   },
   "description": "Flutter quick commands",
   "publisher": "Eldiyar-Dev",
-  "version": "3.2.1",
+  "version": "4.0.0",
   "icon": "images/eldiyar_profile_icon.png",
   "engines": {
     "vscode": "^1.80.0"

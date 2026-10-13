@@ -26,7 +26,7 @@
     let expectSaved = false;
     let pendingFocusId;
     const uiState = vscode.getState() || {};
-    const collapsed = new Set(uiState.collapsed || ['statusBar', 'customCommands', 'other']);
+    const collapsed = new Set(uiState.collapsed || ['customCommands', 'other']);
     const collapsedCats = new Set(uiState.collapsedCats || []);
     const GIT_CAT = 'git';
 
