@@ -532,6 +532,145 @@ button:disabled {
     color: var(--muted);
 }
 
+/* ---------- another extension (Simpler Flutter Generator) ---------- */
+
+.card--external {
+    --ext: #a855f7;
+    position: relative;
+    margin-top: 28px;
+    border-color: color-mix(in srgb, var(--ext) 45%, var(--border));
+    background:
+        linear-gradient(135deg, color-mix(in srgb, var(--ext) 10%, transparent), transparent 55%),
+        var(--card);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--ext) 18%, transparent),
+        0 8px 26px color-mix(in srgb, var(--ext) 12%, transparent);
+}
+
+.card--external::before {
+    content: '';
+    position: absolute;
+    top: 14px;
+    bottom: 14px;
+    left: -1px;
+    width: 3px;
+    border-radius: 0 3px 3px 0;
+    background: linear-gradient(to bottom, var(--ext), var(--flutter-light));
+}
+
+.card--external .card__icon {
+    background: color-mix(in srgb, var(--ext) 18%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ext) 40%, transparent);
+}
+
+.card--external::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+}
+
+/* First appearance: a light sweep across the card, the puzzle piece snaps in, the badge pops. */
+.card--external.is-revealing::after {
+    opacity: 1;
+    background: linear-gradient(105deg, transparent 35%,
+        color-mix(in srgb, var(--ext) 22%, transparent) 50%, transparent 65%) no-repeat;
+    background-size: 250% 100%;
+    animation: ext-sweep 1.2s ease-out both;
+}
+
+.card--external.is-revealing .card__icon {
+    animation: puzzle-snap 0.9s cubic-bezier(0.2, 0.9, 0.25, 1.2) both;
+}
+
+.card--external.is-revealing .ext-badge {
+    animation: badge-pop 0.5s 0.45s cubic-bezier(0.3, 1.4, 0.5, 1) both;
+}
+
+.card--external .card__header:hover .card__icon {
+    animation: puzzle-wiggle 0.6s ease-in-out;
+}
+
+@keyframes ext-sweep {
+    from {
+        background-position: 120% 0;
+    }
+    to {
+        background-position: -120% 0;
+    }
+}
+
+@keyframes puzzle-snap {
+    0% {
+        opacity: 0;
+        transform: translate(-28px, -16px) rotate(-40deg) scale(0.5);
+    }
+    60% {
+        opacity: 1;
+        transform: translate(2px, 1px) rotate(8deg) scale(1.1);
+    }
+    80% {
+        transform: rotate(-3deg) scale(0.97);
+        box-shadow: 0 0 0 4px color-mix(in srgb, var(--ext) 35%, transparent);
+    }
+    100% {
+        transform: none;
+    }
+}
+
+@keyframes badge-pop {
+    from {
+        opacity: 0;
+        transform: translateY(4px) scale(0.85);
+    }
+}
+
+@keyframes puzzle-wiggle {
+    25% {
+        transform: rotate(-10deg) scale(1.06);
+    }
+    60% {
+        transform: rotate(7deg) scale(1.06);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .card--external .card__icon,
+    .card--external .ext-badge,
+    .card--external::after {
+        animation: none !important;
+    }
+}
+
+.ext-badge {
+    display: inline-block;
+    margin-bottom: 4px;
+    padding: 2px 9px;
+    border-radius: 999px;
+    color: color-mix(in srgb, #a855f7 75%, var(--vscode-foreground));
+    background: color-mix(in srgb, #a855f7 16%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, #a855f7 35%, transparent);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.nav__item--external {
+    position: relative;
+    margin-top: 17px;
+}
+
+.nav__item--external::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    top: -9px;
+    border-top: 1px solid var(--border);
+    pointer-events: none;
+}
+
 .dot {
     flex: none;
     width: 8px;

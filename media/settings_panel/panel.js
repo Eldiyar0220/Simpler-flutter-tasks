@@ -24,6 +24,7 @@
     const commandKeys = new WeakMap();
     let commandKeyCounter = 0;
     let motionUntil = 0;
+    let externalRevealed = false;
     let colorTimer;
     let renderTimer;
     let toastTimer;
@@ -35,6 +36,8 @@
     const GIT_CAT = 'git';
     /** Only commands marked with group "git" live in GIT Helps; other "git …" commands are normal buttons. */
     const isGitItem = command => Boolean(command) && command.group === GIT_CAT;
+    // eslint-disable-next-line no-undef
+    const generator = window.createGeneratorPanel({ h, vscode, showLesson, getState: () => state });
 
     /** Tiny DOM builder: h('div', { class: 'x', onclick }, child, 'text'). */
     function h(tag, attrs, ...children) {
@@ -720,20 +723,30 @@
         if (!lesson) {
             return;
         }
-        const close = () => overlay.remove();
         const gif = !['confirm', 'edit'].includes(id)
             && typeof LESSON_GIFS !== 'undefined'
             && LESSON_GIFS[id];
-        const overlay = h('div', { class: 'confirm', onclick: event => event.target === overlay && close() },
-            h('div', { class: 'confirm__box lesson' },
-                gif
-                    ? h('img', { class: 'lesson__gif', src: gif, alt: lesson.en })
-                    : renderDemo(lesson.demo),
-                h('p', { class: 'confirm__en' }, lesson.en),
-                h('p', { class: 'confirm__ru' }, lesson.ru),
-                h('div', { class: 'confirm__actions' },
-                    h('button', { class: 'button', onclick: close }, 'Got it / Понятно'))));
+        showLesson(gif ? h('img', { class: 'lesson__gif', src: gif, alt: lesson.en }) : renderDemo(lesson.demo), lesson.en, lesson.ru);
+    }
+
+    function showLesson(media, en, ru, wide, extra) {
+        const close = () => {
+            overlay.remove();
+            document.removeEventListener('keydown', onKey);
+        };
+        const onKey = event => event.key === 'Escape' && close();
+        const box = h('div', { class: `confirm__box lesson${wide ? ' lesson--wide' : ''}` },
+            media,
+            h('p', { class: 'confirm__en' }, en),
+            h('p', { class: 'confirm__ru' }, ru),
+            extra,
+            h('div', { class: 'confirm__actions' },
+                h('button', { class: 'button', onclick: close }, 'Got it / Понятно')));
+        const overlay = h('div', { class: 'confirm', onclick: event => event.target === overlay && close() }, box);
+        box.closeLesson = close;
+        document.addEventListener('keydown', onKey);
         document.body.append(overlay);
+        return box;
     }
 
     function commandTextInput(index, field, extra) {
@@ -1474,12 +1487,21 @@
     }
 
     function renderSection(section) {
-        const body = section.customCommands
-            ? renderCustomCommands()
-            : h('div', { class: section.grid ? 'grid' : 'list' }, section.controls.map(renderControl));
+        let body;
+        if (section.customCommands) {
+            body = renderCustomCommands();
+        } else if (section.links) {
+            body = generator.renderSection(section);
+        } else {
+            body = h('div', { class: section.grid ? 'grid' : 'list' }, section.controls.map(renderControl));
+        }
         const isCollapsed = collapsed.has(section.id);
 
-        return h('section', { class: `card${isCollapsed ? ' card--collapsed' : ''}`, id: `section-${section.id}`, 'data-section': section.id },
+        return h('section', {
+            class: `card${isCollapsed ? ' card--collapsed' : ''}${section.external ? ' card--external' : ''}`,
+            id: `section-${section.id}`,
+            'data-section': section.id,
+        },
             h('div', { class: 'card__toolbar' },
                 h('button', {
                     class: 'card__header',
@@ -1488,6 +1510,7 @@
                 },
                     h('span', { class: 'card__icon' }, sectionIcon(section)),
                     h('span', { class: 'card__titles' },
+                        section.external && h('span', { class: 'ext-badge' }, '🧩 Another extension · Другое расширение'),
                         h('h2', {}, section.title, h('span', { class: 'counter' }, sectionCounter(section))),
                         h('p', {}, section.description)),
                     h('span', { class: 'card__chevron', 'aria-hidden': 'true' })),
@@ -1511,9 +1534,32 @@
                     }, 'Подробнее · More'))));
     }
 
+    /** Card of another extension: the puzzle piece snaps in once when it scrolls into view. */
+    function setupExternalCards() {
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        for (const card of sectionsRoot.querySelectorAll('.card--external')) {
+            if (externalRevealed || reduce) {
+                card.classList.add('is-revealed');
+                continue;
+            }
+            const observer = new IntersectionObserver(entries => {
+                if (entries.some(entry => entry.isIntersecting)) {
+                    observer.disconnect();
+                    externalRevealed = true;
+                    card.classList.add('is-revealing');
+                    setTimeout(() => {
+                        card.classList.remove('is-revealing');
+                        card.classList.add('is-revealed');
+                    }, 1400);
+                }
+            }, { threshold: 0.35 });
+            observer.observe(card);
+        }
+    }
+
     function renderNav() {
         return state.sections.map(section => h('a', {
-            class: 'nav__item',
+            class: `nav__item${section.external ? ' nav__item--external' : ''}`,
             href: `#section-${section.id}`,
             'data-nav': section.id,
             onclick: event => {
@@ -1538,6 +1584,7 @@
         navRoot.replaceChildren(...renderNav());
         applySearch();
         observeSections();
+        setupExternalCards();
 
         if (pendingFocusId) {
             focusSection(pendingFocusId);

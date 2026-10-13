@@ -2,6 +2,8 @@ const { getSetting, isShown } = require('../../utils/config');
 const { STATUS_BAR_ITEMS, itemColor } = require('../status_bar/status_bar_items');
 const { flavorTitles, getFlavorConfig } = require('../flavor');
 const { builtinShellCommand } = require('../status_bar/status_bar_commands');
+const { GENERATOR_SECTION } = require('./generator/section');
+const { isGeneratorInstalled } = require('./generator/actions');
 
 /**
  * Controls of the settings panel. `kind` defines how a value is stored:
@@ -82,6 +84,7 @@ const SECTIONS = [
             toggle('GitHub', 'gitCategoryExpandable'),
         ],
     },
+    GENERATOR_SECTION,
 ];
 
 /** Text and color of the real status bar button, for the preview strip. */
@@ -122,6 +125,7 @@ function buildPanelState() {
         flavors: flavorTitles(),
         flavorConfig: getFlavorConfig(),
         builtinCommands: builtinCommands(),
+        generatorInstalled: isGeneratorInstalled(),
     };
 }
 

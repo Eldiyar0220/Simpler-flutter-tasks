@@ -2,6 +2,7 @@ const vscode = require('vscode');
 const crypto = require('crypto');
 const { CONFIG_SECTION } = require('../../constants');
 const { getSetting, updateGlobalSetting, userSettingsUri } = require('../../utils/config');
+const { handleGeneratorMessage } = require('./generator/actions');
 const { DEFAULT_CUSTOM_COMMANDS, DEFAULT_GIT_HELPS, isGitCommand } = require('../status_bar/custom_commands');
 const { STATUS_BAR_ITEMS } = require('../status_bar/status_bar_items');
 const { buildPanelState, findControl, toStoredValue, panelSettingKeys } = require('./settings_schema');
@@ -58,6 +59,7 @@ function openSettingsPanel(context, item) {
                 postState();
             }
         }),
+        vscode.extensions.onDidChange(postState),
     ];
 
     panel.onDidDispose(() => {
@@ -113,6 +115,9 @@ async function handleMessage(message, postState, webview) {
                 break;
             case 'flavors':
                 await updateGlobalSetting('Flavors', sanitizeFlavorConfig(message.value));
+                break;
+            default:
+                await handleGeneratorMessage(message);
                 break;
         }
     } catch (error) {
@@ -384,14 +389,16 @@ function renderHtml(webview, mediaRoot, imagesRoot, iconsRoot) {
         `customCommands:"${asset(iconsRoot, 'settings_hover.gif')}"`,
         `other:"${asset(iconsRoot, 'other_settings.gif')}"`,
         `flavor:"${asset(iconsRoot, 'sub_set.gif')}"`,
+        `generator:"${asset(iconsRoot, 'other_extensions_settings_seven_2.gif')}"`,
     ].join(',');
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${webview.cspSource}; style-src ${webview.cspSource} 'nonce-${nonce}'; script-src 'nonce-${nonce}';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${webview.cspSource} https://raw.githubusercontent.com; style-src ${webview.cspSource} 'nonce-${nonce}'; script-src 'nonce-${nonce}';">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="${asset(mediaRoot, 'panel.css')}">
+    <link rel="stylesheet" href="${asset(mediaRoot, 'generator/generator.css')}">
     <title>Flutter Tasks Settings</title>
     <style nonce="${nonce}">
         body.is-booting .hero, body.is-booting .layout { visibility: hidden; }
@@ -435,6 +442,7 @@ function renderHtml(webview, mediaRoot, imagesRoot, iconsRoot) {
     </div>
     <div class="toast" id="toast">Saved ✓</div>
     <script nonce="${nonce}">window.LESSON_GIFS={${lessonGifs}};window.SECTION_ICONS={${sectionIcons}};</script>
+    <script nonce="${nonce}" src="${asset(mediaRoot, 'generator/generator.js')}"></script>
     <script nonce="${nonce}" src="${asset(mediaRoot, 'panel.js')}"></script>
 </body>
 </html>`;
