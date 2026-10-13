@@ -7,7 +7,52 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [Released]
 
 ## Release Notes 🔥 🔥 🔥 🔥 🔥 🔥 🔥 ------- ✅
-  
+
+### 4.0.3
+  - Categories
+    - "+" and "New category" open a picker: add your own commands (as a copy) or Status Bar Icons
+    - A Status Bar Icon added to a category is a 🔗 link — it runs exactly like the status bar button (asks for flavor, uses your edited command)
+    - Hover a category / GIT Helps button — the tooltip is a menu of buttons, click one to run it
+    - Deleting a category moves all its commands to History
+  - Custom commands
+    - Drag & drop to reorder and to move between categories (↑↓ arrows removed)
+    - ⚠️ Confirm and ✏️ Edit first are checkboxes now
+    - Hint about joining several commands with `&&`
+  - History: "Clear all" button
+  - GIT Helps
+    - Hidden by default; turning it on adds the default git commands
+    - Only the default commands are in it — a new `git …` command is not added automatically (drag it there if you want)
+    - Default menu: New Branch, Commit, Rebase, Push, Go to DEV
+  - Welcome / What's New: updated list, "Open Settings" button always visible
+
+### 4.0.2
+  - Published to Open VSX — available in Cursor and other VS Code forks
+  - Added MIT LICENSE, smaller extension icon
+  - GIT Helps keeps its own list instead of grabbing every git command
+
+### 4.0.1
+  - Flutter Flavor is editable in the Settings Panel: path, flavors, packages and menu commands
+  - Default flavor package is a placeholder `com_packages_of_your_app`
+  - Status bar preview: hover a chip to highlight its switch, click it to scroll to the switch
+  - Status Bar Icons section is expanded by default
+  - "Copy the command" (treeViewCopyText) is on by default
+  - Fixed: VS Code froze when opening `{ } settings.json` from the panel
+  - Export / Import settings.json buttons are hidden for now
+  - Typing animation on the panel title, 3D hover on the logo
+
+### 4.0.0 — BIG UPDATE
+  - ✨ Settings Panel — all toggles, Status Bar Icons and custom commands on one page
+    - Search, color pickers, left / right position, live status bar preview
+    - Editable build commands (Build APK / iOS / IPA / Install / Small APK), end with `--flavor` to pick a flavor on click
+  - 🚀 Commands Menu — one status bar button with every command
+  - GIT Helps — New Branch, Commit, Rebase, Push in one status bar menu
+  - Custom commands
+    - Categories: several commands in one status bar button
+    - Then-commands: run after the main one, chained with `&&`
+    - History: removed commands are kept and can be restored
+  - Welcome page on install and What's New on update (once per version)
+  - Sidebar and code refactored into features
+
 ### 3.1.5
 custom commands in user json settings\
 "label": "----> (pub get)",     -----// Change label\
