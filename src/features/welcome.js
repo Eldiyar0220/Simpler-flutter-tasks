@@ -17,12 +17,24 @@ const WHATS_NEW = [
         ru: 'GIT Helps — New Branch, Commit, Rebase и Push в одном меню.',
     },
     {
-        en: 'Categories for custom commands — several commands share one button.',
-        ru: 'Категории custom commands — несколько команд в одной кнопке.',
+        en: 'Categories for custom commands — several commands share one button. Hover it to pick a command right there.',
+        ru: 'Категории custom commands — несколько команд в одной кнопке. Наведи на неё и выбери команду прямо в подсказке.',
     },
     {
-        en: 'Export / Import settings as JSON, to share with the team.',
-        ru: 'Export / Import настроек JSON — можно скинуть коллеге.',
+        en: 'Fill a category with your commands or Status Bar Icons — an icon added there runs exactly like its button.',
+        ru: 'Категорию можно заполнить своими командами или Status Bar Icons — такая команда запускается как сама кнопка.',
+    },
+    {
+        en: 'Drag & drop to reorder commands and move them between categories.',
+        ru: 'Drag & drop — меняй порядок команд и переноси их между категориями.',
+    },
+    {
+        en: 'History — removed commands and deleted categories go there; restore or clear all in one click.',
+        ru: 'История — туда попадают убранные команды и команды удалённых категорий; можно вернуть или очистить всё.',
+    },
+    {
+        en: 'Flutter Flavor is editable in the panel: flavors, packages and menu commands.',
+        ru: 'Flutter Flavor редактируется в панели: flavors, пакеты и команды меню.',
     },
 ];
 
@@ -194,6 +206,19 @@ function renderWelcomeHtml(webview, imagesRoot, iconsRoot, version, previousVers
             border-radius: 14px;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
         }
+        .hero {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            flex-wrap: wrap;
+        }
+        .hero__text { flex: 1; min-width: 180px; }
+        .hero .hero__go {
+            color: var(--flutter-dark);
+            background: #fff;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+        }
+        .hero .hero__go:hover { background: #e8f6ff; }
         .hero h1 { margin: 0; font-size: 22px; }
         .hero p { margin: 4px 0 0; opacity: 0.9; }
         .body { max-width: 640px; margin: 0 auto; padding: 28px 32px 40px; }
@@ -254,7 +279,14 @@ function renderWelcomeHtml(webview, imagesRoot, iconsRoot, version, previousVers
         }
         .news .en { display: block; font-weight: 600; }
         .news .ru { display: block; margin-top: 4px; color: var(--muted); }
-        .actions { margin-top: 24px; }
+        .actions {
+            position: sticky;
+            bottom: 0;
+            margin: 24px -32px 0;
+            padding: 14px 32px;
+            background: linear-gradient(to top, var(--vscode-editor-background) 75%, transparent);
+        }
+        .body { padding-bottom: 0; }
         button {
             font: inherit;
             padding: 9px 18px;
@@ -271,10 +303,11 @@ function renderWelcomeHtml(webview, imagesRoot, iconsRoot, version, previousVers
 <body>
     <header class="hero">
         <img src="${logo}" alt="">
-        <div>
+        <div class="hero__text">
             <h1>Добро пожаловать</h1>
             <p>Welcome to Simpler Flutter Tasks v${escapeHtml(version)}</p>
         </div>
+        <button type="button" id="go" class="hero__go">${isUpdate ? 'Открыть настройки · Open Settings' : 'Начать · Open Settings'} →</button>
     </header>
     <main class="body">
         <div class="hello">
@@ -296,12 +329,13 @@ function renderWelcomeHtml(webview, imagesRoot, iconsRoot, version, previousVers
         </div>
         ${news}
         <div class="actions">
-            <button type="button" id="go">${isUpdate ? 'Открыть настройки · Open Settings' : 'Начать · Open Settings'}</button>
+            <button type="button" class="go">${isUpdate ? 'Открыть настройки · Open Settings' : 'Начать · Open Settings'}</button>
         </div>
     </main>
     <script nonce="${nonce}">
         const vscode = acquireVsCodeApi();
-        document.getElementById('go').addEventListener('click', () => vscode.postMessage({ type: 'continue' }));
+        document.querySelectorAll('#go, .go').forEach(button =>
+            button.addEventListener('click', () => vscode.postMessage({ type: 'continue' })));
         document.getElementById('openView').addEventListener('click', () => vscode.postMessage({ type: 'openView' }));
     </script>
 </body>

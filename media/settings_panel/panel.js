@@ -19,6 +19,7 @@
     let flavorConfig = { path: 'lib/main', flavors: [], commands: [] };
     let saveTimer;
     let flavorTimer;
+    let draggingIndex;
     let colorTimer;
     let renderTimer;
     let toastTimer;
@@ -689,18 +690,17 @@
 
     function renderCommandCard(command, index) {
         const isGit = isGitItem(command);
-        const actives = laneIndexes(index);
-        const place = actives.indexOf(index);
-        const last = place === actives.length - 1;
+        const linked = Boolean(command.vscodeCommand);
         const grouped = Boolean(command.group && commandGroups.some(group => group.id === command.group));
         const card = h('div', {
-            class: `command${command.enabled ? '' : ' command--disabled'}`,
+            class: `command${command.enabled ? '' : ' command--disabled'}${linked ? ' command--linked' : ''}`,
             'data-search': `${command.label} ${command.command} ${(command.then || []).join(' ')} ${isGit ? 'git' : ''}`.toLowerCase(),
             draggable: true,
             ondragstart: event => startCommandDrag(event, index),
-            ondragend: event => event.currentTarget.classList.remove('command--dragging'),
+            ondragend: endCommandDrag,
         },
             h('div', { class: 'command__top' },
+                h('span', { class: 'command__grip', title: 'Drag to reorder / Перетащите', 'aria-hidden': 'true' }, '⠿'),
                 h('input', {
                     class: 'color',
                     type: 'color',
@@ -714,8 +714,23 @@
                     card.classList.toggle('command--disabled', !value);
                     updateCommand(index, { enabled: value });
                 }, 'Enabled')),
-            commandTextInput(index, 'command', { class: 'text-input text-input--mono', placeholder: 'flutter pub get' }),
-            renderThenList(index),
+            linked
+                ? h('div', { class: 'command__link' },
+                    h('span', { class: 'command__link-badge' }, '🔗 Status Bar Icon'),
+                    h('code', {}, command.command || command.vscodeCommand),
+                    h('span', { class: 'command__link-hint' }, 'Runs exactly like the status bar button · Запускается как кнопка на status bar'))
+                : h('div', { class: `command__cmd${command.command ? '' : ' command__cmd--empty'}` },
+                    commandTextInput(index, 'command', { class: 'text-input text-input--mono', placeholder: 'flutter pub get' }),
+                    h('p', { class: 'command__hint' },
+                        'Several commands in one button: join them with ',
+                        h('code', {}, '&&'),
+                        ' — e.g. ',
+                        h('code', {}, 'git checkout DEV && git pull'),
+                        h('br'),
+                        'Несколько команд в одной кнопке: через ',
+                        h('code', {}, '&&'),
+                        '. Следующая запустится, только если предыдущая прошла успешно.')),
+            !linked && renderThenList(index),
             h('div', { class: 'command__bottom' },
                 !isGit && !grouped && withTip(
                     segmented([{ value: 'left', label: '← Left' }, { value: 'right', label: 'Right →' }], command.position || 'left',
@@ -724,20 +739,18 @@
                     'Кнопка будет слева или справа на status bar.',
                     'position',
                 ),
-                flagChip('⚠️ Confirm', {
+                !linked && flagChip('⚠️ Confirm', {
                     en: 'Asks “Are you sure?” before running. Protects against accidental clicks.',
                     ru: 'Перед запуском спросит «Вы уверены?». Защита от случайного нажатия.',
                 }, Boolean(command.warningDialog),
                     value => updateCommand(index, { warningDialog: value }), 'confirm'),
-                flagChip('✏️ Edit first', {
+                !linked && flagChip('✏️ Edit first', {
                     en: 'Opens a text field so you can change the command, then runs what you typed.',
                     ru: 'Сначала откроет поле, где можно поправить команду, и запустит то, что вы ввели.',
                 }, Boolean(command.askerForCommand),
                     value => updateCommand(index, { askerForCommand: value }), 'edit'),
                 h('div', { class: 'spacer' }),
-                h('button', { class: 'icon-button', title: 'Move up', disabled: place === 0, onclick: () => moveCommand(index, -1) }, '↑'),
-                h('button', { class: 'icon-button', title: 'Move down', disabled: last, onclick: () => moveCommand(index, 1) }, '↓'),
-                withTip(h('button', { class: 'icon-button card__add', onclick: () => addThen(index) }, '+'),
+                !linked && withTip(h('button', { class: 'icon-button card__add', onclick: () => addThen(index) }, '+'),
                     'Then-command: runs after this one, chained with &&.',
                     'Дочерняя команда: запустится после основной, через &&.',
                     'then'),
@@ -745,6 +758,7 @@
                     'Hide from the status bar. The command stays in History and settings.json.',
                     'Убрать из status bar. Команда останется в истории на панели и в settings.json.',
                     'archive')));
+        bindCardDrop(card, index);
         return withBarHover(card, isGit || grouped ? undefined : `custom:${index}`);
     }
 
@@ -769,25 +783,77 @@
         });
     }
 
-    function laneIndexes(index) {
-        const command = customCommands[index];
-        const group = command.group || '';
-        return customCommands.map((item, itemIndex) => {
-            if (item.archived) {
-                return -1;
-            }
-            return (item.group || '') === group ? itemIndex : -1;
-        }).filter(itemIndex => itemIndex >= 0);
-    }
-
     function startCommandDrag(event, index) {
         if (event.target.closest('input, textarea, button, select, a, label, .flag, .segmented')) {
             event.preventDefault();
             return;
         }
+        draggingIndex = index;
         event.dataTransfer.setData('text/plain', String(index));
         event.dataTransfer.effectAllowed = 'move';
         event.currentTarget.classList.add('command--dragging');
+        sectionsRoot.classList.add('is-dragging-command');
+    }
+
+    function clearDropMarks() {
+        sectionsRoot.querySelectorAll('.command--drop-before, .command--drop-after')
+            .forEach(element => element.classList.remove('command--drop-before', 'command--drop-after'));
+    }
+
+    function endCommandDrag(event) {
+        draggingIndex = undefined;
+        event.currentTarget.classList.remove('command--dragging');
+        sectionsRoot.classList.remove('is-dragging-command');
+        clearDropMarks();
+    }
+
+    /** Dropping on a card puts the dragged command above or below it, in the card's category. */
+    function bindCardDrop(card, index) {
+        const isBefore = event => {
+            const box = card.getBoundingClientRect();
+            return event.clientY < box.top + box.height / 2;
+        };
+        card.addEventListener('dragover', event => {
+            if (draggingIndex === undefined || draggingIndex === index) {
+                return;
+            }
+            event.preventDefault();
+            event.stopPropagation();
+            event.dataTransfer.dropEffect = 'move';
+            const before = isBefore(event);
+            if (!card.classList.contains(before ? 'command--drop-before' : 'command--drop-after')) {
+                clearDropMarks();
+                card.classList.add(before ? 'command--drop-before' : 'command--drop-after');
+            }
+        });
+        card.addEventListener('dragleave', event => {
+            if (!card.contains(event.relatedTarget)) {
+                card.classList.remove('command--drop-before', 'command--drop-after');
+            }
+        });
+        card.addEventListener('drop', event => {
+            const from = Number(event.dataTransfer.getData('text/plain'));
+            if (!Number.isInteger(from) || from === index || !customCommands[from]) {
+                return;
+            }
+            event.preventDefault();
+            event.stopPropagation();
+            clearDropMarks();
+            moveCommandTo(from, index, isBefore(event));
+        });
+    }
+
+    function moveCommandTo(from, target, before) {
+        const group = customCommands[target].group || '';
+        const [moved] = customCommands.splice(from, 1);
+        const targetIndex = from < target ? target - 1 : target;
+        customCommands.splice(before ? targetIndex : targetIndex + 1, 0, { ...moved, group });
+        if (group) {
+            collapsedCats.delete(group);
+            persistUi();
+        }
+        saveCustomCommands(true);
+        rerender();
     }
 
     function bindDrop(element, groupId) {
@@ -815,20 +881,6 @@
             updateCommand(index, { group: groupId || '' });
             rerender();
         });
-    }
-
-    function moveCommand(index, delta) {
-        const actives = laneIndexes(index);
-        const place = actives.indexOf(index);
-        const swapWith = actives[place + delta];
-        if (swapWith === undefined) {
-            return;
-        }
-        const current = customCommands[index];
-        customCommands[index] = customCommands[swapWith];
-        customCommands[swapWith] = current;
-        saveCustomCommands(true);
-        rerender();
     }
 
     async function archiveCommand(index) {
@@ -926,6 +978,98 @@
         });
     }
 
+    function placeName(command) {
+        if (isGitItem(command)) {
+            return 'GIT Helps';
+        }
+        const group = command.group && commandGroups.find(item => item.id === command.group);
+        return group ? `📂 ${group.label || 'Menu'}` : 'Own button';
+    }
+
+    /** "+" of a category: pick existing commands and Status Bar Icons, or start an empty one. */
+    function openAddPicker(groupId, title, onNew) {
+        const inGroup = command => !command.archived && (command.group || '') === groupId;
+        const linkedHere = new Set(customCommands.filter(inGroup).map(command => command.vscodeCommand).filter(Boolean));
+        const own = customCommands.map((command, index) => ({ command, index }))
+            .filter(({ command }) => !command.archived && !inGroup(command));
+        const builtins = (state.builtinCommands || []).filter(item => !linkedHere.has(item.vscodeCommand));
+        const picked = new Set();
+
+        const close = () => overlay.remove();
+        const addButton = h('button', { class: 'button', disabled: true, onclick: apply }, 'Add / Добавить');
+        const sync = () => {
+            addButton.disabled = picked.size === 0;
+            addButton.textContent = picked.size > 0 ? `Add ${picked.size} / Добавить` : 'Add / Добавить';
+        };
+        const row = (key, label, command, tag) => h('label', { class: 'picker__row' },
+            h('input', {
+                type: 'checkbox',
+                onchange: event => {
+                    if (event.target.checked) {
+                        picked.add(key);
+                    } else {
+                        picked.delete(key);
+                    }
+                    sync();
+                },
+            }),
+            h('span', { class: 'picker__text' },
+                h('span', { class: 'picker__label' }, label || 'Untitled'),
+                h('code', {}, command || '—')),
+            tag && h('span', { class: 'picker__tag' }, tag));
+
+        function apply() {
+            for (const key of picked) {
+                const [kind, value] = key.split(':');
+                if (kind === 'own') {
+                    const source = customCommands[Number(value)];
+                    customCommands.push({ ...source, then: [...(source.then || [])], archived: false, enabled: true, group: groupId });
+                } else {
+                    const item = builtins[Number(value)];
+                    customCommands.push({
+                        label: item.label,
+                        command: item.command,
+                        vscodeCommand: item.vscodeCommand,
+                        enabled: true,
+                        color: item.color || '#02b5ff',
+                        position: 'left',
+                        warningDialog: false,
+                        askerForCommand: false,
+                        then: [],
+                        group: groupId,
+                    });
+                }
+            }
+            collapsedCats.delete(groupId);
+            persistUi();
+            close();
+            saveCustomCommands(true);
+            rerender();
+        }
+
+        const overlay = h('div', { class: 'confirm', onclick: event => event.target === overlay && close() },
+            h('div', { class: 'confirm__box picker' },
+                h('h3', { class: 'picker__title' }, `Add to ${title} · Добавить в ${title}`),
+                h('button', {
+                    class: 'button button--dashed picker__new',
+                    onclick: () => {
+                        close();
+                        onNew();
+                    },
+                }, '+ New empty command / Новая пустая команда'),
+                h('div', { class: 'picker__lists' },
+                    own.length > 0 && h('div', { class: 'picker__section' },
+                        h('div', { class: 'picker__head' }, 'Your commands · копия команды'),
+                        own.map(({ command, index }) => row(`own:${index}`, command.label, command.command, placeName(command)))),
+                    builtins.length > 0 && h('div', { class: 'picker__section' },
+                        h('div', { class: 'picker__head' }, 'Status Bar Icons · 🔗 запускает как кнопку'),
+                        builtins.map((item, index) => row(`builtin:${index}`, item.label, item.command, '🔗 link')))),
+                h('div', { class: 'confirm__actions' },
+                    h('button', { class: 'button button--ghost', onclick: close }, 'Cancel / Отмена'),
+                    addButton)));
+        document.body.append(overlay);
+    }
+
     function thenList(index) {
         return customCommands[index].then || [];
     }
@@ -1000,15 +1144,17 @@
     }
 
     function addGroup() {
-        commandGroups.push({
+        const group = {
             id: `g${Date.now()}`,
             label: commandGroups.length === 0 ? 'Menu' : `Menu ${commandGroups.length + 1}`,
             color: '#02b5ff',
             position: 'left',
             enabled: true,
-        });
+        };
+        commandGroups.push(group);
         saveCustomCommands(true);
         rerender();
+        openAddPicker(group.id, `«${group.label}»`, () => addCommand(group.id));
     }
 
     function updateGroup(id, patch, immediate = true) {
@@ -1016,13 +1162,33 @@
         saveCustomCommands(immediate);
     }
 
-    function deleteGroup(id) {
-        commandGroups = commandGroups.filter(group => group.id !== id);
-        customCommands.forEach((command, index) => {
-            if (command.group === id) {
-                customCommands[index] = { ...command, group: '' };
+    async function deleteGroup(id) {
+        const group = commandGroups.find(item => item.id === id);
+        const name = (group && group.label) || 'Menu';
+        const members = customCommands.filter(command => !command.archived && command.group === id);
+        if (members.length > 0) {
+            const ok = await askConfirm({
+                en: `Delete category “${name}”? Its ${members.length} command(s) will move to History.`,
+                ru: `Удалить категорию «${name}»? Её команды (${members.length}) уйдут в историю.`,
+                ok: 'Delete / Удалить',
+            });
+            if (!ok) {
+                return;
+            }
+        }
+        commandGroups = commandGroups.filter(item => item.id !== id);
+        const kept = [];
+        const archived = [];
+        customCommands.forEach(command => {
+            if (command.group !== id) {
+                kept.push(command);
+            } else if (command.archived) {
+                archived.push({ ...command, group: '' });
+            } else {
+                archived.push({ ...command, group: '', archived: true, enabled: false });
             }
         });
+        customCommands = [...kept, ...archived];
         saveCustomCommands(true);
         rerender();
     }
@@ -1096,8 +1262,12 @@
                     'Позиция этой кнопки-категории на status bar.',
                     'position',
                 ),
-                h('button', { class: 'icon-button card__add', title: 'Add command here', onclick: () => addCommand(group.id) }, '+'),
-                h('button', { class: 'icon-button icon-button--danger', title: 'Ungroup / Распустить', onclick: () => deleteGroup(group.id) }, '✕')),
+                h('button', {
+                    class: 'icon-button card__add',
+                    title: 'Add command here',
+                    onclick: () => openAddPicker(group.id, `«${group.label || 'Menu'}»`, () => addCommand(group.id)),
+                }, '+'),
+                h('button', { class: 'icon-button icon-button--danger', title: 'Delete category / Удалить категорию', onclick: () => deleteGroup(group.id) }, '✕')),
             h('div', { class: 'category__body' },
                 members.length > 0
                     ? members.map(({ command, index }) => renderCommandCard(command, index))
@@ -1145,7 +1315,11 @@
                     'Позиция одной кнопки Git на status bar.',
                     'position',
                 ),
-                h('button', { class: 'icon-button card__add', title: 'Add git command', onclick: addGitCommand }, '+')),
+                h('button', {
+                    class: 'icon-button card__add',
+                    title: 'Add git command',
+                    onclick: () => openAddPicker(GIT_CAT, 'GIT Helps', addGitCommand),
+                }, '+')),
             h('div', { class: 'category__body' },
                 members.length > 0
                     ? members.map(({ command, index }) => renderCommandCard(command, index))

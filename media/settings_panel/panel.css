@@ -1001,6 +1001,120 @@ span.category__name {
     opacity: 0.45;
 }
 
+.command__cmd {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.command__hint {
+    display: none;
+    margin: 0;
+    padding: 7px 10px;
+    border-left: 2px solid var(--flutter-light);
+    border-radius: 0 6px 6px 0;
+    color: var(--muted);
+    background: color-mix(in srgb, var(--flutter-light) 7%, transparent);
+    font-size: 11.5px;
+    line-height: 1.5;
+}
+
+.command__hint code {
+    padding: 0 4px;
+    border-radius: 4px;
+    color: var(--vscode-foreground);
+    background: var(--input);
+    font-family: var(--vscode-editor-font-family, monospace);
+}
+
+.command__cmd:focus-within .command__hint,
+.command__cmd--empty .command__hint {
+    display: block;
+}
+
+.command__link {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
+    padding: 8px 10px;
+    border: 1px dashed color-mix(in srgb, var(--flutter-light) 45%, transparent);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--flutter-light) 6%, transparent);
+}
+
+.command__link-badge {
+    padding: 2px 8px;
+    border-radius: 999px;
+    color: var(--flutter-light);
+    background: color-mix(in srgb, var(--flutter-light) 14%, transparent);
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.command__link code {
+    color: var(--vscode-foreground);
+    font-family: var(--vscode-editor-font-family, monospace);
+    font-size: 12px;
+}
+
+.command__link-hint {
+    flex-basis: 100%;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.command[draggable="true"] {
+    cursor: grab;
+}
+
+.command[draggable="true"]:active {
+    cursor: grabbing;
+}
+
+.command__grip {
+    flex: none;
+    margin: 0 -2px 0 -4px;
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1;
+    opacity: 0.55;
+    cursor: grab;
+    user-select: none;
+    transition: opacity 0.15s, color 0.15s;
+}
+
+.command:hover .command__grip {
+    opacity: 1;
+    color: var(--flutter-light);
+}
+
+.command--drop-before::before,
+.command--drop-after::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    right: 6px;
+    height: 3px;
+    border-radius: 3px;
+    background: var(--flutter-light);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--flutter-light) 70%, transparent);
+    pointer-events: none;
+}
+
+.command--drop-before::before {
+    top: -7px;
+}
+
+.command--drop-after::after {
+    bottom: -7px;
+}
+
+.is-dragging-command .command:not(.command--dragging) * {
+    pointer-events: none;
+}
+
 .command {
     position: relative;
     z-index: 0;
@@ -1094,13 +1208,17 @@ span.category__name {
     position: relative;
     display: inline-flex;
     align-items: center;
-    padding: 4px 10px;
-    border: 1px solid var(--border);
-    border-radius: 999px;
+    gap: 7px;
+    padding: 4px 6px;
+    border-radius: 6px;
     font-size: 12px;
     cursor: pointer;
     user-select: none;
-    transition: background 0.15s, border-color 0.15s;
+    transition: background 0.15s;
+}
+
+.flag:hover {
+    background: var(--hover);
 }
 
 .flag__text {
@@ -1208,13 +1326,51 @@ span.category__name {
     transition-delay: 0s;
 }
 
-.flag input {
-    display: none;
+.flag input,
+.picker__row input {
+    appearance: none;
+    -webkit-appearance: none;
+    flex: none;
+    position: relative;
+    width: 15px;
+    height: 15px;
+    margin: 0;
+    border: 1px solid var(--vscode-checkbox-border, var(--border));
+    border-radius: 4px;
+    background: var(--vscode-checkbox-background, var(--input));
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
 }
 
-.flag--on {
-    border-color: var(--vscode-focusBorder);
-    background: var(--hover);
+.flag input::after,
+.picker__row input::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 1px;
+    width: 4px;
+    height: 8px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) scale(0);
+    transition: transform 0.12s var(--ease);
+}
+
+.flag input:checked,
+.picker__row input:checked {
+    border-color: var(--flutter-light);
+    background: var(--flutter-light);
+}
+
+.flag input:checked::after,
+.picker__row input:checked::after {
+    transform: rotate(45deg) scale(1);
+}
+
+.flag input:focus-visible,
+.picker__row input:focus-visible {
+    outline: 1px solid var(--vscode-focusBorder);
+    outline-offset: 2px;
 }
 
 .spacer {
@@ -1342,6 +1498,89 @@ span.category__name {
 
 .lesson.confirm__box {
     width: min(460px, 100%);
+}
+
+.picker.confirm__box {
+    display: flex;
+    flex-direction: column;
+    width: min(560px, 100%);
+    max-height: 82vh;
+}
+
+.picker__title {
+    margin: 0 0 12px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.picker__new {
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.picker__lists {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-height: 0;
+    overflow-y: auto;
+    margin: 0 -6px;
+    padding: 0 6px;
+}
+
+.picker__head {
+    margin-bottom: 4px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+}
+
+.picker__row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.picker__row:hover {
+    background: var(--hover);
+}
+
+.picker__row:has(input:checked) {
+    background: color-mix(in srgb, var(--flutter-light) 12%, transparent);
+}
+
+.picker__text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.picker__label {
+    font-weight: 600;
+}
+
+.picker__text code {
+    overflow: hidden;
+    color: var(--muted);
+    font-family: var(--vscode-editor-font-family, monospace);
+    font-size: 11.5px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.picker__tag {
+    flex: none;
+    padding: 2px 8px;
+    border-radius: 999px;
+    color: var(--muted);
+    background: var(--input);
+    font-size: 11px;
 }
 
 .lesson__gif {

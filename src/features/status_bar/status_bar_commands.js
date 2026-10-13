@@ -66,6 +66,19 @@ function runEasyLocalization() {
     setTimeout(() => showTimedNotification('Locale 2 -> Successfully ✅ ✅', 30), 2300);
 }
 
+/** Shell command a built-in button runs, without a trailing "--flavor" so it works as a plain custom command. */
+function builtinShellCommand(commandId) {
+    if (commandId === 'flutter-tasks.locale') {
+        return [getSetting('easyLocalizationFirst'), getSetting('easyLocalizationSecond')].filter(Boolean).join(' && ');
+    }
+    const definition = TERMINAL_COMMANDS.find(item => item.id === commandId);
+    if (!definition) {
+        return undefined;
+    }
+    return ((definition.setting && getSetting(definition.setting)) || definition.command).replace(ASK_FLAVOR, '').trimEnd();
+}
+
 module.exports = {
     registerStatusBarCommands,
+    builtinShellCommand,
 };

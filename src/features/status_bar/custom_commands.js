@@ -94,9 +94,37 @@ const DEFAULT_CUSTOM_COMMANDS = [
 
 const GIT_MENU_COMMAND = 'flutter-tasks.customGitMenu';
 const GROUP_MENU_PREFIX = 'flutter-tasks.customGroup.';
+const MENU_ITEM_COMMAND = 'flutter-tasks.runCustomMenuItem';
+
+function escapeMarkdown(text) {
+    return String(text).replace(/[\\`*_{}[\]()#+\-.!|<>$]/g, '\\$&');
+}
+
+/** Hover of a menu button: every command is a link that runs it right away. */
+function menuTooltip(title, members, configs) {
+    const markdown = new vscode.MarkdownString(undefined, true);
+    markdown.supportHtml = true;
+    markdown.isTrusted = { enabledCommands: [MENU_ITEM_COMMAND] };
+    markdown.appendMarkdown(`$(folder-opened) **${escapeMarkdown(title)}**\n\n---\n\n`);
+    for (const config of members) {
+        const args = encodeURIComponent(JSON.stringify([configs.indexOf(config)]));
+        const icon = isLinked(config) ? 'link' : isFlagOn(config.warningDialog) ? 'warning' : 'play';
+        const hint = describeCommand(config).replace(/\$\([^)]*\)\s*/g, '').replace(/"/g, '\'');
+        // VS Code keeps a span style only in this exact order: color; background-color; border-radius.
+        const button = '<span style="color:var(--vscode-button-secondaryForeground);background-color:var(--vscode-button-secondaryBackground);border-radius:6px;">'
+            + `&nbsp;<span class="codicon codicon-${icon}"></span>&nbsp;${escapeMarkdown(config.label || config.command)}&nbsp;&nbsp;</span>`;
+        markdown.appendMarkdown(`[${button}](command:${MENU_ITEM_COMMAND}?${args} "${hint}")\n\n`);
+    }
+    return markdown;
+}
+
+/** Linked to a Status Bar Icon: runs that VS Code command instead of a shell command. */
+function isLinked(config) {
+    return typeof config.vscodeCommand === 'string' && config.vscodeCommand.startsWith('flutter-tasks.');
+}
 
 function customCommandId(config) {
-    return `flutter-tasks.${config.command}`;
+    return isLinked(config) ? config.vscodeCommand : `flutter-tasks.${config.command}`;
 }
 
 function isDefaultGitCommand(config) {
@@ -140,6 +168,14 @@ function groupIdOf(config) {
 /** Custom commands: git → one Git menu, `group` → a category menu, others → own status bar button. */
 function registerCustomCommands(context) {
     let disposables = [];
+    let configs = [];
+
+    context.subscriptions.push(vscode.commands.registerCommand(MENU_ITEM_COMMAND, index => {
+        const config = configs[index];
+        if (config) {
+            runCustomCommand(config);
+        }
+    }));
 
     function createStatusBarItem({ text, command, tooltip, color, position }) {
         const alignment = position === 'right' ? vscode.StatusBarAlignment.Right : vscode.StatusBarAlignment.Left;
@@ -153,7 +189,7 @@ function registerCustomCommands(context) {
         disposables.forEach(disposable => disposable.dispose());
         disposables = [];
 
-        const configs = getSetting('customCommandsList') || [];
+        configs = getSetting('customCommandsList') || [];
         const groups = getSetting('customCommandGroups') || [];
         const knownGroups = new Set(groups.map(group => group.id));
         const gitConfigs = [];
@@ -162,7 +198,7 @@ function registerCustomCommands(context) {
 
         for (const config of configs) {
             const commandId = customCommandId(config);
-            if (!registered.has(commandId)) {
+            if (!isLinked(config) && !registered.has(commandId)) {
                 registered.add(commandId);
                 try {
                     disposables.push(vscode.commands.registerCommand(commandId, () => runCustomCommand(config)));
@@ -184,7 +220,7 @@ function registerCustomCommands(context) {
                 grouped.set(groupId, members);
                 continue;
             }
-            createStatusBarItem({ text: config.label, command: commandId, tooltip: chainedCommand(config), color: config.color, position: config.position });
+            createStatusBarItem({ text: config.label, command: commandId, tooltip: describeCommand(config), color: config.color, position: config.position });
         }
 
         if (gitConfigs.length > 0 && getSetting('customGitMenuIcon') !== 'hide') {
@@ -196,7 +232,7 @@ function registerCustomCommands(context) {
             createStatusBarItem({
                 text: '$(git-branch) GIT Helps',
                 command: GIT_MENU_COMMAND,
-                tooltip: gitConfigs.map(config => config.label).join('\n'),
+                tooltip: menuTooltip('GIT Helps', gitConfigs, configs),
                 color: gitConfigs[0].color,
                 position: gitConfigs[0].position,
             });
@@ -216,7 +252,7 @@ function registerCustomCommands(context) {
             createStatusBarItem({
                 text: `$(folder) ${group.label || 'Menu'}`,
                 command: commandId,
-                tooltip: members.map(config => config.label).join('\n'),
+                tooltip: menuTooltip(group.label || 'Menu', members, configs),
                 color: group.color,
                 position: group.position,
             });
@@ -244,7 +280,7 @@ function registerCustomCommands(context) {
 async function showPickMenu(placeHolder, configs) {
     const items = configs.map(config => ({
         label: config.warningDialog ? `${config.label} $(warning)` : config.label,
-        description: chainedCommand(config),
+        description: describeCommand(config),
         config,
     }));
     const selected = await vscode.window.showQuickPick(items, {
@@ -266,7 +302,15 @@ function chainedCommand(config, main = config.command) {
     return extra.length > 0 ? `${main} && ${extra.join(' && ')}` : main;
 }
 
+function describeCommand(config) {
+    return isLinked(config) ? `$(link) ${config.command || config.vscodeCommand}` : chainedCommand(config);
+}
+
 async function runCustomCommand(config) {
+    if (isLinked(config)) {
+        await vscode.commands.executeCommand(config.vscodeCommand);
+        return;
+    }
     let command = config.command;
     const isGitPush = command.includes(GIT_PUSH_MARKER);
     const isGitCommit = command.includes(GIT_COMMIT_MARKER);

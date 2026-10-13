@@ -1,6 +1,7 @@
 const { getSetting, isShown } = require('../../utils/config');
 const { STATUS_BAR_ITEMS, itemColor } = require('../status_bar/status_bar_items');
 const { flavorTitles, getFlavorConfig } = require('../flavor');
+const { builtinShellCommand } = require('../status_bar/status_bar_commands');
 
 /**
  * Controls of the settings panel. `kind` defines how a value is stored:
@@ -99,6 +100,16 @@ function controlState(control) {
     };
 }
 
+/** Built-in status bar buttons offered when filling a category; the copy runs the same VS Code command. */
+function builtinCommands() {
+    return STATUS_BAR_ITEMS.map(item => ({
+        label: item.text.replace(/\$\([^)]*\)/g, '').trim(),
+        command: builtinShellCommand(item.command) || item.tooltip,
+        vscodeCommand: item.command,
+        color: itemColor(item),
+    }));
+}
+
 /** Current values of every control, sent to the webview. */
 function buildPanelState() {
     return {
@@ -110,6 +121,7 @@ function buildPanelState() {
         gitMenuIcon: getSetting('customGitMenuIcon') !== 'hide',
         flavors: flavorTitles(),
         flavorConfig: getFlavorConfig(),
+        builtinCommands: builtinCommands(),
     };
 }
 

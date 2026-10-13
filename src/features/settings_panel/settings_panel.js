@@ -182,6 +182,9 @@ function sanitizeCustomCommands(list) {
         if (Array.isArray(item.then)) {
             clean.then = item.then.map(value => String(value));
         }
+        if (STATUS_BAR_ITEMS.some(definition => definition.command === item.vscodeCommand)) {
+            clean.vscodeCommand = item.vscodeCommand;
+        }
         return clean;
     });
 }

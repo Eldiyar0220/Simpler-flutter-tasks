@@ -7,7 +7,7 @@
     },
     "description": "Flutter quick commands",
     "publisher": "Eldiyar-Dev",
-    "version": "4.0.2",
+    "version": "4.0.3",
     "icon": "images/eldiyar_profile_icon.png",
     "engines": {
         "vscode": "^1.80.0"
@@ -379,7 +379,7 @@
                 },
                 "SimplerFlutterTasks.customGitMenuIcon": {
                     "type": "string",
-                    "default": "show",
+                    "default": "hide",
                     "enum": [
                         "show",
                         "hide"
@@ -642,6 +642,10 @@
                                 "type": "string",
                                 "default": "",
                                 "description": "If set, the command is shown inside this category menu instead of its own status bar button"
+                            },
+                            "vscodeCommand": {
+                                "type": "string",
+                                "description": "Runs this VS Code command (a Status Bar Icon) instead of the shell command"
                             }
                         }
                     },
