@@ -31,15 +31,6 @@ const DEFAULT_GIT_HELPS = [
         askerForCommand: false,
     },
     {
-        label: '3 Rebase [Слияния]',
-        command: 'git pull --rebase origin fix/some_branch',
-        enabled: true,
-        color: '#00fff7',
-        position: 'left',
-        warningDialog: true,
-        askerForCommand: false,
-    },
-    {
         label: '3 Rebase',
         command: 'git pull --rebase origin DEV',
         enabled: true,
